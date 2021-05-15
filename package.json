@@ -1,0 +1,49 @@
+{
+  "name": "flax-crm",
+  "version": "1.0.0",
+  "description": "Flax CRM",
+  "type": "module",
+  "scripts": {
+    "develop": "concurrently \"pnpm:develop:*\"",
+    "develop:backend": "cross-env \"NODE_OPTIONS=--experimental-loader ts-node/esm\" nodemon backend/Server.ts",
+    "develop:db": "docker-compose up",
+    "check-format": "prettier --check .",
+    "format": "prettier --write .",
+    "lint": "eslint backend/**/*",
+    "prepare": "husky install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JustUtahCoders/flax-crm.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JustUtahCoders/flax-crm/issues"
+  },
+  "homepage": "https://github.com/JustUtahCoders/flax-crm#readme",
+  "devDependencies": {
+    "@babel/core": "^7.14.2",
+    "@babel/eslint-parser": "^7.14.2",
+    "@babel/preset-typescript": "^7.13.0",
+    "concurrently": "^6.1.0",
+    "cross-env": "^7.0.3",
+    "eslint": "^7.26.0",
+    "eslint-config-ts-react-important-stuff": "^3.0.0",
+    "husky": "^6.0.0",
+    "nodemon": "^2.0.7",
+    "prettier": "^2.3.0",
+    "pretty-quick": "^3.1.0",
+    "sequelize-cli": "^6.2.0",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.4",
+    "umzug": "^2.3.0"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "express-promise-router": "^4.1.0",
+    "pg": "^8.6.0",
+    "sequelize": "^6.6.2"
+  }
+}
