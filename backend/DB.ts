@@ -14,7 +14,7 @@ export const dbReady = new Promise<void>((resolve, reject) => {
   const intervalId = setInterval(() => {
     console.log("Attempting to connect to db");
     sequelize.authenticate().then(
-      async () => {
+      () => {
         console.log("Database connection established");
         clearInterval(intervalId);
 
