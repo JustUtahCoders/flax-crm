@@ -7,3 +7,12 @@ router.get("/api/nouns", async (req, res) => {
     nouns,
   });
 });
+
+router.get("/api/nouns/:nounId", async (req, res) => {
+  const noun = await sequelize.models.noun.findByPk(req.params.nounId);
+  if (noun === null) {
+    res.sendStatus(404);
+  } else {
+    res.send(noun);
+  }
+});
