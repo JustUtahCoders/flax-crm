@@ -5,11 +5,12 @@
   "type": "module",
   "scripts": {
     "develop": "concurrently \"pnpm:develop:*\"",
-    "develop:backend": "cross-env \"NODE_OPTIONS=--experimental-loader ts-node/esm\" nodemon backend/Server.ts",
+    "develop:backend": "cross-env \"NODE_OPTIONS=--experimental-loader ts-node/esm\" nodemon backend/Server.ts --watch backend --watch frontend --watch migrations --ext tsx,ts,js",
     "develop:db": "docker-compose up",
+    "develop:frontend": "webpack serve --config webpack.config.cjs --port 7700",
     "check-format": "prettier --check .",
     "format": "prettier --write .",
-    "lint": "eslint backend/**/*",
+    "lint": "eslint \"backend/**/*\" \"frontend/**/*\"",
     "prepare": "husky install"
   },
   "repository": {
@@ -28,22 +29,36 @@
     "@babel/preset-typescript": "^7.13.0",
     "concurrently": "^6.1.0",
     "cross-env": "^7.0.3",
+    "css-loader": "^5.2.6",
     "eslint": "^7.26.0",
     "eslint-config-ts-react-important-stuff": "^3.0.0",
+    "file-loader": "^6.2.0",
     "husky": "^6.0.0",
+    "mini-css-extract-plugin": "^1.6.0",
     "nodemon": "^2.0.7",
     "prettier": "^2.3.0",
     "pretty-quick": "^3.1.0",
     "sequelize-cli": "^6.2.0",
+    "style-loader": "^2.0.0",
+    "ts-loader": "^9.2.2",
     "ts-node": "^9.1.1",
     "typescript": "^4.2.4",
-    "umzug": "^2.3.0"
+    "umzug": "^2.3.0",
+    "url-loader": "^4.1.1",
+    "webpack": "^5.37.1",
+    "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
+    "@types/react": "^17.0.8",
+    "@types/react-dom": "^17.0.5",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "express-promise-router": "^4.1.0",
     "pg": "^8.6.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^2.0.3",
     "sequelize": "^6.6.2"
   }
 }
