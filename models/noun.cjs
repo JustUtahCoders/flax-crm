@@ -14,8 +14,6 @@ module.exports = (sequelize, DataTypes) => {
           name: "parentId",
           allowNull: true,
         },
-        onUpdate: "CASCADE",
-        onDelete: "SET NULL",
       });
     }
   }
