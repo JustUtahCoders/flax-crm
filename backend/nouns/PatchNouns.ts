@@ -9,7 +9,7 @@ router.patch("/api/nouns/:nounId", async (req, res) => {
     ...(parentId !== undefined && { parentId }),
   };
 
-  const [numUpdated] = await sequelize.models.noun.update(toUpdate, {
+  const [numUpdated] = await sequelize.models.Noun.update(toUpdate, {
     where: {
       id: req.params.nounId,
     },

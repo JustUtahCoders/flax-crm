@@ -2,7 +2,7 @@ import { sequelize } from "../DB.js";
 import { router } from "../Router.js";
 
 router.delete("/api/nouns/:nounId", async (req, res) => {
-  const numDeleted = await sequelize.models.noun.destroy({
+  const numDeleted = await sequelize.models.Noun.destroy({
     where: {
       id: req.params.nounId,
     },

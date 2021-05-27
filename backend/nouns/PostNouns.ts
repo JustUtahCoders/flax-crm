@@ -3,7 +3,7 @@ import { router } from "../Router.js";
 
 router.post("/api/nouns", async (req, res) => {
   const { tableName, slug, friendlyName, parentId } = req.body;
-  const newNoun = await sequelize.models.noun.create({
+  const newNoun = await sequelize.models.Noun.create({
     tableName,
     slug,
     friendlyName,
