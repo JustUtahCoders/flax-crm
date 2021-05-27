@@ -1,35 +1,37 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class Noun extends Model {
+  class Field extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
+      console.log("FOreign key");
       // define association here
-      models.Noun.belongsTo(models.Noun, {
+      models.Noun.hasMany(models.Field, {
         foreignKey: {
-          name: "parentId",
-          allowNull: true,
+          name: "nounId",
+          allowNull: false,
         },
         onUpdate: "CASCADE",
         onDelete: "SET NULL",
       });
     }
   }
-  Noun.init(
+  Field.init(
     {
-      tableName: DataTypes.STRING,
-      slug: DataTypes.STRING,
+      nounId: DataTypes.INTEGER,
+      type: DataTypes.STRING,
+      columnName: DataTypes.STRING,
       friendlyName: DataTypes.STRING,
-      parentId: DataTypes.INTEGER,
+      activeStatus: DataTypes.BOOLEAN,
     },
     {
       sequelize,
-      modelName: "Noun",
+      modelName: "Field",
     }
   );
-  return Noun;
+  return Field;
 };
