@@ -3,6 +3,8 @@ import { router } from "./Router.js";
 import bodyParser from "body-parser";
 import "./DB.js";
 import "./RouteImports.js";
+import kill from "tree-kill";
+import open from "open";
 
 const app = express();
 app.use(bodyParser.json());
@@ -12,4 +14,24 @@ const port = process.env.PORT || 7600;
 
 app.listen(port);
 
-console.log(`Listening on http://localhost:${port}`);
+const fullUrl = `http://localhost:${port}`;
+console.log(`Listening on ${fullUrl}`);
+
+// For debugging concurrently + nodemon problems
+// https://github.com/remy/nodemon/issues/1247
+console.log("---------------");
+console.log("STARTING PID", process.pid);
+console.log("---------------");
+
+const pid = process.pid;
+process.on("SIGINT", function () {
+  console.log("---------------");
+  console.log("KILLING PID", process.pid);
+  console.log("---------------");
+  kill(pid, "SIGTERM");
+  process.exit();
+});
+
+if (process.env.NODE_ENV !== "production" && process.env.FLAX_OPEN === "true") {
+  open(fullUrl);
+}
