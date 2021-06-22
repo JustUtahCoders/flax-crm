@@ -16,6 +16,9 @@ router.use(async (req, res: Response) => {
     );
   } catch (err) {
     console.log("ERROR", err);
+    return res.status(500).json({
+      errors: `Failed to generate HTML`,
+    });
   }
 
   if (routerContext.url) {

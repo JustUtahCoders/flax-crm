@@ -1,4 +1,4 @@
-import { body, validationResult } from "express-validator";
+import { body, checkSchema, validationResult } from "express-validator";
 import { ModelCtor } from "sequelize/lib/model.js";
 import { NounModel } from "../../models/noun.js";
 import { sequelize } from "../DB.js";
@@ -7,6 +7,9 @@ import { router } from "../Router.js";
 router.post(
   "/api/nouns",
   body("tableName").isString().notEmpty(),
+  body("slug").isString().notEmpty(),
+  body("friendlyName").isString().notEmpty(),
+  body("parentId").isInt().optional({ nullable: true }),
   async (req, res) => {
     const validationErrors = validationResult(req);
 
