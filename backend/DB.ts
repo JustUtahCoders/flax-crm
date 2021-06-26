@@ -1,5 +1,5 @@
 import Umzug from "umzug";
-import s from "sequelize";
+import s, { Sequelize as SequelizeType } from "sequelize";
 import ss from "umzug/lib/storages/SequelizeStorage.js";
 import { router } from "./Router.js";
 // @ts-ignore
@@ -8,7 +8,7 @@ import db from "../models/index.cjs";
 const { default: SequelizeStorage } = ss;
 const { Sequelize } = s;
 
-export const sequelize = db.sequelize;
+export const sequelize: SequelizeType = db.sequelize;
 
 export const dbReady = new Promise<void>((resolve, reject) => {
   const intervalId = setInterval(() => {

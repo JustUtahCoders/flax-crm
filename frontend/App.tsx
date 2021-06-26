@@ -1,23 +1,31 @@
-import * as React from "react";
-import { Button } from "semantic-ui-react";
+import { StaticRouter, Route, Redirect } from "react-router";
+import { BrowserRouter } from "react-router-dom";
+import { CreateNoun } from "./Nouns/CreateNoun";
+import { QueryClient, QueryClientProvider } from "react-query";
 
-export function App() {
-  const [text, setText] = React.useState<string | null>(null);
+const queryClient = new QueryClient();
 
-  React.useEffect(() => {
-    setText("Hydrated");
-  });
+export function App(props) {
+  const inBrowser = typeof window !== "undefined";
+
+  const Router = inBrowser ? BrowserRouter : StaticRouter;
 
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
       <head>
         <link rel="stylesheet" href="http://localhost:7700/main.css"></link>
       </head>
       <body>
-        <div>{text || "Hello world"}</div>
-        <Button>Semantic button</Button>
+        <Router context={props.routerContext} location={props.reqUrl}>
+          <Redirect from="/" to="/create-noun" />
+          <Route path="/create-noun" component={CreateNoun} />
+        </Router>
         <script src="http://localhost:7700/flax.js"></script>
       </body>
-    </>
+    </QueryClientProvider>
   );
+}
+
+export interface RouterContext {
+  url?: string;
 }
