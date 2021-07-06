@@ -15,8 +15,9 @@ open http://localhost:7600
 ```sh
 docker-compose exec db bash
 psql flax
-\dt # show tables
-select * from nouns;
+# show tables
+\dt
+select * from "Nouns";
 ```
 
 ## Database migrations
