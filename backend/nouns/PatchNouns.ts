@@ -1,23 +1,38 @@
 import { sequelize } from "../DB.js";
 import { router } from "../Router.js";
+import { param, validationResult } from "express-validator";
+import { invalidRequest } from "../Utils/EndpointResponses.js";
 
-router.patch("/api/nouns/:nounId", async (req, res) => {
-  const { slug, friendlyName, parentId } = req.body;
-  const toUpdate = {
-    ...(slug !== undefined && { slug }),
-    ...(friendlyName !== undefined && { friendlyName }),
-    ...(parentId !== undefined && { parentId }),
-  };
+router.patch<Params>(
+  "/api/nouns/:nounId",
+  param("nounId").isInt().toInt(),
+  async (req, res) => {
+    const validationErrors = validationResult(req);
+    if (!validationErrors.isEmpty()) {
+      return invalidRequest(res, validationErrors);
+    }
 
-  const [numUpdated] = await sequelize.models.Noun.update(toUpdate, {
-    where: {
-      id: req.params.nounId,
-    },
-  });
+    const { slug, friendlyName, parentId } = req.body;
+    const toUpdate = {
+      ...(slug !== undefined && { slug }),
+      ...(friendlyName !== undefined && { friendlyName }),
+      ...(parentId !== undefined && { parentId }),
+    };
 
-  if (numUpdated === 0) {
-    res.sendStatus(404);
-  } else {
-    res.sendStatus(204);
+    const [numUpdated] = await sequelize.models.Noun.update(toUpdate, {
+      where: {
+        id: req.params.nounId,
+      },
+    });
+
+    if (numUpdated === 0) {
+      res.sendStatus(404);
+    } else {
+      res.sendStatus(204);
+    }
   }
-});
+);
+
+interface Params {
+  nounId: number;
+}
