@@ -1,7 +1,11 @@
 import { sequelize } from "../DB.js";
 import { router } from "../Router.js";
 import { param, validationResult } from "express-validator";
-import { invalidRequest } from "../Utils/EndpointResponses.js";
+import {
+  invalidRequest,
+  notFound,
+  successNoContent,
+} from "../Utils/EndpointResponses.js";
 
 router.delete<Params>(
   "/api/nouns/:nounId",
@@ -18,9 +22,9 @@ router.delete<Params>(
       },
     });
     if (numDeleted === 0) {
-      res.sendStatus(404);
+      notFound(res, `No such noun with id '${req.params.nounId}'`);
     } else {
-      res.sendStatus(200);
+      successNoContent(res);
     }
   }
 );

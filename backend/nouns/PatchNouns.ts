@@ -1,7 +1,11 @@
 import { sequelize } from "../DB.js";
 import { router } from "../Router.js";
 import { param, validationResult } from "express-validator";
-import { invalidRequest } from "../Utils/EndpointResponses.js";
+import {
+  invalidRequest,
+  notFound,
+  successNoContent,
+} from "../Utils/EndpointResponses.js";
 
 router.patch<Params>(
   "/api/nouns/:nounId",
@@ -26,9 +30,9 @@ router.patch<Params>(
     });
 
     if (numUpdated === 0) {
-      res.sendStatus(404);
+      notFound(res, `No such noun with id '${req.params.nounId}'`);
     } else {
-      res.sendStatus(204);
+      successNoContent(res);
     }
   }
 );
