@@ -45,7 +45,7 @@ router.post<Params, ResponseBody, RequestBody>(
   }
 );
 
-type FieldToCreate = Omit<FieldAttributes, "nounId">;
+export type FieldToCreate = Omit<FieldAttributes, "nounId">;
 interface Params {
   nounId: number;
 }

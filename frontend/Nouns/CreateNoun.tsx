@@ -1,15 +1,18 @@
-import { useState } from "react";
-import { Input, Form, Button } from "semantic-ui-react";
+import React, { useState } from "react";
+import { Input, Form, Button, DropdownItemProps } from "semantic-ui-react";
 import { RouterProps } from "react-router";
 import { useMutation } from "react-query";
 import { flaxFetch } from "../Utils/flaxFetch";
 import { unary, kebabCase } from "lodash-es";
+import { NounAttributes } from "../../models/noun";
+import { FieldToCreate } from "../../backend/Fields/BatchPostFields";
 
 export function CreateNoun(props: RouterProps) {
   const [nounName, setNounName] = useState<string>("");
+  const [fields, setFields] = useState<FieldToCreate[]>([emptyField()]);
 
   const submitMutation = useMutation<
-    Noun,
+    NounAttributes,
     Error,
     React.FormEvent<HTMLFormElement>
   >((evt) => {
@@ -38,19 +41,77 @@ export function CreateNoun(props: RouterProps) {
           required
         />
       </Form.Field>
+      <Form.Field>
+        {fields.map((field, i) => (
+          <>
+            <label htmlFor={`field-type-${i}`}>Field Type</label>
+            <Form.Select
+              options={fieldTypes}
+              id={`field-type-${i}`}
+              value={field.type}
+              onChange={(evt) => updateFieldType(i, evt)}
+            ></Form.Select>
+            <label htmlFor={`field-name-${i}`}>Field Name</label>
+            <Input
+              id={`field-name-${i}`}
+              value={field.friendlyName}
+              onChange={(evt) => updateFriendlyName(i, evt)}
+            />
+          </>
+        ))}
+      </Form.Field>
       <Button type="submit">Create Noun</Button>
     </Form>
   );
+
+  function updateFriendlyName(i, evt: React.ChangeEvent<HTMLInputElement>) {
+    updateField(i, (field) => {
+      field.friendlyName = evt.target.value;
+      return field;
+    });
+  }
+
+  function updateFieldType(i, evt: React.ChangeEvent<HTMLSelectElement>) {
+    updateField(i, (field) => {
+      field.type = evt.target.value;
+      return field;
+    });
+  }
+
+  function updateField(
+    i: number,
+    transform: (field: FieldToCreate) => FieldToCreate
+  ) {
+    setFields(
+      fields.map((field, j) => {
+        if (i === j) {
+          return transform({ ...field });
+        } else {
+          return field;
+        }
+      })
+    );
+  }
 }
 
-export interface Noun {
-  id: number;
-  tableName: string;
-  slug: string;
-  friendlyName: string;
-  parentId?: number;
-  createdAt: DbDateTime;
-  updatedAt: DbDateTime;
+const fieldTypes: DropdownItemProps[] = [
+  {
+    label: "Text",
+    value: "string",
+  },
+  {
+    label: "Date",
+    value: "date",
+  },
+];
+
+function emptyField(): FieldToCreate {
+  return {
+    friendlyName: "",
+    columnName: "",
+    type: "",
+    activeStatus: true,
+  };
 }
 
 export type DbDateTime = string;
