@@ -2,6 +2,7 @@ import { StaticRouter, Route, Redirect } from "react-router";
 import { BrowserRouter } from "react-router-dom";
 import { CreateNoun } from "./Nouns/CreateNoun";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { Login } from "./Auth/Login";
 
 const queryClient = new QueryClient();
 
@@ -17,8 +18,8 @@ export function App(props) {
       </head>
       <body>
         <Router context={props.routerContext} location={props.reqUrl}>
-          <Redirect from="/" to="/create-noun" />
           <Route path="/create-noun" component={CreateNoun} />
+          <Route path="/login" component={Login} />
         </Router>
         <script src="http://localhost:7700/flax.js"></script>
       </body>

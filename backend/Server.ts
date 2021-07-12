@@ -2,11 +2,11 @@ import express from "express";
 import { router } from "./Router.js";
 import bodyParser from "body-parser";
 import "./DB.js";
-import "./RouteImports.js";
 import kill from "tree-kill";
 import open from "open";
+import "./RouteImports.js";
 
-const app = express();
+export const app = express();
 app.use(bodyParser.json());
 
 app.use(router);

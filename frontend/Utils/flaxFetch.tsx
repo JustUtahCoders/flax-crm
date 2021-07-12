@@ -36,5 +36,5 @@ export function flaxFetch<ResponseDataType = object>(
 }
 
 export type FlaxFetchOptions = Omit<RequestInit, "body"> & {
-  body: object | BodyInit;
+  body?: object | BodyInit;
 };
