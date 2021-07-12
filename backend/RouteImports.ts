@@ -6,5 +6,3 @@ import "./Nouns/DeleteNouns.js";
 
 // WebApp should be at the bottom
 import "./WebApp/WebApp.js";
-
-//console.log("RouteImports has run");

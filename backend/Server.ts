@@ -5,25 +5,11 @@ import "./DB.js";
 import "./RouteImports.js";
 import kill from "tree-kill";
 import open from "open";
-import cookieSession from "cookie-session";
-import passport from "passport";
 
 const app = express();
 app.use(bodyParser.json());
+
 app.use(router);
-
-app.use(
-  cookieSession({
-    name: "session",
-    keys: ["key1", "key2"], //   keys: require("keygrip")([process.env.KEYGRIP_SECRET], "sha256"), from CUI
-    maxAge: 144 * 60 * 60 * 1000, // 144 hours --->  What maxAge should we use?
-    secure: process.env.IS_RUNNING_LOCALLY ? false : true, // in dev env. no need to be secure
-  })
-);
-
-// initialize passport
-app.use(passport.initialize());
-app.use(passport.session());
 
 const port = process.env.PORT || 7600;
 
