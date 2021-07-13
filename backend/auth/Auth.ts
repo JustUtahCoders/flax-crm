@@ -47,7 +47,6 @@ passport.use(
 );
 
 passport.serializeUser(function (user, done) {
-  // @ts-ignore
   done(null, user);
 });
 
