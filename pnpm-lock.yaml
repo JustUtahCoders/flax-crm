@@ -14,7 +14,6 @@ specifiers:
   '@types/react-router': ^5.1.15
   body-parser: ^1.19.0
   concurrently: ^6.1.0
-  cookie-parser: ^1.4.5
   cookie-session: ^1.4.0
   cross-env: ^7.0.3
   css-loader: ^5.2.6
@@ -31,7 +30,6 @@ specifiers:
   open: ^8.2.1
   passport: ^0.4.1
   passport-custom: ^1.1.1
-  passport-local: ^1.0.0
   pg: ^8.6.0
   prettier: ^2.3.0
   pretty-quick: ^3.1.0
@@ -63,7 +61,6 @@ dependencies:
   '@types/react-dom': 17.0.8
   '@types/react-router': 5.1.15
   body-parser: 1.19.0
-  cookie-parser: 1.4.5
   cookie-session: 1.4.0
   express: 4.17.1
   express-promise-router: 4.1.0_1e4d5aefc915886dae9e998bf55b0fd2
@@ -72,7 +69,6 @@ dependencies:
   open: 8.2.1
   passport: 0.4.1
   passport-custom: 1.1.1
-  passport-local: 1.0.0
   pg: 8.6.0
   react: 17.0.2
   react-dom: 17.0.2_react@17.0.2
@@ -1561,14 +1557,6 @@ packages:
     dependencies:
       safe-buffer: 5.1.2
     dev: true
-
-  /cookie-parser/1.4.5:
-    resolution: {integrity: sha512-f13bPUj/gG/5mDr+xLmSxxDsB9DQiTIfhJS/sqjrmfAWiAN+x2O4i/XguTL9yDZ+/IFDanJ+5x7hC4CXT9Tdzw==}
-    engines: {node: '>= 0.8.0'}
-    dependencies:
-      cookie: 0.4.0
-      cookie-signature: 1.0.6
-    dev: false
 
   /cookie-session/1.4.0:
     resolution: {integrity: sha512-0hhwD+BUIwMXQraiZP/J7VP2YFzqo6g4WqZlWHtEHQ22t0MeZZrNBSCxC1zcaLAs8ApT3BzAKizx9gW/AP9vNA==}
@@ -4157,13 +4145,6 @@ packages:
   /passport-custom/1.1.1:
     resolution: {integrity: sha512-/2m7jUGxmCYvoqenLB9UrmkCgPt64h8ZtV+UtuQklZ/Tn1NpKBeOorCYkB/8lMRoiZ5hUrCoMmDtxCS/d38mlg==}
     engines: {node: '>= 0.10.0'}
-    dependencies:
-      passport-strategy: 1.0.0
-    dev: false
-
-  /passport-local/1.0.0:
-    resolution: {integrity: sha1-H+YyaMkudWBmJkN+O5BmYsFbpu4=}
-    engines: {node: '>= 0.4.0'}
     dependencies:
       passport-strategy: 1.0.0
     dev: false
