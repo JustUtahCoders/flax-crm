@@ -7,9 +7,9 @@ import { invalidRequest } from "../Utils/EndpointResponses.js";
 
 router.post(
   "/api/nouns",
-  body("tableName").isString().notEmpty(),
-  body("slug").isString().notEmpty(),
-  body("friendlyName").isString().notEmpty(),
+  body("tableName").isString().notEmpty().trim(),
+  body("slug").isString().notEmpty().trim(),
+  body("friendlyName").isString().notEmpty().trim(),
   body("parentId").isInt().optional({ nullable: true }),
   async (req, res) => {
     const validationErrors = validationResult(req);
