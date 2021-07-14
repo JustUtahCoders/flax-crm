@@ -1,8 +1,10 @@
-import Model from "sequelize/lib/model.js";
+import { Model, Instance } from "sequelize/lib/model.js";
 
-export abstract class NounModel extends Model<Noun> {}
+type NounInstance = Instance<NounAttributes> & NounAttributes;
 
-export interface Noun {
+export type NounModel = Model<NounInstance, NounAttributes>;
+
+export interface NounAttributes {
   tableName: string;
   slug: string;
   friendlyName: string;

@@ -3,6 +3,7 @@ import { ModelCtor } from "sequelize/lib/model.js";
 import { NounModel } from "../../models/noun.js";
 import { sequelize } from "../DB.js";
 import { router } from "../Router.js";
+import { invalidRequest } from "../Utils/EndpointResponses.js";
 
 router.post(
   "/api/nouns",
@@ -14,9 +15,7 @@ router.post(
     const validationErrors = validationResult(req);
 
     if (!validationErrors.isEmpty()) {
-      return res.status(400).json({
-        errors: validationErrors.array(),
-      });
+      return invalidRequest(res, validationErrors);
     }
 
     const { tableName, slug, friendlyName, parentId } = req.body;
