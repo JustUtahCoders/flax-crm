@@ -22,7 +22,10 @@ router.delete<Params>(
       },
     });
     if (numDeleted === 0) {
-      notFound(res, `No such noun with id '${req.params.nounId}'`);
+      notFound(
+        res,
+        `Could not delete noun - no such noun with id '${req.params.nounId}'`
+      );
     } else {
       successNoContent(res);
     }
