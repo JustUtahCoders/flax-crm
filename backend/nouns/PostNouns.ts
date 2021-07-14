@@ -3,20 +3,19 @@ import { ModelCtor } from "sequelize/lib/model.js";
 import { NounModel } from "../../models/noun.js";
 import { sequelize } from "../DB.js";
 import { router } from "../Router.js";
+import { invalidRequest } from "../Utils/EndpointResponses.js";
 
 router.post(
   "/api/nouns",
-  body("tableName").isString().notEmpty(),
-  body("slug").isString().notEmpty(),
-  body("friendlyName").isString().notEmpty(),
+  body("tableName").isString().notEmpty().trim(),
+  body("slug").isString().notEmpty().trim(),
+  body("friendlyName").isString().notEmpty().trim(),
   body("parentId").isInt().optional({ nullable: true }),
   async (req, res) => {
     const validationErrors = validationResult(req);
 
     if (!validationErrors.isEmpty()) {
-      return res.status(400).json({
-        errors: validationErrors.array(),
-      });
+      return invalidRequest(res, validationErrors);
     }
 
     const { tableName, slug, friendlyName, parentId } = req.body;

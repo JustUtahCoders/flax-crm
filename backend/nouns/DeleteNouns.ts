@@ -1,15 +1,37 @@
 import { sequelize } from "../DB.js";
 import { router } from "../Router.js";
+import { param, validationResult } from "express-validator";
+import {
+  invalidRequest,
+  notFound,
+  successNoContent,
+} from "../Utils/EndpointResponses.js";
 
-router.delete("/api/nouns/:nounId", async (req, res) => {
-  const numDeleted = await sequelize.models.Noun.destroy({
-    where: {
-      id: req.params.nounId,
-    },
-  });
-  if (numDeleted === 0) {
-    res.sendStatus(404);
-  } else {
-    res.sendStatus(200);
+router.delete<Params>(
+  "/api/nouns/:nounId",
+  param("nounId").isInt().toInt(),
+  async (req, res) => {
+    const validationErrors = validationResult(req);
+    if (!validationErrors.isEmpty()) {
+      return invalidRequest(res, validationErrors);
+    }
+
+    const numDeleted = await sequelize.models.Noun.destroy({
+      where: {
+        id: req.params.nounId,
+      },
+    });
+    if (numDeleted === 0) {
+      notFound(
+        res,
+        `Could not delete noun - no such noun with id '${req.params.nounId}'`
+      );
+    } else {
+      successNoContent(res);
+    }
   }
-});
+);
+
+interface Params {
+  nounId: number;
+}
