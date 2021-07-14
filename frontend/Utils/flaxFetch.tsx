@@ -1,4 +1,5 @@
 import { isPlainObject } from "lodash-es";
+import { theGlobal } from "./Global";
 
 export function flaxFetch<ResponseDataType = object>(
   url: string,
@@ -38,3 +39,17 @@ export function flaxFetch<ResponseDataType = object>(
 export type FlaxFetchOptions = Omit<RequestInit, "body"> & {
   body?: object | BodyInit;
 };
+
+declare global {
+  interface Window {
+    debugFetch: typeof flaxFetch;
+  }
+
+  namespace NodeJS {
+    interface Global {
+      debugFetch: typeof flaxFetch;
+    }
+  }
+}
+
+theGlobal.debugFetch = flaxFetch;
