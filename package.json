@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "develop": "concurrently \"pnpm:develop:*\"",
-    "develop:backend": "cross-env \"NODE_OPTIONS=--experimental-loader ts-node/esm  --experimental-specifier-resolution=node\" nodemon --signal SIGINT backend/Server.ts --watch backend --watch migrations --ext tsx,ts,js",
+    "develop:backend": "cross-env \"NODE_OPTIONS=--experimental-loader ts-node/esm  --experimental-specifier-resolution=node\" nodemon --signal SIGINT backend/Server.ts --watch backend --watch frontend --watch migrations --ext tsx,ts,js",
     "develop:db": "docker-compose up",
     "develop:frontend": "webpack serve --config webpack.config.cjs --port 7700",
     "check-format": "prettier --check .",
