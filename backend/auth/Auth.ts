@@ -36,7 +36,7 @@ router.get("/login", renderWebApp);
 router.use("/", async (req, res, next) => {
   if (req.session && req.session.passport && req.session.passport.user.id) {
     return next();
-  } else if (req.baseUrl && req.baseUrl.includes("/api")) {
+  } else if (req.url && req.url.includes("/api")) {
     res.status(401).json({ message: "Unauthorized" });
   } else {
     res.status(302).redirect("/login");
