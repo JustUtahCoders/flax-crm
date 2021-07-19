@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "develop": "concurrently \"pnpm:develop:*\"",
+    "dev:vscode": "concurrently \"pnpm:develop:db\" \"pnpm:develop:frontend\"",
     "develop:backend": "cross-env \"NODE_OPTIONS=--experimental-loader ts-node/esm  --experimental-specifier-resolution=node\" IS_RUNNING_LOCALLY=true nodemon --signal SIGINT backend/Server.ts --watch backend --watch migrations --watch frontend --ext tsx,ts,js",
     "develop:db": "docker-compose up",
     "develop:frontend": "webpack serve --config webpack.config.cjs --port 7700",
