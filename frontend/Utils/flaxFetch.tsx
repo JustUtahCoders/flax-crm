@@ -26,6 +26,8 @@ export function flaxFetch<ResponseDataType = object>(
       ) {
         return r.text();
       }
+    } else if (r.status === 401) {
+      window.location.assign("/login");
     } else {
       throw Error(
         `Server responded with ${r.status} ${r.statusText} when requesting ${
@@ -37,7 +39,7 @@ export function flaxFetch<ResponseDataType = object>(
 }
 
 export type FlaxFetchOptions = Omit<RequestInit, "body"> & {
-  body: object | BodyInit;
+  body?: object | BodyInit;
 };
 
 declare global {

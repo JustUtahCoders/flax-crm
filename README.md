@@ -10,6 +10,16 @@ pnpm run develop
 open http://localhost:7600
 ```
 
+## Visual Studio Code debugging
+
+To debug the NodeJS server in Visual Studio Code, first start up the database and frontend:
+
+```sh
+pnpm run dev:vscode
+```
+
+Then click on "Run and Debug" in VS Code, and press Start for Develop Backend.
+
 ## Connecting to local database
 
 ```sh

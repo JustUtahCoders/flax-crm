@@ -27,6 +27,7 @@ router.post<Params, ResponseBody, RequestBody>(
     try {
       noun = await sequelize.models.Noun.findByPk<NounModel>(req.params.nounId);
     } catch (err) {
+      console.error(err);
       notFound(res, `No such noun with id '${req.params.nounId}'`);
       return;
     }

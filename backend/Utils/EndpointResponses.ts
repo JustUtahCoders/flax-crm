@@ -22,4 +22,8 @@ export function invalidRequest(res: Response, errors: EndpointErrorMessage) {
   });
 }
 
+export function successNoContent(res: Response) {
+  res.status(204).end();
+}
+
 type EndpointErrorMessage = string | Array<string> | Result<ValidationError>;

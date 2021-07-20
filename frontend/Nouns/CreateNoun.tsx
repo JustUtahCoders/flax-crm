@@ -49,7 +49,10 @@ export function CreateNoun(props: RouterProps) {
               options={fieldTypes}
               id={`field-type-${i}`}
               value={field.type}
-              onChange={(evt) => updateFieldType(i, evt)}
+              onChange={(evt) => {
+                // @ts-ignore
+                updateFieldType(i, evt);
+              }}
             ></Form.Select>
             <label htmlFor={`field-name-${i}`}>Field Name</label>
             <Input
