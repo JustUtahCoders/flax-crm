@@ -7,9 +7,34 @@ This is where we will authenticate users.
 
 import { router } from "../Router.js";
 import passport from "passport";
-import { Strategy } from "passport-custom";
+//import { Strategy } from "passport-custom";
+// const CustomStrategy = require("passport-custom").Strategy;
+import passportCustom from "passport-custom";
+const CustomStrategy = passportCustom.Strategy;
 import cookieSession from "cookie-session";
 import { renderWebApp } from "../WebApp/RenderWebApp";
+import { findOrCreateLocalUser } from "../users/FindOrCreateLocalUser";
+
+const LOCAL_DEV_USER_EMAIL = "localdev@email.com";
+
+// DEFINE PASSPORT STRATEGIES
+const passportStrategy = new CustomStrategy((req, done) => {
+  // LOCAL DEV STRATEGY
+  if (process.env.IS_RUNNING_LOCALLY) {
+    console.log("localPassportStrategy custom.......................");
+    try {
+      const localUser = findOrCreateLocalUser(LOCAL_DEV_USER_EMAIL);
+      return done(null, localUser);
+    } catch (error) {
+      return done(error);
+    }
+  }
+  // MAIN STRATEGY
+  console.log("main PassportStrategy.......................");
+  return done(null, { id: "hello" });
+});
+
+passport.use(passportStrategy);
 
 router.use(
   cookieSession({
@@ -21,6 +46,7 @@ router.use(
 );
 
 router.use(passport.initialize());
+router.use(passport.session());
 
 router.post(
   "/login",
@@ -33,7 +59,32 @@ router.post(
 
 router.get("/login", renderWebApp);
 
+// FOR TESTING ONLY
+router.get("/test", async (req, res) => {
+  //    res.send("Hello World!");
+  console.log("Doing TEST!!!!!!!!");
+  const newUser = await findOrCreateLocalUser("localDev@email.com");
+  console.log("After finding or creating local user. Is it here?: ", newUser);
+  if (newUser) {
+    res.status(201).send(newUser);
+  } else {
+    res.status(500);
+  }
+});
+
 router.use("/", async (req, res, next) => {
+  // FOR TESTING ONLY
+  // if (req.url && req.url.includes("/test")) {
+  //   return next()
+  // }
+  // if (req.url && req.url.includes("/create-noun")) {
+  //   return next()
+  // }
+
+  console.log(
+    ">>>>>>>>>>>>>>>>>>>>>>>> req.session.passport: ",
+    req.session?.passport
+  );
   if (req.session && req.session.passport && req.session.passport.user.id) {
     return next();
   } else if (req.url && req.url.includes("/api")) {
@@ -42,12 +93,6 @@ router.use("/", async (req, res, next) => {
     res.status(302).redirect("/login");
   }
 });
-
-passport.use(
-  new Strategy(function (req, done) {
-    return done(null, { id: "hello" });
-  })
-);
 
 passport.serializeUser(function (user, done) {
   done(null, user);
