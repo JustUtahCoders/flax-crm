@@ -18,12 +18,12 @@ import { findOrCreateLocalUser } from "../users/FindOrCreateLocalUser";
 const LOCAL_DEV_USER_EMAIL = "localdev@email.com";
 
 // DEFINE PASSPORT STRATEGIES
-const passportStrategy = new CustomStrategy((req, done) => {
+const passportStrategy = new CustomStrategy(async (req, done) => {
   // LOCAL DEV STRATEGY
   if (process.env.IS_RUNNING_LOCALLY) {
     console.log("localPassportStrategy custom.......................");
     try {
-      const localUser = findOrCreateLocalUser(LOCAL_DEV_USER_EMAIL);
+      const localUser = await findOrCreateLocalUser(LOCAL_DEV_USER_EMAIL);
       return done(null, localUser);
     } catch (error) {
       return done(error);
@@ -61,10 +61,9 @@ router.get("/login", renderWebApp);
 
 // FOR TESTING ONLY
 router.get("/test", async (req, res) => {
-  //    res.send("Hello World!");
   console.log("Doing TEST!!!!!!!!");
   const newUser = await findOrCreateLocalUser("localDev@email.com");
-  console.log("After finding or creating local user. Is it here?: ", newUser);
+  console.log("After finding or creating local user. Log new user: ", newUser);
   if (newUser) {
     res.status(201).send(newUser);
   } else {
@@ -73,18 +72,20 @@ router.get("/test", async (req, res) => {
 });
 
 router.use("/", async (req, res, next) => {
-  // FOR TESTING ONLY
-  // if (req.url && req.url.includes("/test")) {
-  //   return next()
-  // }
-  // if (req.url && req.url.includes("/create-noun")) {
-  //   return next()
-  // }
+  console.log("router.use(/): ", req.url);
 
-  console.log(
-    ">>>>>>>>>>>>>>>>>>>>>>>> req.session.passport: ",
-    req.session?.passport
-  );
+  if (process.env.IS_RUNNING_LOCALLY) {
+    console.log("router.use IS RUNNING LOCALLY");
+    const localUser = await findOrCreateLocalUser(LOCAL_DEV_USER_EMAIL);
+    // passport method .login logs the user in (tells passport the user is authenticated)
+    req.login(localUser, function (err) {
+      if (err) {
+        console.log("In req.login callback ", err);
+      }
+    });
+    return next();
+  }
+
   if (req.session && req.session.passport && req.session.passport.user.id) {
     return next();
   } else if (req.url && req.url.includes("/api")) {
