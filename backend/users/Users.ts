@@ -23,4 +23,15 @@ export async function findOrCreateLocalUser(email) {
   return localUser;
 }
 
+export async function findUser(email, password) {
+  const users = await sequelize.models.User.findAll({
+    where: {
+      email: email,
+      password: password,
+    },
+  });
+  // Not sure why Model.<any, any>[] does not have first() method (?)
+  //  const user = users.first();
+  return users.length > 0 ? users[0] : null;
+}
 //module.exports = { findOrCreateLocalUser };

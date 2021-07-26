@@ -30,6 +30,7 @@ specifiers:
   open: ^8.2.1
   passport: ^0.4.1
   passport-custom: ^1.1.1
+  passport-local: ^1.0.0
   pg: ^8.6.0
   prettier: ^2.3.0
   pretty-quick: ^3.1.0
@@ -69,6 +70,7 @@ dependencies:
   open: 8.2.1
   passport: 0.4.1
   passport-custom: 1.1.1
+  passport-local: 1.0.0
   pg: 8.6.0
   react: 17.0.2
   react-dom: 17.0.2_react@17.0.2
@@ -3689,6 +3691,13 @@ packages:
   /passport-custom/1.1.1:
     resolution: {integrity: sha512-/2m7jUGxmCYvoqenLB9UrmkCgPt64h8ZtV+UtuQklZ/Tn1NpKBeOorCYkB/8lMRoiZ5hUrCoMmDtxCS/d38mlg==}
     engines: {node: '>= 0.10.0'}
+    dependencies:
+      passport-strategy: 1.0.0
+    dev: false
+
+  /passport-local/1.0.0:
+    resolution: {integrity: sha1-H+YyaMkudWBmJkN+O5BmYsFbpu4=}
+    engines: {node: '>= 0.4.0'}
     dependencies:
       passport-strategy: 1.0.0
     dev: false
