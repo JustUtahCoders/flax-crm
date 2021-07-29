@@ -6,33 +6,13 @@ This is where we will authenticate users.
 */
 
 import { router } from "../Router.js";
+import cookieSession from "cookie-session";
 import passport from "passport";
 import { Strategy } from "passport-local";
-// const CustomStrategy = require("passport-custom").Strategy;
-// import passportCustom from "passport-custom";
-// const CustomStrategy = passportCustom.Strategy;
-import cookieSession from "cookie-session";
 import { renderWebApp } from "../WebApp/RenderWebApp";
 import { findOrCreateLocalUser, findUser } from "../users/Users";
 
 const LOCAL_DEV_USER_EMAIL = "localdev@email.com";
-
-// DEFINE PASSPORT STRATEGIES
-// const passportStrategy = new CustomStrategy(async (req, done) => {
-//   // LOCAL DEV STRATEGY
-//   if (process.env.IS_RUNNING_LOCALLY) {
-//     console.log("localPassportStrategy custom.......................");
-//     try {
-//       const localUser = await findOrCreateLocalUser(LOCAL_DEV_USER_EMAIL);
-//       return done(null, localUser);
-//     } catch (error) {
-//       return done(error);
-//     }
-//   }
-//   // MAIN STRATEGY
-//   console.log("main PassportStrategy.......................");
-//   return done(null, { id: "hello" });
-// });
 
 let passportStrategy = new Strategy(async function (email, password, done) {
   try {
@@ -64,49 +44,31 @@ router.use(passport.session());
 router.post(
   "/login",
   (req, res, next) => {
-    console.log("POST LOGIN", req.body);
     next();
   },
-  passport.authenticate("local", { successRedirect: "/create-noun" })
+  passport.authenticate("local", { successRedirect: "/create-noun" }) // change or remove redirect later
 );
 
 router.get("/login", renderWebApp);
 
-// FOR TESTING ONLY
-router.get("/test", async (req, res) => {
-  console.log("Doing TEST!!!!!!!!");
-  const newUser = await findOrCreateLocalUser("localDev@email.com");
-  console.log("After finding or creating local user. Log new user: ", newUser);
-  if (newUser) {
-    res.status(201).send(newUser);
-  } else {
-    res.status(500);
-  }
-});
-
 router.use("/", async (req, res, next) => {
-  console.log("router.use(/): ", req.url);
-
-  // if (process.env.IS_RUNNING_LOCALLY) {
-  //   console.log("router.use IS RUNNING LOCALLY");
-  //   const localUser = await findOrCreateLocalUser(LOCAL_DEV_USER_EMAIL);
-  //   // passport method .login logs the user in (tells passport the user is authenticated)
-  //   req.login(localUser, function (err) {
-  //     if (err) {
-  //       console.log("In req.login callback ", err);
-  //     }
-  //   });
-  //   return next();
-  // }
-  // check to see if logged in for nondev users
   if (req.session && req.session.passport && req.session.passport.user.id) {
     return next();
+  } else if (process.env.IS_RUNNING_LOCALLY) {
+    const localUser = await findOrCreateLocalUser(LOCAL_DEV_USER_EMAIL);
+    loginPromise(localUser, req)
+      .then(() => {
+        return next();
+      })
+      .catch((error) => {
+        res.status(500).send(error);
+      });
   } else if (req.url && req.url.includes("/api")) {
     res.status(401).json({ message: "Unauthorized" });
   } else {
     res.status(302).redirect("/login");
   }
-});
+}); // router.use("/")
 
 passport.serializeUser(function (user, done) {
   done(null, user);
@@ -119,3 +81,15 @@ passport.deserializeUser<User>(function (user, done) {
 interface User {
   id: string;
 }
+
+// Created manual promise because util.promisify did not work with req.login
+const loginPromise = (user, request) => {
+  return new Promise((resolve, reject) => {
+    request.login(user, (err) => {
+      if (err) {
+        return reject(err);
+      }
+      resolve(user);
+    });
+  });
+};
