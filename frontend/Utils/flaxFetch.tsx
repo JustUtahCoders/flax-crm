@@ -12,6 +12,8 @@ export function flaxFetch<ResponseDataType = object>(
   }
 
   return fetch(url, options as RequestInit).then((r) => {
+    console.log("in the fetch - r:", r);
+    console.log("in the fetch - r.ok:", r.ok);
     if (r.ok) {
       if (r.status === 204) {
         return;

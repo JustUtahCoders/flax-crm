@@ -43,10 +43,19 @@ router.use(passport.session());
 
 router.post(
   "/login",
+  passport.authenticate("local"),
   (req, res, next) => {
-    next();
-  },
-  passport.authenticate("local", { successRedirect: "/create-noun" }) // change or remove redirect later
+    res.status(200).json({ loginSuccess: true });
+    //    next();
+  }
+  //passport.authenticate("local",
+
+  // function(req, res) {
+  //   console.log("response:", res)
+  //   res.json({ loginSuccess: true });
+  // }
+
+  // )
 );
 
 router.get("/login", renderWebApp);
