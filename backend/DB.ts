@@ -14,7 +14,6 @@ export const dbReady = new Promise<void>((resolve, reject) => {
   const intervalId = setInterval(() => {
     console.log("Attempting to connect to db");
     sequelize.authenticate().then(
-      // use await here
       () => {
         console.log("Database connection established");
         clearInterval(intervalId);
@@ -33,14 +32,10 @@ export const dbReady = new Promise<void>((resolve, reject) => {
         });
 
         console.log("Running database migrations");
-        // umzug.down({to: 0}) // undo all migrations
-        // .then(() => {
         return umzug.up().then(() => {
-          // then do the migrations
           console.log("Finished database migrations");
           resolve();
         });
-        // });
       },
       (err) => {
         reject(err);

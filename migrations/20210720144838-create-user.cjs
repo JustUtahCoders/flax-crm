@@ -1,7 +1,6 @@
 "use strict";
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    console.log("-------------in the create user migration");
     await queryInterface.createTable("Users", {
       id: {
         allowNull: false,

@@ -15,7 +15,7 @@ export async function findOrCreateLocalUser(email) {
       lastName: "localDevLastName",
       email: email,
       password: "localDevPassword",
-      googleAuthToken: "localDevGoogleAuthToken",
+      googleAuthToken: null,
     });
   }
   return localUser;
