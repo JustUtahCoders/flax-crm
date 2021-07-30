@@ -8,6 +8,7 @@ This is where we will authenticate users.
 import { router } from "../Router.js";
 import cookieSession from "cookie-session";
 import passport from "passport";
+import util from "util";
 import { Strategy } from "passport-local";
 import { renderWebApp } from "../WebApp/RenderWebApp";
 import { findOrCreateLocalUser, findUser } from "../users/Users";
@@ -65,19 +66,20 @@ router.use("/", async (req, res, next) => {
     return next();
   } else if (process.env.IS_RUNNING_LOCALLY) {
     const localUser = await findOrCreateLocalUser(LOCAL_DEV_USER_EMAIL);
-    loginPromise(localUser, req)
-      .then(() => {
-        return next();
-      })
-      .catch((error) => {
-        res.status(500).send(error);
-      });
+    try {
+      const login = util.promisify(req.login).bind(req);
+      await login(localUser);
+      next();
+    } catch (err) {
+      console.error(err);
+      res.status(500).send("Server error during login");
+    }
   } else if (req.url && req.url.includes("/api")) {
     res.status(401).json({ message: "Unauthorized" });
   } else {
     res.status(302).redirect("/login");
   }
-}); // router.use("/")
+});
 
 passport.serializeUser(function (user, done) {
   done(null, user);
@@ -90,15 +92,3 @@ passport.deserializeUser<User>(function (user, done) {
 interface User {
   id: string;
 }
-
-// Created manual promise because util.promisify did not work with req.login
-const loginPromise = (user, request) => {
-  return new Promise((resolve, reject) => {
-    request.login(user, (err) => {
-      if (err) {
-        return reject(err);
-      }
-      resolve(user);
-    });
-  });
-};
