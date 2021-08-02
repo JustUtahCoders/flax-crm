@@ -6,10 +6,29 @@ This is where we will authenticate users.
 */
 
 import { router } from "../Router.js";
-import passport from "passport";
-import { Strategy } from "passport-custom";
 import cookieSession from "cookie-session";
+import passport from "passport";
+import util from "util";
+import { Strategy } from "passport-local";
 import { renderWebApp } from "../WebApp/RenderWebApp";
+import { findOrCreateLocalUser, findUser } from "../users/Users";
+
+const LOCAL_DEV_USER_EMAIL = "localdev@email.com";
+
+let passportStrategy = new Strategy(async function (email, password, done) {
+  try {
+    let user = await findUser(email, password);
+    if (user) {
+      return done(null, user);
+    } else {
+      return done(null, false);
+    }
+  } catch (error) {
+    return done(error);
+  }
+});
+
+passport.use(passportStrategy);
 
 router.use(
   cookieSession({
@@ -21,14 +40,14 @@ router.use(
 );
 
 router.use(passport.initialize());
+router.use(passport.session());
 
 router.post(
   "/login",
   (req, res, next) => {
-    console.log("POST LOGIN");
     next();
   },
-  passport.authenticate("custom", { successRedirect: "/create-noun" })
+  passport.authenticate("local", { successRedirect: "/create-noun" }) // change or remove redirect later
 );
 
 router.get("/login", renderWebApp);
@@ -36,18 +55,22 @@ router.get("/login", renderWebApp);
 router.use("/", async (req, res, next) => {
   if (req.session && req.session.passport && req.session.passport.user.id) {
     return next();
+  } else if (process.env.IS_RUNNING_LOCALLY) {
+    const localUser = await findOrCreateLocalUser(LOCAL_DEV_USER_EMAIL);
+    try {
+      const login = util.promisify(req.login).bind(req);
+      await login(localUser);
+      next();
+    } catch (err) {
+      console.error(err);
+      res.status(500).send("Server error during login");
+    }
   } else if (req.url && req.url.includes("/api")) {
     res.status(401).json({ message: "Unauthorized" });
   } else {
     res.status(302).redirect("/login");
   }
 });
-
-passport.use(
-  new Strategy(function (req, done) {
-    return done(null, { id: "hello" });
-  })
-);
 
 passport.serializeUser(function (user, done) {
   done(null, user);
