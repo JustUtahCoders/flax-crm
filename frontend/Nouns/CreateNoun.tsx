@@ -29,7 +29,7 @@ export function CreateNoun(props: RouterProps) {
   });
 
   return (
-    <Form onSubmit={unary(submitMutation.mutate)}>
+    <Form onSubmit={unary(submitMutation.mutate)} style={{ padding: "4rem" }}>
       <Form.Field>
         <label htmlFor="noun-name">
           What is the name for this data? (Client, Donor, Lead, Invoice)
@@ -49,9 +49,8 @@ export function CreateNoun(props: RouterProps) {
               options={fieldTypes}
               id={`field-type-${i}`}
               value={field.type}
-              onChange={(evt) => {
-                // @ts-ignore
-                updateFieldType(i, evt);
+              onChange={(evt, props) => {
+                updateFieldType(i, props.value as string);
               }}
             ></Form.Select>
             <label htmlFor={`field-name-${i}`}>Field Name</label>
@@ -74,9 +73,9 @@ export function CreateNoun(props: RouterProps) {
     });
   }
 
-  function updateFieldType(i, evt: React.ChangeEvent<HTMLSelectElement>) {
+  function updateFieldType(i, type: string) {
     updateField(i, (field) => {
-      field.type = evt.target.value;
+      field.type = type;
       return field;
     });
   }
@@ -99,11 +98,11 @@ export function CreateNoun(props: RouterProps) {
 
 const fieldTypes: DropdownItemProps[] = [
   {
-    label: "Text",
+    text: "Text",
     value: "string",
   },
   {
-    label: "Date",
+    text: "Date",
     value: "date",
   },
 ];
