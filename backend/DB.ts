@@ -13,8 +13,9 @@ export const sequelize: SequelizeType = db.sequelize;
 export const dbReady = new Promise<void>((resolve, reject) => {
   const intervalId = setInterval(() => {
     console.log("Attempting to connect to db");
-    sequelize.authenticate().then(
-      () => {
+    sequelize
+      .authenticate()
+      .then(() => {
         console.log("Database connection established");
         clearInterval(intervalId);
 
@@ -36,11 +37,11 @@ export const dbReady = new Promise<void>((resolve, reject) => {
           console.log("Finished database migrations");
           resolve();
         });
-      },
-      (err) => {
-        reject(err);
-      }
-    );
+      })
+      .catch((err) => {
+        console.error("Failed to connect to db. Trying again in 100ms");
+        console.error(err);
+      });
   }, 100);
 });
 
