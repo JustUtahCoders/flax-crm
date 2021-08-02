@@ -40,7 +40,7 @@ export const dbReady = new Promise<void>((resolve, reject) => {
       })
       .catch((err) => {
         console.error("Failed to connect to db. Trying again in 100ms");
-        console.error(err);
+        // console.error(err);
       });
   }, 100);
 });
