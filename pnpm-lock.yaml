@@ -4,7 +4,6 @@ specifiers:
   '@babel/core': ^7.14.2
   '@babel/eslint-parser': ^7.14.2
   '@babel/preset-typescript': ^7.13.0
-  '@node-loader/core': ^1.0.5
   '@types/cookie-session': ^2.0.43
   '@types/express': ^4.17.12
   '@types/lodash-es': ^4.17.4
@@ -91,7 +90,6 @@ devDependencies:
   '@babel/core': 7.14.2
   '@babel/eslint-parser': 7.14.2_@babel+core@7.14.2+eslint@7.26.0
   '@babel/preset-typescript': 7.13.0_@babel+core@7.14.2
-  '@node-loader/core': 1.0.5
   '@types/passport': 1.0.7
   '@types/passport-local': 1.0.34
   autoprefixer: 10.3.1_postcss@8.3.6
@@ -451,11 +449,6 @@ packages:
       react-dom: 17.0.2_react@17.0.2
       react-is: 16.13.1
     dev: false
-
-  /@node-loader/core/1.0.5:
-    resolution: {integrity: sha512-hIkryVANacwKJeQgTRCWhTiwzfWSsE9ZTAA1YxqPcg5qmPs5w5vAuabyuhWqR8ZYmc+++O6O5Uv9wbCf/zzTMA==}
-    engines: {node: '>=13'}
-    dev: true
 
   /@nodelib/fs.scandir/2.1.5:
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}

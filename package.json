@@ -29,7 +29,6 @@
     "@babel/core": "^7.14.2",
     "@babel/eslint-parser": "^7.14.2",
     "@babel/preset-typescript": "^7.13.0",
-    "@node-loader/core": "^1.0.5",
     "@types/passport": "^1.0.7",
     "@types/passport-local": "^1.0.34",
     "autoprefixer": "^10.3.1",
