@@ -19,7 +19,7 @@ module.exports = {
       },
       {
         test: /\.css$/i,
-        use: [MiniCssExtractPlugin.loader, "css-loader"],
+        use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader"],
         include: [path.join(__dirname, "frontend"), /node_modules/],
       },
       {
