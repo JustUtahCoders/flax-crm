@@ -1,5 +1,5 @@
 {
-  "files": ["backend/Server.ts"],
+  "files": ["backend/Server.ts", "backend/Definitions.d.ts"],
   "compilerOptions": {
     "esModuleInterop": true,
     "module": "esnext",
