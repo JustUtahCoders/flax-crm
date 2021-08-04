@@ -21,7 +21,9 @@ export function flaxFetch<ResponseDataType = object>(
         r.headers["content-type"] &&
         r.headers["content-type"].includes("application/json")
       ) {
+        console.log("in the flaxFetch Line 24");
         return r.json();
+        // return r;
       } else if (
         r.headers["content-length"] &&
         r.headers["content-length"] > 0
