@@ -12,8 +12,6 @@ export function flaxFetch<ResponseDataType = object>(
   }
 
   return fetch(url, options as RequestInit).then((r) => {
-    console.log("in the fetch - r:", r);
-    console.log("in the fetch - r.ok:", r.ok);
     if (r.ok) {
       if (r.status === 204) {
         return;
@@ -21,9 +19,7 @@ export function flaxFetch<ResponseDataType = object>(
         r.headers["content-type"] &&
         r.headers["content-type"].includes("application/json")
       ) {
-        console.log("in the flaxFetch Line 24");
         return r.json();
-        // return r;
       } else if (
         r.headers["content-length"] &&
         r.headers["content-length"] > 0
