@@ -40,4 +40,9 @@ module.exports = {
     ],
   },
   plugins: [new MiniCssExtractPlugin()],
+  devServer: {
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+    },
+  },
 };

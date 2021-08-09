@@ -50,6 +50,14 @@ router.post(
   passport.authenticate("local", { successRedirect: "/create-noun" }) // change or remove redirect later
 );
 
+router.get(
+  "/login-with-google",
+  (req, res, next) => {
+    next();
+  },
+  passport.authenticate("google", { successRedirect: "/create-noun" })
+);
+
 router.get("/login", renderWebApp);
 
 router.use("/", async (req, res, next) => {
