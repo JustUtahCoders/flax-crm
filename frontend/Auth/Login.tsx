@@ -8,7 +8,7 @@
 */
 
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { Button, Form, Card } from "semantic-ui-react";
 import { RouterProps } from "react-router";
 import { useMutation } from "react-query";
@@ -62,6 +62,7 @@ export function Login(props: RouterProps) {
             <label htmlFor="username">Email</label>
             <input
               id="username"
+              type="email"
               value={loginFormData.username}
               onChange={(evt) =>
                 setLoginFormData({
@@ -77,6 +78,7 @@ export function Login(props: RouterProps) {
             <label htmlFor="password">Password</label>
             <input
               id="password"
+              type="password"
               value={loginFormData.password}
               onChange={(evt) =>
                 setLoginFormData({
@@ -101,6 +103,7 @@ export function Login(props: RouterProps) {
           </Button>
 
           <Button
+            // <Link href="/reset-password">
             type="submit"
             style={{
               background: "white",
@@ -134,20 +137,18 @@ export function Login(props: RouterProps) {
             </div>
           </div>
 
-          <Button
-            class="ui grey basic button"
-            style={{ marginTop: "20px", width: "100%", borderColor: "red" }}
-          >
-            Insert Google Button here
-          </Button>
+          <div className="g-signin2" data-onsuccess="onSignIn"></div>
 
           <p
             style={{ textAlign: "center", fontSize: "12px", marginTop: "30px" }}
           >
             New to Flax?{" "}
-            <a href="/create-account" style={{ textDecoration: "underline" }}>
+            <Link
+              href="/create-account"
+              style={{ textDecoration: "underline" }}
+            >
               Create an account
-            </a>
+            </Link>
           </p>
         </Form>
       </Card>

@@ -28,15 +28,12 @@ export async function findOrCreateLocalUser(email) {
 export async function findUser(email, password) {
   const hashpass = await bcrypt.hash(password, 5);
 
-  // Issue 1: users should be typed as an array of User objects, but was typed as an array of Models...
-  // Because of that, was not able to use user.password on Line 47
   const users = await sequelize.models.User.findAll({
     where: {
       email: email,
     },
   });
 
-  // Issue 2: I couldn't use users.first so went with the below line
   const user = users.length > 0 ? users[0] : null;
 
   if (user) {
@@ -44,7 +41,6 @@ export async function findUser(email, password) {
     const hash = user.get("password");
     const isValid = bcrypt.compareSync(password, `${hash}`);
 
-    console.log("----------------in findUser: isValid:", isValid);
     return isValid ? user : null;
   } else {
     return null;

@@ -3,7 +3,7 @@ This is where we will authenticate users.
 [x] All server endpoints starting with /api/ that are not related to auth should respond with http 401 whenever the user is not logged in.
 [x] This should be an HTTP 302 Found response status from the server when the authentication cookie / token is not found server side.
 [x] Until we have login working, this should be turned off when the IS_RUNNING_LOCALLY env variable is set.
-*/ //
+*/
 
 import { router } from "../Router.js";
 import cookieSession from "cookie-session";
