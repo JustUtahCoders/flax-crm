@@ -28,7 +28,5 @@ export const renderWebApp = async (req, res: Response) => {
     console.log("ERROR", err);
   });
 
-  res.write("<!DOCTYPE html>");
-
   stream.pipe(res);
 };
