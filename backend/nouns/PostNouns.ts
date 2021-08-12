@@ -41,7 +41,7 @@ router.post(
       parentId,
     });
     if (newNoun) {
-      res.status(200).json(newNoun);
+      res.status(201).send(newNoun);
     } else {
       res.status(500);
     }
