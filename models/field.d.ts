@@ -1,8 +1,7 @@
-import { Model, Instance } from "sequelize/lib/model.js";
+import { Model } from "sequelize/lib/model.js";
+import { DefaultModelAttrs } from "./defaults";
 
-type FieldInstance = Instance<FieldAttributes> & FieldAttributes;
-
-export type FieldModel = Model<FieldInstance, FieldAttributes>;
+export type FieldModel = Model<FieldAttributes>;
 
 export interface FieldAttributes {
   nounId: number;
@@ -11,3 +10,5 @@ export interface FieldAttributes {
   friendlyName: string;
   activeStatus: boolean;
 }
+
+export type Field = FieldAttributes & DefaultModelAttrs;
