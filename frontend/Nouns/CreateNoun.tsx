@@ -10,7 +10,7 @@ import { RouterProps } from "react-router";
 import { useMutation } from "react-query";
 import { flaxFetch } from "../Utils/flaxFetch";
 import { unary, kebabCase } from "lodash-es";
-import { NounAttributes } from "../../models/noun";
+import { Noun } from "../../models/noun";
 import { FieldToCreate } from "../../backend/Fields/BatchPostFields";
 
 export function CreateNoun(props: RouterProps) {
@@ -21,12 +21,13 @@ export function CreateNoun(props: RouterProps) {
   >(fieldReducer, initialFieldState, () => initialFieldState);
 
   const submitMutation = useMutation<
-    NounAttributes,
+    Noun,
     Error,
     React.FormEvent<HTMLFormElement>
-  >((evt) => {
+  >(async (evt) => {
     evt.preventDefault();
-    return flaxFetch(`/api/nouns`, {
+
+    const noun = await flaxFetch<Noun>(`/api/nouns`, {
       method: "POST",
       body: {
         friendlyName: nounName,
@@ -35,6 +36,15 @@ export function CreateNoun(props: RouterProps) {
         parentId: null,
       },
     });
+
+    await flaxFetch<void>(`/api/nouns/${noun.id}/fields`, {
+      method: "POST",
+      body: {
+        fields,
+      },
+    });
+
+    return noun;
   });
 
   useEffect(() => {
@@ -49,11 +59,6 @@ export function CreateNoun(props: RouterProps) {
       });
     }
   });
-
-  // useEffect(() => {
-  //   // Remove any empty fields when user clicks off of them
-  //   setFields(fields.filter((field, i) => i === fieldBeingEdited || field.friendlyName || field.type))
-  // }, [fieldBeingEdited])
 
   return (
     <Form onSubmit={unary(submitMutation.mutate)} className="container p-20">
@@ -82,33 +87,34 @@ export function CreateNoun(props: RouterProps) {
                 }
               >
                 <Card.Content>
-                  <Card.Header>
-                    {isEditing ? (
-                      <Form.Field>
-                        <label htmlFor={`field-name-${i}`}>Field Name</label>
-                        <Input
-                          id={`field-name-${i}`}
-                          value={field.friendlyName}
-                          onChange={(evt) => updateFriendlyName(i, evt)}
-                        />
-                      </Form.Field>
-                    ) : (
-                      field.friendlyName || "(No Name)"
-                    )}
-                  </Card.Header>
+                  {!isEditing && (
+                    <Card.Header>
+                      {field.friendlyName || "(No Name)"}
+                    </Card.Header>
+                  )}
                   <Card.Meta>
                     {isEditing ? (
-                      <Form.Field>
-                        <label htmlFor={`field-type-${i}`}>Field Type</label>
-                        <Form.Select
-                          options={fieldTypes}
-                          id={`field-type-${i}`}
-                          value={field.type}
-                          onChange={(evt, props) => {
-                            updateFieldType(i, props.value as string);
-                          }}
-                        ></Form.Select>
-                      </Form.Field>
+                      <>
+                        <Form.Field>
+                          <label htmlFor={`field-name-${i}`}>Field Name</label>
+                          <Input
+                            id={`field-name-${i}`}
+                            value={field.friendlyName}
+                            onChange={(evt) => updateFriendlyName(i, evt)}
+                          />
+                        </Form.Field>
+                        <Form.Field>
+                          <label htmlFor={`field-type-${i}`}>Field Type</label>
+                          <Form.Select
+                            options={fieldTypes}
+                            id={`field-type-${i}`}
+                            value={field.type}
+                            onChange={(evt, props) => {
+                              updateFieldType(i, props.value as string);
+                            }}
+                          ></Form.Select>
+                        </Form.Field>
+                      </>
                     ) : (
                       field.type || "No type"
                     )}
@@ -156,15 +162,18 @@ export function CreateNoun(props: RouterProps) {
     i: number,
     transform: (field: FieldToCreate) => FieldToCreate
   ) {
-    setFields(
-      fields.map((field, j) => {
-        if (i === j) {
-          return transform({ ...field });
-        } else {
-          return field;
-        }
-      })
-    );
+    dispatchFieldState({
+      type: FieldActions.UpdateFields,
+      update(fields) {
+        return fields.map((field, j) => {
+          if (i === j) {
+            return transform({ ...field });
+          } else {
+            return field;
+          }
+        });
+      },
+    });
   }
 }
 
@@ -205,6 +214,11 @@ function fieldReducer(oldState: FieldState, action: FieldAction): FieldState {
         ...oldState,
         fields: oldState.fields.concat(emptyField()),
       };
+    case FieldActions.UpdateFields:
+      return {
+        ...oldState,
+        fields: action.update(oldState.fields),
+      };
     default:
       throw Error();
   }
@@ -224,6 +238,8 @@ enum FieldActions {
   ClearEdit = "ClearEdit",
   EditField = "EditField",
   AddField = "AddField",
+  UpdateFields = "UpdateFields",
+  ClearEmptyFields = "ClearEmptyFields",
 }
 
 type ClearEditedField = {
@@ -239,7 +255,12 @@ type AddField = {
   type: FieldActions.AddField;
 };
 
-type FieldAction = ClearEditedField | EditField | AddField;
+type UpdateFields = {
+  type: FieldActions.UpdateFields;
+  update(fields: FieldToCreate[]): FieldToCreate[];
+};
+
+type FieldAction = ClearEditedField | EditField | AddField | UpdateFields;
 
 type FieldReducer = (oldState: FieldState, action: FieldAction) => FieldState;
 

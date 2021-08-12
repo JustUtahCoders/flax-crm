@@ -23,7 +23,7 @@ router.post<Params, ResponseBody, RequestBody>(
 
     const { nounId } = req.params;
 
-    let noun: NounAttributes;
+    let noun: NounModel | null;
     try {
       noun = await sequelize.models.Noun.findByPk<NounModel>(req.params.nounId);
     } catch (err) {

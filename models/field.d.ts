@@ -1,6 +1,6 @@
 import { Model, Instance } from "sequelize/lib/model.js";
 
-type FieldInstance = Instance<FieldAttributes> & FieldAttributes;
+export type FieldInstance = Instance<FieldAttributes> & FieldAttributes;
 
 export type FieldModel = Model<FieldInstance, FieldAttributes>;
 
