@@ -5,8 +5,10 @@ import {
   Button,
   DropdownItemProps,
   Card,
+  Header,
+  HeaderContent,
 } from "semantic-ui-react";
-import { RouterProps } from "react-router";
+import { RouterProps, useHistory } from "react-router";
 import { useMutation } from "react-query";
 import { flaxFetch } from "../Utils/flaxFetch";
 import { unary, kebabCase } from "lodash-es";
@@ -19,6 +21,7 @@ export function CreateNoun(props: RouterProps) {
     FieldReducer,
     FieldState
   >(fieldReducer, initialFieldState, () => initialFieldState);
+  const history = useHistory();
 
   const submitMutation = useMutation<
     Noun,
@@ -44,6 +47,8 @@ export function CreateNoun(props: RouterProps) {
       },
     });
 
+    history.push(`/create-intake-form/${noun.id}`);
+
     return noun;
   });
 
@@ -62,6 +67,9 @@ export function CreateNoun(props: RouterProps) {
 
   return (
     <Form onSubmit={unary(submitMutation.mutate)} className="container p-20">
+      <Header>
+        <HeaderContent>Create Noun</HeaderContent>
+      </Header>
       <Form.Field>
         <label htmlFor="noun-name">
           What is the name for this data? (Client, Donor, Lead, Invoice)
