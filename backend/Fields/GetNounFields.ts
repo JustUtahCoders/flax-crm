@@ -17,7 +17,7 @@ router.get<Params, ResponseBody, RequestBody>(
 
     const { nounId } = req.params;
 
-    let fields: FieldModel | null;
+    let fields: FieldModel[];
 
     try {
       fields = await sequelize.models.Field.findAll<FieldModel>({
