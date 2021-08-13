@@ -6,6 +6,7 @@ import "./Nouns/PostNouns.js";
 import "./Nouns/PatchNouns.js";
 import "./Nouns/DeleteNouns.js";
 import "./Fields/BatchPostFields.js";
+import "./Fields/GetNounFields.js";
 
 // WebApp should be at the bottom, as it's the default route
 import "./WebApp/WebApp.js";
