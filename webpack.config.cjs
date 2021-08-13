@@ -4,6 +4,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 module.exports = {
   entry: path.resolve(process.cwd(), "frontend/entry.tsx"),
   output: {
+    path: path.resolve(process.cwd(), "dist/static"),
     filename: "flax.js",
   },
   mode: "development",
@@ -27,14 +28,14 @@ module.exports = {
         loader: require.resolve("url-loader"),
         options: {
           limit: 10000,
-          name: "static/media/[name].[hash:8].[ext]",
+          name: "media/[name].[hash:8].[ext]",
         },
       },
       {
         test: [/\.eot$/, /\.ttf$/, /\.svg$/, /\.woff$/, /\.woff2$/],
         loader: require.resolve("file-loader"),
         options: {
-          name: "/static/media/[name].[hash:8].[ext]",
+          name: "/media/[name].[hash:8].[ext]",
         },
       },
     ],

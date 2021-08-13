@@ -9,6 +9,7 @@
     "strictNullChecks": true,
     "jsx": "react-jsx",
     "sourceMap": true,
+    "outDir": "dist/server",
     "lib": [
       "dom",
       "es5",
@@ -17,7 +18,8 @@
       "es2015.promise",
       "es2016.array.include",
       "es2018"
-    ]
+    ],
+    "target": "ES2020"
   },
   "ts-node": {
     "transpileOnly": true

@@ -13,10 +13,12 @@ specifiers:
   '@types/react-dom': ^17.0.8
   '@types/react-router': ^5.1.15
   '@types/sequelize': ^4.28.10
+  '@vercel/ncc': ^0.29.1
   autoprefixer: ^10.3.1
   body-parser: ^1.19.0
   concurrently: ^6.1.0
   cookie-session: ^1.4.0
+  copyfiles: ^2.4.1
   cross-env: ^7.0.3
   css-loader: ^6.2.0
   dotenv: ^10.0.0
@@ -44,6 +46,7 @@ specifiers:
   react-query: ^3.17.2
   react-router: ^5.2.0
   react-router-dom: ^5.2.0
+  rimraf: ^3.0.2
   semantic-ui-css: ^2.4.1
   semantic-ui-react: ^2.0.3
   sequelize: ^6.6.2
@@ -96,8 +99,10 @@ devDependencies:
   '@babel/preset-typescript': 7.13.0_@babel+core@7.14.2
   '@types/passport': 1.0.7
   '@types/passport-local': 1.0.34
+  '@vercel/ncc': 0.29.1
   autoprefixer: 10.3.1_postcss@8.3.6
   concurrently: 6.1.0
+  copyfiles: 2.4.1
   cross-env: 7.0.3
   css-loader: 6.2.0_webpack@5.37.1
   eslint: 7.26.0
@@ -110,6 +115,7 @@ devDependencies:
   postcss-loader: 6.1.1_postcss@8.3.6+webpack@5.37.1
   prettier: 2.3.0
   pretty-quick: 3.1.0_prettier@2.3.0
+  rimraf: 3.0.2
   sequelize-cli: 6.2.0
   style-loader: 2.0.0_webpack@5.37.1
   tailwindcss: 2.2.7_8c4f56fceea46e0564d4a9fe3811b687
@@ -752,6 +758,11 @@ packages:
   /@types/validator/13.6.3:
     resolution: {integrity: sha512-fWG42pMJOL4jKsDDZZREnXLjc3UE0R8LOJfARWYg6U966rxDT7TYejYzLnUF5cvSObGg34nd0+H2wHHU5Omdfw==}
     dev: false
+
+  /@vercel/ncc/0.29.1:
+    resolution: {integrity: sha512-92d2AApJtkpampMqKgfqWbYkuFvqRFs8kPkKLTbesSB9RVwWfiI3i6mgBxtZgMV9iRuLPVZ+OBNocKHXZSRj6Q==}
+    hasBin: true
+    dev: true
 
   /@webassemblyjs/ast/1.11.0:
     resolution: {integrity: sha512-kX2W49LWsbthrmIRMbQZuQDhGtjyqXfEmmHyEi4XWnSZtPmxY0+3anPIzsnRb45VH/J55zlOfWvZuY47aJZTJg==}
@@ -1574,6 +1585,19 @@ packages:
       depd: 2.0.0
       keygrip: 1.1.0
     dev: false
+
+  /copyfiles/2.4.1:
+    resolution: {integrity: sha512-fereAvAvxDrQDOXybk3Qu3dPbOoKoysFMWtkY3mv5BsL8//OSZVL5DCLYqgRfY5cWirgRzlC+WSrxp6Bo3eNZg==}
+    hasBin: true
+    dependencies:
+      glob: 7.1.7
+      minimatch: 3.0.4
+      mkdirp: 1.0.4
+      noms: 0.0.0
+      through2: 2.0.5
+      untildify: 4.0.0
+      yargs: 16.2.0
+    dev: true
 
   /core-js-pure/3.12.1:
     resolution: {integrity: sha512-1cch+qads4JnDSWsvc7d6nzlKAippwjUlf6vykkTLW53VSV+NkE6muGBToAjEA8pG90cSfcud3JgVmW2ds5TaQ==}
@@ -3082,7 +3106,6 @@ packages:
 
   /isarray/0.0.1:
     resolution: {integrity: sha1-ihis/Kmo9Bd+Cav8YDiTmwXR7t8=}
-    dev: false
 
   /isarray/1.0.0:
     resolution: {integrity: sha1-u5NdSFgsuhaMBoNJV6VKPgcSTxE=}
@@ -3648,6 +3671,13 @@ packages:
       touch: 3.1.0
       undefsafe: 2.0.3
       update-notifier: 4.1.3
+    dev: true
+
+  /noms/0.0.0:
+    resolution: {integrity: sha1-2o69nzr51nYJGbJ9nNyAkqczKFk=}
+    dependencies:
+      inherits: 2.0.4
+      readable-stream: 1.0.34
     dev: true
 
   /nopt/1.0.10:
@@ -4439,6 +4469,15 @@ packages:
       type-fest: 0.6.0
     dev: true
 
+  /readable-stream/1.0.34:
+    resolution: {integrity: sha1-Elgg40vIQtLyqq+v5MKRbuMsFXw=}
+    dependencies:
+      core-util-is: 1.0.2
+      inherits: 2.0.4
+      isarray: 0.0.1
+      string_decoder: 0.10.31
+    dev: true
+
   /readable-stream/2.3.7:
     resolution: {integrity: sha512-Ebho8K4jIbHAxnuxi7o42OrZgF/ZTNcsZj6nRKyUmkhLFq8CHItp/fy6hQZuZmP/n3yZ9VBUbp4zz/mX8hmYPw==}
     dependencies:
@@ -5011,6 +5050,10 @@ packages:
       define-properties: 1.1.3
     dev: true
 
+  /string_decoder/0.10.31:
+    resolution: {integrity: sha1-YuIDvEF2bGwoyfyEMB2rHFMQ+pQ=}
+    dev: true
+
   /string_decoder/1.1.1:
     resolution: {integrity: sha512-n/ShnvDi6FHbbVfviro+WojiFzv+s8MPMHBczVePfUpDJLwoLT0ht1l4YwBCbi8pJAveEEdnkHyPyTP/mzRfwg==}
     dependencies:
@@ -5184,6 +5227,13 @@ packages:
 
   /text-table/0.2.0:
     resolution: {integrity: sha1-f17oI66AUgfACvLfSoTsP8+lcLQ=}
+    dev: true
+
+  /through2/2.0.5:
+    resolution: {integrity: sha512-/mrRod8xqpA+IHSLyGCQ2s8SPHiCDEeQJSep1jqLYeEUClOFG2Qsh+4FU6G9VeqpZnGW/Su8LQGc4YKni5rYSQ==}
+    dependencies:
+      readable-stream: 2.3.7
+      xtend: 4.0.2
     dev: true
 
   /thunky/1.1.0:
@@ -5386,6 +5436,11 @@ packages:
   /unpipe/1.0.0:
     resolution: {integrity: sha1-sr9O6FFKrmFltIF4KdIbLvSZBOw=}
     engines: {node: '>= 0.8'}
+
+  /untildify/4.0.0:
+    resolution: {integrity: sha512-KK8xQ1mkzZeg9inewmFVDNkg3l5LUhoq9kN6iWYB/CC9YMG8HA+c1Q8HwDe6dEX7kErrEVNVBO3fWsVq5iDgtw==}
+    engines: {node: '>=8'}
+    dev: true
 
   /update-notifier/4.1.3:
     resolution: {integrity: sha512-Yld6Z0RyCYGB6ckIjffGOSOmHXj1gMeE7aROz4MG+XMkmixBX4jUngrGXNYz7wPKBmtoD4MnBa2Anu7RSKht/A==}
