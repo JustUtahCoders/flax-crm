@@ -15,15 +15,9 @@ export function flaxFetch<ResponseDataType = object>(
     if (r.ok) {
       if (r.status === 204) {
         return;
-      } else if (
-        r.headers["content-type"] &&
-        r.headers["content-type"].includes("application/json")
-      ) {
+      } else if (r.headers.get("content-type")?.includes("application/json")) {
         return r.json();
-      } else if (
-        r.headers["content-length"] &&
-        r.headers["content-length"] > 0
-      ) {
+      } else if (r.headers.get["content-length"]?.length > 0) {
         return r.text();
       }
     } else if (r.status === 401) {
