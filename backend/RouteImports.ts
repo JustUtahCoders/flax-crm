@@ -8,5 +8,8 @@ import "./Nouns/DeleteNouns.js";
 import "./Fields/BatchPostFields.js";
 import "./Fields/GetNounFields.js";
 
+// The default API Handler responds with a 404
+import "./ApiNotFound.js";
+
 // WebApp should be at the bottom, as it's the default route
 import "./WebApp/WebApp.js";
