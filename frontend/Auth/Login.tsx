@@ -8,7 +8,7 @@
 */
 
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { Button, Form, Card } from "semantic-ui-react";
 import { RouterProps } from "react-router";
 import { useMutation } from "react-query";
@@ -43,25 +43,37 @@ export function Login(props: RouterProps) {
       onSuccess: async (data, variables, context) => {
         history.push("/home");
       },
+      onError: (error, variables, context) => {
+        console.log(error);
+      },
     }
   );
 
   return (
-    <div style={{ display: "flex", justifyContent: "center" }}>
-      <Card
-        style={{
-          padding: "10px",
-          width: "30%",
-          boxShadow: "none",
-          marginTop: "15%",
-        }}
-      >
-        <h1 style={{ color: "#646461", fontSize: "20px" }}>Sign in</h1>
+    <div className="flex flex-col items-center grid grid-cols-3 gap-r">
+      <div className="..."></div>
+
+      <div className="... ">
+        <h1 className="text-xl text-gray-500 place-self-start pt-40">
+          Sign in
+        </h1>
+        <br />
         <Form onSubmit={unary(submitMutation.mutate)}>
           <Form.Field>
-            <label htmlFor="username">Email</label>
+            <label
+              htmlFor="username"
+              style={{
+                fontFamily: "Source Sans Pro",
+                color: "#403F3D",
+                fontWeight: 600,
+              }}
+            >
+              Email
+            </label>
             <input
               id="username"
+              type="email"
+              className="ui input"
               value={loginFormData.username}
               onChange={(evt) =>
                 setLoginFormData({
@@ -74,9 +86,21 @@ export function Login(props: RouterProps) {
           </Form.Field>
 
           <Form.Field>
-            <label htmlFor="password">Password</label>
+            {/* // @ts-ignore  */}
+            <label
+              htmlFor="password"
+              style={{
+                fontFamily: "Source Sans Pro",
+                color: "#403F3D",
+                fontWeight: 600,
+              }}
+            >
+              Password
+            </label>
             <input
               id="password"
+              type="password"
+              className="ui input"
               value={loginFormData.password}
               onChange={(evt) =>
                 setLoginFormData({
@@ -88,69 +112,47 @@ export function Login(props: RouterProps) {
             />
           </Form.Field>
 
-          <Button
-            type="submit"
-            style={{
-              background: "#2a467b",
-              color: "white",
-              width: "50%",
-              margin: 0,
-            }}
-          >
-            Sign in
-          </Button>
+          <div className="py-8"></div>
 
-          <Button
-            type="submit"
-            style={{
-              background: "white",
-              color: "#2a467b",
-              width: "50%",
-              margin: 0,
-            }}
-          >
-            Reset Password
-          </Button>
-
-          <div style={{ marginTop: "20px", marginBottom: "10px" }}>
-            <div
+          <div className="flex grid grid-cols-2 gap-4 space-x-4">
+            <Button
+              type="submit"
               style={{
-                width: "100%",
-                height: "10px",
-                textAlign: "center",
-                borderBottom: "1px solid #b3b3b1",
-                color: "#b3b3b1",
+                background: "#2a467b",
+                color: "white",
               }}
+              className="h-15 rounded font-medium flex-shrink"
             >
-              <span
-                style={{
-                  fontSize: "10px",
-                  backgroundColor: "white",
-                  padding: "0 10px",
-                }}
-              >
-                or
-              </span>
-            </div>
+              Sign in
+            </Button>
+            <Link
+              to="/reset-password"
+              className="h-15 rounded self-center text-center font-medium text-blue-900 bg-white flex-shrink"
+            >
+              Reset Password
+            </Link>
           </div>
 
-          <Button
-            class="ui grey basic button"
-            style={{ marginTop: "20px", width: "100%", borderColor: "red" }}
-          >
+          <div className="pt-6 pb-2 flex flex-row">
+            <hr className="w-full mt-4 mb-8 border-gray-400"></hr>
+            <span className="bg-white py-2 px-2 text-gray-400 text-sm">or</span>
+            <hr className="w-full mt-4 mb-8 border-gray-400"></hr>
+          </div>
+
+          <Button className="ui grey basic button w-full" type="button">
             Insert Google Button here
           </Button>
 
-          <p
-            style={{ textAlign: "center", fontSize: "12px", marginTop: "30px" }}
-          >
+          <p className="text-center text-xs text-gray-600 py-8">
             New to Flax?{" "}
-            <a href="/create-account" style={{ textDecoration: "underline" }}>
+            <Link href="/create-account" className="underline text-blue-900">
               Create an account
-            </a>
+            </Link>
           </p>
         </Form>
-      </Card>
+      </div>
+
+      <div className="..."></div>
     </div>
   );
 }
