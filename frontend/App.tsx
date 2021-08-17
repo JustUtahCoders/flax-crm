@@ -21,6 +21,7 @@ export function App(props) {
           <Route path="/create-noun" component={CreateNoun} />
           <Route path="/login" component={Login} />
         </Router>
+
         <script src="http://localhost:7700/flax.js"></script>
       </body>
     </QueryClientProvider>
