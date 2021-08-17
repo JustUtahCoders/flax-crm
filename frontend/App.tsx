@@ -15,12 +15,17 @@ export function App(props) {
     <QueryClientProvider client={queryClient}>
       <head>
         <link rel="stylesheet" href="http://localhost:7700/main.css"></link>
+        <meta
+          name="google-signin-client_id"
+          content="437751451243-do7cqgls9rooar4q430cr57nu24cgb5n.apps.googleusercontent.com"
+        ></meta>
       </head>
       <body>
         <Router context={props.routerContext} location={props.reqUrl}>
           <Route path="/create-noun" component={CreateNoun} />
           <Route path="/login" component={Login} />
         </Router>
+
         <script src="http://localhost:7700/flax.js"></script>
       </body>
     </QueryClientProvider>
