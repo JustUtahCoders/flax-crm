@@ -54,10 +54,9 @@ export function Login(props: RouterProps) {
       <div className="flex items-center"></div>
 
       <div>
-        <h1 className="text-xl text-gray-500 place-self-start pt-40">
+        <h1 className="text-xl text-gray-500 place-self-start pt-40 mb-6">
           Sign in
         </h1>
-        <br />
         <Form onSubmit={unary(submitMutation.mutate)}>
           <Form.Field>
             <label
@@ -86,7 +85,6 @@ export function Login(props: RouterProps) {
           </Form.Field>
 
           <Form.Field>
-            {/* // @ts-ignore  */}
             <label
               htmlFor="password"
               style={{
