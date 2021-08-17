@@ -23,7 +23,7 @@ router.post<Params, ResponseBody, RequestBody>(
 
     const { nounId } = req.params;
 
-    let noun: NounAttributes;
+    let noun: NounModel | null;
     try {
       noun = await sequelize.models.Noun.findByPk<NounModel>(req.params.nounId);
     } catch (err) {
@@ -46,7 +46,7 @@ router.post<Params, ResponseBody, RequestBody>(
   }
 );
 
-type FieldToCreate = Omit<FieldAttributes, "nounId">;
+export type FieldToCreate = Omit<FieldAttributes, "nounId">;
 interface Params {
   nounId: number;
 }
