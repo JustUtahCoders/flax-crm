@@ -37,7 +37,6 @@ export async function findUser(email, password) {
   const user = users.length > 0 ? users[0] : null;
 
   if (user) {
-    // Model from Sequelize has a field accessor called get()  ... so I got the password field
     const hash = user.get("password");
     const isValid = bcrypt.compareSync(password, `${hash}`);
 
