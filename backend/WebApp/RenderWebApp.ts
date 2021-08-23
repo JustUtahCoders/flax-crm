@@ -15,8 +15,6 @@ export const renderWebApp = async (req, res: Response) => {
     webpackManifest = (await import("../webpack-manifest.json")).default;
   }
 
-  console.log("manifest", webpackManifest);
-
   const props: AppProps = {
     routerContext,
     reqUrl: req.url,
