@@ -55,6 +55,7 @@ specifiers:
   sequelize-cli: ^6.2.0
   style-loader: ^2.0.0
   tailwindcss: ^2.2.7
+  terser-webpack-plugin: ^5.1.4
   tree-kill: ^1.2.2
   ts-loader: ^9.2.2
   ts-node: ^9.1.1
@@ -125,6 +126,7 @@ devDependencies:
   sequelize-cli: 6.2.0
   style-loader: 2.0.0_webpack@5.37.1
   tailwindcss: 2.2.7_8c4f56fceea46e0564d4a9fe3811b687
+  terser-webpack-plugin: 5.1.4_webpack@5.37.1
   ts-loader: 9.2.2_typescript@4.2.4+webpack@5.37.1
   ts-node: 9.1.1_typescript@4.2.4
   typescript: 4.2.4
@@ -3150,6 +3152,15 @@ packages:
       supports-color: 7.2.0
     dev: true
 
+  /jest-worker/27.0.6:
+    resolution: {integrity: sha512-qupxcj/dRuA3xHPMUd40gr2EaAurFbkwzOh7wfPaeE9id7hyjURRQoqNfHifHK3XjJU6YJJUQKILGUnwGPEOCA==}
+    engines: {node: '>= 10.13.0'}
+    dependencies:
+      '@types/node': 16.4.7
+      merge-stream: 2.0.0
+      supports-color: 8.1.1
+    dev: true
+
   /jquery/3.6.0:
     resolution: {integrity: sha512-JVzAR/AjBvVt2BmYhxRCSYysDsPcssdmTFnzyLEts9qNwmjmu4JTAMYubEfwVOSwpQ1I1sKKFcxhZCI2buerfw==}
     dev: false
@@ -4850,6 +4861,12 @@ packages:
       randombytes: 2.1.0
     dev: true
 
+  /serialize-javascript/6.0.0:
+    resolution: {integrity: sha512-Qr3TosvguFt8ePWqsvRfrKyQXIiW+nGbYpy8XK24NQHE83caxWt+mIymTT19DGFbNWNLfEwsrkSmN64lVWB9ag==}
+    dependencies:
+      randombytes: 2.1.0
+    dev: true
+
   /serve-index/1.9.1:
     resolution: {integrity: sha1-03aNabHn2C5c4FD/9bRTvqEqkjk=}
     engines: {node: '>= 0.8.0'}
@@ -5231,6 +5248,21 @@ packages:
       p-limit: 3.1.0
       schema-utils: 3.0.0
       serialize-javascript: 5.0.1
+      source-map: 0.6.1
+      terser: 5.7.0
+      webpack: 5.37.1_webpack-cli@4.7.2
+    dev: true
+
+  /terser-webpack-plugin/5.1.4_webpack@5.37.1:
+    resolution: {integrity: sha512-C2WkFwstHDhVEmsmlCxrXUtVklS+Ir1A7twrYzrDrQQOIMOaVAYykaoo/Aq1K0QRkMoY2hhvDQY1cm4jnIMFwA==}
+    engines: {node: '>= 10.13.0'}
+    peerDependencies:
+      webpack: ^5.1.0
+    dependencies:
+      jest-worker: 27.0.6
+      p-limit: 3.1.0
+      schema-utils: 3.1.1
+      serialize-javascript: 6.0.0
       source-map: 0.6.1
       terser: 5.7.0
       webpack: 5.37.1_webpack-cli@4.7.2

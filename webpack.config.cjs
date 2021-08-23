@@ -1,6 +1,7 @@
 const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const { WebpackManifestPlugin } = require("webpack-manifest-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
 
 module.exports = (webpackConfigEnv, argv) => {
   const isProd = webpackConfigEnv.prod;
@@ -15,6 +16,19 @@ module.exports = (webpackConfigEnv, argv) => {
     devtool: "source-map",
     resolve: {
       extensions: [".ts", ".tsx", ".js"],
+    },
+    optimization: {
+      minimizer: [
+        new TerserPlugin({
+          terserOptions: {
+            format: {
+              // lodash'es deburrLetter function has unicode chars that don't work in all browsers yet
+              // https://github.com/terser/terser/issues/1005#issuecomment-904213337
+              ascii_only: true,
+            },
+          },
+        }),
+      ],
     },
     module: {
       rules: [
