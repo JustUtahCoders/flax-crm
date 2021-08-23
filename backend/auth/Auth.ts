@@ -42,13 +42,9 @@ router.use(
 router.use(passport.initialize());
 router.use(passport.session());
 
-router.post(
-  "/login",
-  (req, res, next) => {
-    next();
-  },
-  passport.authenticate("local", { successRedirect: "/create-noun" }) // change or remove redirect later
-);
+router.post("/login", passport.authenticate("local"), (req, res, next) => {
+  res.status(200).json({ loginSuccess: true });
+});
 
 router.get("/login", renderWebApp);
 
