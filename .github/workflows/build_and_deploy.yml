@@ -27,7 +27,7 @@ jobs:
 
   deploy-server:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.repository_owner == 'single-spa-workshop'
+    if: github.ref == 'refs/heads/main' && github.repository_owner == 'JustUtahCoders'
     needs: [build]
     env:
       ENV_VARS_YAML: ${{ secrets.ENV_VARS_YAML }}
@@ -43,10 +43,17 @@ jobs:
       - uses: pnpm/action-setup@v2.0.1
         with:
           version: 16.13.0
-      - run: npm run compile
-      - run: mkdir keys
+      - run: pnpm install
+      - run: pnpm run build
+      # Upload frontend assets to GCP bucket
+      - id: upload-files
+        uses: google-github-actions/upload-cloud-storage@main
+        with:
+          path: dist
+          destination: ${{ secrets.GCP_FRONTEND_BUCKET }}
+
+      # App Engine deployment
       - run: echo "$ENV_VARS_YAML" > env-vars.yaml
-      - run: ls -al keys
       - uses: google-github-actions/deploy-appengine@main
         with:
           credentials: ${{ secrets.GCP_SA_KEY }}

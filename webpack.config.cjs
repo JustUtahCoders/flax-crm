@@ -4,7 +4,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 module.exports = {
   entry: path.resolve(process.cwd(), "frontend/entry.tsx"),
   output: {
-    path: path.resolve(process.cwd(), "dist/static"),
+    path: path.resolve(process.cwd(), "dist"),
     filename: "flax.js",
   },
   mode: "development",

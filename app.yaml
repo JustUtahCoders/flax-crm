@@ -1,0 +1,13 @@
+runtime: custom
+env: flex
+liveness_check:
+  path: "/api/health"
+readiness_check:
+  path: "/api/health"
+includes:
+  - env-vars.yaml
+handlers:
+  - url: /.*
+    script: auto
+    secure: always
+    redirect_http_response_code: 301

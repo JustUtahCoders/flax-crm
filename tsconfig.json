@@ -9,7 +9,7 @@
     "strictNullChecks": true,
     "jsx": "react-jsx",
     "sourceMap": true,
-    "outDir": "dist/server",
+    "outDir": "lib",
     "lib": [
       "dom",
       "es5",

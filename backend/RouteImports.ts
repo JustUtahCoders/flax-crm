@@ -1,3 +1,4 @@
+import "./Health/Health.js";
 // Auth should be first, to prevent showing anything if they're not logged in
 import "./Auth/Auth.js";
 
