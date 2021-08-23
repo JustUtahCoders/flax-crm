@@ -33,7 +33,7 @@ jobs:
       - run: pnpm run build
       - run: find lib
       - run: find dist
-      - run: cat dist/flax.js
+      - run: cp dist/webpack-manifest.json lib/backend
       - uses: actions/upload-artifact@v2
         with:
           name: frontend-assets

@@ -46,10 +46,12 @@ export const dbReady = new Promise<void>((resolve, reject) => {
       });
   }, 300);
 
-  timeoutId = setTimeout(() => {
-    console.log("Unable to connect to db. Giving up");
-    process.exit(1);
-  }, 10000);
+  if (process.env.NODE_ENV !== "development") {
+    timeoutId = setTimeout(() => {
+      console.log("Unable to connect to db. Giving up");
+      process.exit(1);
+    }, 10000);
+  }
 });
 
 router.use(async (req, res, next) => {

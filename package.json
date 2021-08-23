@@ -14,7 +14,7 @@
     "clean": "rimraf dist lib",
     "build": "pnpm run clean && concurrently pnpm:build:*",
     "build:backend": "tsc",
-    "build:frontend": "webpack build --mode=production",
+    "build:frontend": "webpack build --mode=production --env prod",
     "start": "node --experimental-specifier-resolution=node backend/Server.js",
     "format": "prettier --write .",
     "lint": "eslint \"backend/**/*\" \"frontend/**/*\"",
@@ -65,7 +65,8 @@
     "url-loader": "^4.1.1",
     "webpack": "^5.37.1",
     "webpack-cli": "^4.7.2",
-    "webpack-dev-server": "4.0.0-rc.0"
+    "webpack-dev-server": "4.0.0-rc.0",
+    "webpack-manifest-plugin": "^4.0.2"
   },
   "dependencies": {
     "@types/bcryptjs": "^2.4.2",
