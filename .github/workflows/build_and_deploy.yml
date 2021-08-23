@@ -31,9 +31,9 @@ jobs:
       - run: pnpm run check-format
       - run: pnpm run lint
       - run: pnpm run build
+      - run: cp dist/webpack-manifest.json lib/backend
       - run: find lib
       - run: find dist
-      - run: cp dist/webpack-manifest.json lib/backend
       - uses: actions/upload-artifact@v2
         with:
           name: frontend-assets
