@@ -10,8 +10,8 @@ import cookieSession from "cookie-session";
 import passport from "passport";
 import util from "util";
 import { Strategy } from "passport-local";
-import { renderWebApp } from "../WebApp/RenderWebApp";
-import { findOrCreateLocalUser, findUser } from "../users/Users";
+import { renderWebApp } from "../WebApp/RenderWebApp.js";
+import { findOrCreateLocalUser, findUser } from "../Users/Users.js";
 
 const LOCAL_DEV_USER_EMAIL = "localdev@email.com";
 

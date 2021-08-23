@@ -8,21 +8,24 @@ const queryClient = new QueryClient();
 
 export function App(props) {
   const inBrowser = typeof window !== "undefined";
+  const assetBase =
+    process.env.NODE_ENV === "production"
+      ? "https://storage.googleapis.com/flax-crm-frontend/dist"
+      : "http://localhost:7700";
 
   const Router = inBrowser ? BrowserRouter : StaticRouter;
 
   return (
     <QueryClientProvider client={queryClient}>
       <head>
-        <link rel="stylesheet" href="http://localhost:7700/main.css"></link>
+        <link rel="stylesheet" href={`${assetBase}/main.css`}></link>
       </head>
       <body>
         <Router context={props.routerContext} location={props.reqUrl}>
           <Route path="/create-noun" component={CreateNoun} />
           <Route path="/login" component={Login} />
         </Router>
-
-        <script src="http://localhost:7700/flax.js"></script>
+        <script src={`${assetBase}/flax.js`}></script>
       </body>
     </QueryClientProvider>
   );

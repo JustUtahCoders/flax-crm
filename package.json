@@ -11,6 +11,11 @@
     "develop:db": "docker-compose up",
     "develop:frontend": "webpack serve --config webpack.config.cjs --port 7700",
     "check-format": "prettier --check .",
+    "clean": "rimraf dist lib",
+    "build": "pnpm run clean && concurrently pnpm:build:*",
+    "build:backend": "tsc",
+    "build:frontend": "webpack build --mode=production",
+    "start": "node --experimental-specifier-resolution=node backend/Server.js",
     "format": "prettier --write .",
     "lint": "eslint \"backend/**/*\" \"frontend/**/*\"",
     "prepare": "husky install"
@@ -18,6 +23,9 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/JustUtahCoders/flax-crm.git"
+  },
+  "engines": {
+    "node": "16.4.2"
   },
   "author": "",
   "license": "MIT",
@@ -31,8 +39,10 @@
     "@babel/preset-typescript": "^7.13.0",
     "@types/passport": "^1.0.7",
     "@types/passport-local": "^1.0.34",
+    "@vercel/ncc": "^0.29.1",
     "autoprefixer": "^10.3.1",
     "concurrently": "^6.1.0",
+    "copyfiles": "^2.4.1",
     "cross-env": "^7.0.3",
     "css-loader": "^6.2.0",
     "eslint": "^7.26.0",
@@ -45,13 +55,13 @@
     "postcss-loader": "^6.1.1",
     "prettier": "^2.3.0",
     "pretty-quick": "^3.1.0",
+    "rimraf": "^3.0.2",
     "sequelize-cli": "^6.2.0",
     "style-loader": "^2.0.0",
     "tailwindcss": "^2.2.7",
     "ts-loader": "^9.2.2",
     "ts-node": "^9.1.1",
     "typescript": "^4.2.4",
-    "umzug": "^2.3.0",
     "url-loader": "^4.1.1",
     "webpack": "^5.37.1",
     "webpack-cli": "^4.7.2",
@@ -87,6 +97,7 @@
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^2.0.3",
     "sequelize": "^6.6.2",
-    "tree-kill": "^1.2.2"
+    "tree-kill": "^1.2.2",
+    "umzug": "^2.3.0"
   }
 }
