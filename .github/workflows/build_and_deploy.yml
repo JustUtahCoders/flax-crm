@@ -27,13 +27,14 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-
+      - run: find backend
+      - run: cat backend/RouteImports.ts
+      - run: cat backend/Auth/Auth.ts
       - run: pnpm install
       - run: pnpm run check-format
       - run: pnpm run lint
       - run: pnpm run build
       - run: find lib
-      - run: cat backend/RouteImports.ts
-      - run: cat backend/Auth/Auth.ts
       - run: cat lib/backend/RouteImports.js
       - run: cat lib/backend/Auth/Auth.js
       - run: find dist
