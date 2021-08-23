@@ -50,6 +50,7 @@ jobs:
         uses: google-github-actions/upload-cloud-storage@main
         with:
           path: dist
+          credentials: ${{ secrets.GCP_SA_KEY }}
           destination: ${{ secrets.GCP_FRONTEND_BUCKET }}
 
       # App Engine deployment
