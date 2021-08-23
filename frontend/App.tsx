@@ -6,26 +6,35 @@ import { Login } from "./Auth/Login";
 
 const queryClient = new QueryClient();
 
-export function App(props) {
+export function App(props: AppProps) {
   const inBrowser = typeof window !== "undefined";
-  const assetBase =
-    process.env.NODE_ENV === "production"
-      ? "https://storage.googleapis.com/flax-crm-frontend/dist"
-      : "http://localhost:7700";
 
   const Router = inBrowser ? BrowserRouter : StaticRouter;
 
   return (
     <QueryClientProvider client={queryClient}>
       <head>
-        <link rel="stylesheet" href={`${assetBase}/main.css`}></link>
+        <script
+          type="application/json"
+          id="root-props"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(props) }}
+        />
+        {props.cssFiles.map((cssFile) => (
+          <link
+            key={cssFile}
+            rel="stylesheet"
+            href={`${props.assetBase}/${cssFile}`}
+          ></link>
+        ))}
       </head>
       <body>
         <Router context={props.routerContext} location={props.reqUrl}>
           <Route path="/create-noun" component={CreateNoun} />
           <Route path="/login" component={Login} />
         </Router>
-        <script src={`${assetBase}/flax.js`}></script>
+        {props.jsFiles.map((jsFile) => (
+          <script key={jsFile} src={`${props.assetBase}/${jsFile}`}></script>
+        ))}
       </body>
     </QueryClientProvider>
   );
@@ -33,4 +42,12 @@ export function App(props) {
 
 export interface RouterContext {
   url?: string;
+}
+
+export interface AppProps {
+  routerContext: RouterContext;
+  reqUrl: string;
+  assetBase: string;
+  jsFiles: string[];
+  cssFiles: string[];
 }

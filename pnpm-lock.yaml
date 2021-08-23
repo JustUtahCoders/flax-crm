@@ -64,6 +64,7 @@ specifiers:
   webpack: ^5.37.1
   webpack-cli: ^4.7.2
   webpack-dev-server: 4.0.0-rc.0
+  webpack-manifest-plugin: ^4.0.2
 
 dependencies:
   '@types/bcryptjs': 2.4.2
@@ -131,6 +132,7 @@ devDependencies:
   webpack: 5.37.1_webpack-cli@4.7.2
   webpack-cli: 4.7.2_50d47e26d47b9b92d72d295841df9b42
   webpack-dev-server: 4.0.0-rc.0_webpack-cli@4.7.2+webpack@5.37.1
+  webpack-manifest-plugin: 4.0.2_webpack@5.37.1
 
 packages:
 
@@ -5679,6 +5681,17 @@ packages:
       - debug
       - supports-color
       - utf-8-validate
+    dev: true
+
+  /webpack-manifest-plugin/4.0.2_webpack@5.37.1:
+    resolution: {integrity: sha512-Ld6j05pRblXAVoX8xdXFDsc/s97cFnR1FOmQawhTSlp6F6aeU1Jia5aqTmDpkueaAz8g9sXpgSOqmEgVAR61Xw==}
+    engines: {node: '>=12.22.0'}
+    peerDependencies:
+      webpack: ^4.44.2 || ^5.47.0
+    dependencies:
+      tapable: 2.2.0
+      webpack: 5.37.1_webpack-cli@4.7.2
+      webpack-sources: 2.2.0
     dev: true
 
   /webpack-merge/5.8.0:
