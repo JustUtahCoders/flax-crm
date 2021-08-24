@@ -33,3 +33,4 @@ select * from "Nouns";
 ## Database migrations
 
 DB migrations are run automatically when you start up the server. To create a new migration, follow the instructions at https://sequelize.org/master/manual/migrations.html. The generated files need to be renamed to have the `.cjs` extension since this project uses ESM by default.
+
