@@ -35,7 +35,7 @@ router.use(
     name: "session",
     keys: ["key1", "key2"], //   keys: require("keygrip")([process.env.KEYGRIP_SECRET], "sha256"), from CUI
     maxAge: 144 * 60 * 60 * 1000, // 144 hours
-    secure: process.env.IS_RUNNING_LOCALLY ? false : true, // in dev env. no need to be secure
+    secure: false,
   })
 );
 
