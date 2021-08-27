@@ -14,6 +14,9 @@ import { RouterProps } from "react-router";
 import { useMutation } from "react-query";
 import { flaxFetch } from "../Utils/flaxFetch";
 import { unary } from "lodash-es";
+import styles from "./Login.module.css";
+
+console.log("Login styles", styles);
 
 export function Login(props: RouterProps) {
   const [loginFormData, setLoginFormData] = useState<LoginFormData>({
@@ -59,14 +62,7 @@ export function Login(props: RouterProps) {
         </h1>
         <Form onSubmit={unary(submitMutation.mutate)}>
           <Form.Field>
-            <label
-              htmlFor="username"
-              style={{
-                fontFamily: "Source Sans Pro",
-                color: "#403F3D",
-                fontWeight: 600,
-              }}
-            >
+            <label htmlFor="username" className={styles.emailLabel}>
               Email
             </label>
             <input

@@ -1,5 +1,6 @@
 {
   "files": ["backend/Server.ts"],
+  "include": ["backend/**/*.d.ts", "frontend/**/*.d.ts"],
   "compilerOptions": {
     "esModuleInterop": true,
     "module": "esnext",
