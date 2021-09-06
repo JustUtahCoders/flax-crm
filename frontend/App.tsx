@@ -15,6 +15,12 @@ export function App(props) {
     <QueryClientProvider client={queryClient}>
       <head>
         <link rel="stylesheet" href="http://localhost:7700/main.css"></link>
+        <link rel="preconnect" href="https://fonts.googleapis.com"></link>
+        <link rel="preconnect" href="https://fonts.gstatic.com"></link>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap"
+          rel="stylesheet"
+        ></link>
         <meta
           name="google-signin-client_id"
           content="437751451243-do7cqgls9rooar4q430cr57nu24cgb5n.apps.googleusercontent.com"
@@ -27,16 +33,6 @@ export function App(props) {
         </Router>
 
         <script src="http://localhost:7700/flax.js"></script>
-        {/* <script>
-    
-    function renderButton() {
-      gapi.signin2.render('my-signin2', {
-        'width': 240,
-        'height': 50
-      });
-    }
-  </script> */}
-        <script src="https://apis.google.com/js/platform.js?onload=renderButton"></script>
       </body>
     </QueryClientProvider>
   );

@@ -11,7 +11,12 @@ import passport from "passport";
 import util from "util";
 import { Strategy } from "passport-local";
 import { renderWebApp } from "../WebApp/RenderWebApp";
-import { findOrCreateLocalUser, findUser } from "../users/Users";
+import {
+  findOrCreateLocalUser,
+  findUser,
+  findOrCreateGoogleUser,
+} from "../users/Users";
+import { OAuth2Strategy as GoogleStrategy } from "passport-google-oauth";
 
 const LOCAL_DEV_USER_EMAIL = "localdev@email.com";
 
@@ -27,6 +32,21 @@ let passportStrategy = new Strategy(async function (email, password, done) {
     return done(error);
   }
 });
+
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID:
+        "437751451243-do7cqgls9rooar4q430cr57nu24cgb5n.apps.googleusercontent.com",
+      clientSecret: "zC6Mt0fGV7ObDtPg1rw2CNsN",
+      callbackURL: "http://localhost:7600/auth/google/callback", // Change to env variable  .. auth/google/callback
+    },
+    async function (accessToken, refreshToken, profile, done) {
+      const googleUser = await findOrCreateGoogleUser(profile);
+      return done(null, googleUser); // null instead of error for now? add error handling here
+    }
+  )
+);
 
 passport.use(passportStrategy);
 
@@ -47,6 +67,21 @@ router.post("/login", passport.authenticate("local"), (req, res, next) => {
 });
 
 router.get("/login", renderWebApp);
+
+router.get(
+  "/auth/google",
+  passport.authenticate("google", {
+    scope: ["https://www.googleapis.com/auth/plus.login", "email"],
+  })
+);
+
+router.get(
+  "/auth/google/callback",
+  passport.authenticate("google", { failureRedirect: "/login" }),
+  function (req, res) {
+    res.redirect("/");
+  }
+);
 
 router.use("/", async (req, res, next) => {
   if (req.session && req.session.passport && req.session.passport.user.id) {
