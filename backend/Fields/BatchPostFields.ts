@@ -1,5 +1,5 @@
-import { FieldAttributes, FieldModel } from "../../models/field.js";
-import { NounAttributes, NounModel } from "../../models/noun.js";
+import { FieldAttributes, FieldModel } from "../DB/models/field.js";
+import { NounAttributes, NounModel } from "../DB/models/noun.js";
 import { sequelize } from "../DB.js";
 import { router } from "../Router.js";
 import { invalidRequest, notFound } from "../Utils/EndpointResponses.js";

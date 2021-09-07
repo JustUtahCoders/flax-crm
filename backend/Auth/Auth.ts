@@ -62,7 +62,7 @@ router.use(
     name: "session",
     keys: Keygrip([process.env.KEYGRIP_SECRET || "keygrip secret"], "sha256"), // using keygrip to generate the keys
     maxAge: 144 * 60 * 60 * 1000, // 144 hours
-    secure: process.env.IS_RUNNING_LOCALLY ? false : true, // in dev env. no need to be secure
+    secure: false,
   })
 );
 

@@ -1,0 +1,73 @@
+name: Build and deploy
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.4]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - uses: pnpm/action-setup@v2.0.1
+        with:
+          version: 6.14.3
+      - name: Cache pnpm modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-
+      - run: pnpm install
+      - run: pnpm run check-format
+      - run: pnpm run lint
+      - run: pnpm run build
+      - run: cp dist/webpack-manifest.json lib/backend
+      - run: find lib
+      - run: find dist
+      - uses: actions/upload-artifact@v2
+        with:
+          name: frontend-assets
+          path: dist
+      - uses: actions/upload-artifact@v2
+        with:
+          name: backend-code
+          path: lib
+
+  deploy-server:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.repository_owner == 'JustUtahCoders'
+    needs: [build]
+    env:
+      ENV_VARS_YAML: ${{ secrets.ENV_VARS_YAML }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/download-artifact@v2
+        with:
+          name: frontend-assets
+          path: dist
+      - uses: actions/download-artifact@v2
+        with:
+          name: backend-code
+          path: lib
+      - run: find lib
+      - run: find dist
+      # Upload frontend assets to GCP bucket
+      - id: upload-files
+        uses: google-github-actions/upload-cloud-storage@main
+        with:
+          path: dist
+          credentials: ${{ secrets.GCP_SA_KEY }}
+          destination: ${{ secrets.GCP_FRONTEND_BUCKET }}
+
+      # App Engine deployment
+      - run: echo "$ENV_VARS_YAML" > env-vars.yaml
+      - uses: google-github-actions/deploy-appengine@main
+        with:
+          credentials: ${{ secrets.GCP_SA_KEY }}

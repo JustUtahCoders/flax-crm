@@ -12,7 +12,7 @@ import { RouterProps, useHistory } from "react-router";
 import { useMutation } from "react-query";
 import { flaxFetch } from "../Utils/flaxFetch";
 import { unary, kebabCase } from "lodash-es";
-import { Noun } from "../../models/noun";
+import { Noun } from "../../backend/DB/models/noun";
 import { FieldToCreate } from "../../backend/Fields/BatchPostFields";
 
 export function CreateNoun(props: RouterProps) {

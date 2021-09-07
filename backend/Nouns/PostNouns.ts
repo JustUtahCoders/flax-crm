@@ -1,6 +1,6 @@
 import { body, checkSchema, validationResult } from "express-validator";
 import { ModelCtor } from "sequelize/lib/model.js";
-import { NounModel } from "../../models/noun.js";
+import { NounModel } from "../DB/models/noun.js";
 import { sequelize } from "../DB.js";
 import { router } from "../Router.js";
 import { invalidRequest } from "../Utils/EndpointResponses.js";

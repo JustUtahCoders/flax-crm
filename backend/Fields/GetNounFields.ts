@@ -1,6 +1,6 @@
 import { router } from "../Router.js";
 import { param, validationResult } from "express-validator";
-import { Field, FieldModel } from "../../models/field.js";
+import { Field, FieldModel } from "../DB/models/field.js";
 import { invalidRequest, notFound } from "../Utils/EndpointResponses.js";
 import { sequelize } from "../DB.js";
 
