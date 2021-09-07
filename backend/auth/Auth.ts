@@ -41,7 +41,7 @@ passport.use(
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL:
         process.env.GOOGLE_CALLBACK_URL ||
-        "http://localhost:7600/auth/google/callback", // How to handle this?
+        "http://localhost:7600/auth/google/callback",
     },
     async function (accessToken, refreshToken, profile, done) {
       findOrCreateGoogleUser(profile)
@@ -91,12 +91,7 @@ router.get(
 );
 
 router.use("/", async (req, res, next) => {
-  if (
-    req.session &&
-    req.session.passport &&
-    req.session.passport.user &&
-    req.session.passport.user.id
-  ) {
+  if (req?.session?.passport?.user?.id) {
     return next();
   } else if (process.env.IS_RUNNING_LOCALLY) {
     const localUser = await findOrCreateLocalUser(LOCAL_DEV_USER_EMAIL);
