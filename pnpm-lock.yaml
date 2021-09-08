@@ -4021,7 +4021,7 @@ packages:
       base64url: 3.0.1
       oauth: 0.9.15
       passport-strategy: 1.0.0
-      uid2: 0.0.3
+      uid2: 0.0.4
       utils-merge: 1.0.1
     dev: false
 
@@ -5494,8 +5494,8 @@ packages:
     hasBin: true
     dev: true
 
-  /uid2/0.0.3:
-    resolution: {integrity: sha1-SDEm4Rd03y9xuLY53NeZw3YWK4I=}
+  /uid2/0.0.4:
+    resolution: {integrity: sha512-IevTus0SbGwQzYh3+fRsAMTVVPOoIVufzacXcHPmdlle1jUpq7BRL+mw3dgeLanvGZdwwbWhRV6XrcFNdBmjWA==}
     dev: false
 
   /umzug/2.3.0:

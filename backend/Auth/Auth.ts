@@ -15,7 +15,7 @@ import {
   findOrCreateLocalUser,
   findUser,
   findOrCreateGoogleUser,
-} from "../users/Users";
+} from "../Users/Users";
 import { OAuth2Strategy as GoogleStrategy } from "passport-google-oauth";
 import Keygrip from "keygrip";
 
