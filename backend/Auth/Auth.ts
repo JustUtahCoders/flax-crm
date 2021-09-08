@@ -10,8 +10,14 @@ import cookieSession from "cookie-session";
 import passport from "passport";
 import util from "util";
 import { Strategy } from "passport-local";
-import { renderWebApp } from "../WebApp/RenderWebApp.js";
-import { findOrCreateLocalUser, findUser } from "../Users/Users.js";
+import { renderWebApp } from "../WebApp/RenderWebApp";
+import {
+  findOrCreateLocalUser,
+  findUser,
+  findOrCreateGoogleUser,
+} from "../Users/Users";
+import { OAuth2Strategy as GoogleStrategy } from "passport-google-oauth";
+import Keygrip from "keygrip";
 
 const LOCAL_DEV_USER_EMAIL = "localdev@email.com";
 
@@ -28,12 +34,33 @@ let passportStrategy = new Strategy(async function (email, password, done) {
   }
 });
 
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL:
+        process.env.GOOGLE_CALLBACK_URL ||
+        "http://localhost:7600/auth/google/callback",
+    },
+    async function (accessToken, refreshToken, profile, done) {
+      findOrCreateGoogleUser(profile)
+        .then((user) => {
+          return done(null, user);
+        })
+        .catch((error) => {
+          return done(error);
+        });
+    }
+  )
+);
+
 passport.use(passportStrategy);
 
 router.use(
   cookieSession({
     name: "session",
-    keys: ["key1", "key2"], //   keys: require("keygrip")([process.env.KEYGRIP_SECRET], "sha256"), from CUI
+    keys: Keygrip([process.env.KEYGRIP_SECRET || "keygrip secret"], "sha256"), // using keygrip to generate the keys
     maxAge: 144 * 60 * 60 * 1000, // 144 hours
     secure: false,
   })
@@ -48,8 +75,23 @@ router.post("/login", passport.authenticate("local"), (req, res, next) => {
 
 router.get("/login", renderWebApp);
 
+router.get(
+  "/auth/google",
+  passport.authenticate("google", {
+    scope: ["https://www.googleapis.com/auth/plus.login", "email"],
+  })
+);
+
+router.get(
+  "/auth/google/callback",
+  passport.authenticate("google", { failureRedirect: "/login" }),
+  function (req, res) {
+    res.redirect("/");
+  }
+);
+
 router.use("/", async (req, res, next) => {
-  if (req.session && req.session.passport && req.session.passport.user.id) {
+  if (req?.session?.passport?.user?.id) {
     return next();
   } else if (process.env.IS_RUNNING_LOCALLY) {
     const localUser = await findOrCreateLocalUser(LOCAL_DEV_USER_EMAIL);

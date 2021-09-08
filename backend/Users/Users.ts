@@ -25,6 +25,32 @@ export async function findOrCreateLocalUser(email) {
   return localUser;
 }
 
+export async function findOrCreateGoogleUser(profile) {
+  const users = await sequelize.models.User.findAll({
+    where: {
+      googleAuthToken: profile.id,
+    },
+  });
+
+  let googleUser = users.length > 0 ? users[0] : null;
+
+  let userGoogleEmail = undefined;
+  if (profile.emails.length > 0) {
+    userGoogleEmail = profile.emails[0].value;
+  }
+
+  if (!googleUser) {
+    googleUser = await sequelize.models.User.create({
+      firstName: profile.name.givenName,
+      lastName: profile.name.familyName,
+      email: userGoogleEmail,
+      googleAuthToken: profile.id, // googleAuthToken is not a token, it's a Google id
+    });
+  }
+
+  return googleUser;
+}
+
 export async function findUser(email, password) {
   const hashpass = await bcrypt.hash(password, 5);
 

@@ -62,7 +62,7 @@ export function Login(props: RouterProps) {
             <label
               htmlFor="username"
               style={{
-                fontFamily: "Source Sans Pro",
+                fontFamily: "Source Sans Pro", // san serif
                 color: "#403F3D",
                 fontWeight: 600,
               }}
@@ -138,7 +138,7 @@ export function Login(props: RouterProps) {
           </div>
 
           <Button className="ui grey basic button w-full" type="button">
-            Insert Google Button here
+            <a href="/auth/google">Continue with Google</a>
           </Button>
 
           <p className="text-center text-xs text-gray-600 py-8">

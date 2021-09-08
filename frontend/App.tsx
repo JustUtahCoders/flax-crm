@@ -14,6 +14,16 @@ export function App(props: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com"></link>
+        <link rel="preconnect" href="https://fonts.gstatic.com"></link>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap"
+          rel="stylesheet"
+        ></link>
+        <meta
+          name="google-signin-client_id"
+          content="437751451243-do7cqgls9rooar4q430cr57nu24cgb5n.apps.googleusercontent.com"
+        ></meta>
         <script
           type="application/json"
           id="root-props"
