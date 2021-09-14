@@ -1,17 +1,18 @@
-import { AnchorHTMLAttributes } from "react";
-import { Link } from "react-router-dom";
+import { Link, LinkProps } from "react-router-dom";
 import { buttonClasses, ButtonKind } from "./Button";
 
 export function Anchor(props: AnchorProps) {
-  const { kind, className, children, ...otherProps } = props;
+  const { kind, className, children, to, ...otherProps } = props;
 
   // Use react-router (no page reload) when "to" prop is passed
   // Use <a> (with page reload) when "href" prop is passed
   const useReactRouter = !Boolean(props.href);
 
   if (useReactRouter) {
+    const to: string = props.to as string;
+
     return (
-      <Link className={buttonClasses(kind, className)} {...otherProps}>
+      <Link to={to} className={buttonClasses(kind, className)} {...otherProps}>
         {children}
       </Link>
     );
@@ -24,7 +25,7 @@ export function Anchor(props: AnchorProps) {
   }
 }
 
-export interface AnchorProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
+export type AnchorProps = Omit<LinkProps, "to"> & {
   kind: ButtonKind;
   to?: string;
-}
+};

@@ -38,6 +38,7 @@ export function App(props: AppProps) {
         ))}
       </head>
       <body>
+        {/* @ts-ignore */}
         <Router context={props.routerContext} location={props.reqUrl}>
           <Route path="/create-noun" component={CreateNoun} />
           <Route path="/login" component={Login} />

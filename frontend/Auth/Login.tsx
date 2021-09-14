@@ -139,9 +139,13 @@ export function Login(props: RouterProps) {
 
           <p className="text-center text-xs text-gray-600 py-8">
             New to Flax?{" "}
-            <Link href="/create-account" className="underline text-blue-900">
+            <Anchor
+              kind={ButtonKind.classic}
+              href="/create-account"
+              className="underline text-blue-900"
+            >
               Create an account
-            </Link>
+            </Anchor>
           </p>
         </Form>
       </div>
