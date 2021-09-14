@@ -14,6 +14,7 @@ import { RouterProps } from "react-router";
 import { useMutation } from "react-query";
 import { flaxFetch } from "../Utils/flaxFetch";
 import { unary } from "lodash-es";
+import { css, cx } from "@emotion/css";
 
 export function Login(props: RouterProps) {
   const [loginFormData, setLoginFormData] = useState<LoginFormData>({
@@ -61,11 +62,11 @@ export function Login(props: RouterProps) {
           <Form.Field>
             <label
               htmlFor="username"
-              style={{
+              className={css({
                 fontFamily: "Source Sans Pro", // san serif
                 color: "#403F3D",
                 fontWeight: 600,
-              }}
+              })}
             >
               Email
             </label>
@@ -87,11 +88,11 @@ export function Login(props: RouterProps) {
           <Form.Field>
             <label
               htmlFor="password"
-              style={{
+              className={css({
                 fontFamily: "Source Sans Pro",
                 color: "#403F3D",
                 fontWeight: 600,
-              }}
+              })}
             >
               Password
             </label>
@@ -115,11 +116,13 @@ export function Login(props: RouterProps) {
           <div className="flex grid grid-cols-2 gap-4 space-x-4">
             <Button
               type="submit"
-              style={{
-                background: "#2a467b",
-                color: "white",
-              }}
-              className="h-15 rounded font-medium flex-shrink"
+              className={cx(
+                css({
+                  background: "#2a467b",
+                  color: "white",
+                }),
+                "h-15 rounded font-medium flex-shrink"
+              )}
             >
               Sign in
             </Button>

@@ -44,13 +44,13 @@ export const dbReady = new Promise<void>((resolve, reject) => {
         console.error("Failed to connect to db. Trying again in 300ms");
         // console.error(err);
       });
-  }, 300);
+  }, 1000);
 
   if (process.env.NODE_ENV !== "development") {
     timeoutId = setTimeout(() => {
       console.log("Unable to connect to db. Giving up");
       process.exit(1);
-    }, 10000);
+    }, 20000);
   }
 });
 
