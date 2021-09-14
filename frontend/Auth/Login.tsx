@@ -9,7 +9,8 @@
 
 import React, { useState } from "react";
 import { useHistory, Link } from "react-router-dom";
-import { Button } from "../Styleguide/Button";
+import { Button, ButtonKind } from "../Styleguide/Button";
+import { Anchor } from "../Styleguide/Anchor";
 import { Form, Card } from "semantic-ui-react";
 import { RouterProps } from "react-router";
 import { useMutation } from "react-query";
@@ -114,13 +115,12 @@ export function Login(props: RouterProps) {
           <div className="py-8"></div>
 
           <div className="flex grid grid-cols-2 gap-4 space-x-4">
-            <Button type="submit">Sign in</Button>
-            <Link
-              to="/reset-password"
-              className="h-15 rounded self-center text-center font-medium text-blue-900 bg-white flex-shrink"
-            >
+            <Button kind={ButtonKind.primary} type="submit">
+              Sign in
+            </Button>
+            <Anchor kind={ButtonKind.transparent} to="/reset-password">
               Reset Password
-            </Link>
+            </Anchor>
           </div>
 
           <div className="pt-6 pb-2 flex flex-row">
@@ -129,9 +129,13 @@ export function Login(props: RouterProps) {
             <hr className="w-full mt-4 mb-8 border-gray-400"></hr>
           </div>
 
-          <Button className="ui grey basic button w-full" type="button">
-            <a href="/auth/google">Continue with Google</a>
-          </Button>
+          <Anchor
+            kind={ButtonKind.secondary}
+            className="w-full"
+            href="/auth/google"
+          >
+            Continue with Google
+          </Anchor>
 
           <p className="text-center text-xs text-gray-600 py-8">
             New to Flax?{" "}

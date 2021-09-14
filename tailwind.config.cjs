@@ -7,6 +7,7 @@ module.exports = {
         DEFAULT: "#2a467b",
       },
       white: colors.white,
+      gray: colors.gray,
     },
   },
 };
