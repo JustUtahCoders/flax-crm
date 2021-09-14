@@ -24,7 +24,7 @@ export enum ButtonKind {
 
 export function buttonClasses(kind: ButtonKind, extraClassName: string = "") {
   const kindClasses = buttonKindClasses[kind] || "";
-  return maybe(kindClasses, kindClasses)
+  return always(kindClasses)
     .always(extraClassName)
     .maybe(styledButtonClasses, kind !== ButtonKind.classic)
     .toString();
