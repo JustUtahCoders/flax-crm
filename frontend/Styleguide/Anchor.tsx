@@ -28,15 +28,3 @@ export interface AnchorProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   kind: ButtonKind;
   to?: string;
 }
-
-// export enum AnchorKind {
-//   primary = "primary",
-//   secondary = "secondary",
-//   transparent = "transparent"
-// }
-
-// const allKindClasses = {
-//   [AnchorKind.primary]: "bg-primary text-white",
-//   [AnchorKind.secondary]: "text-gray-500 border-gray-500 border hover:text-gray-500",
-//   [AnchorKind.transparent]: "text-primary hover:text-primary"
-// }
