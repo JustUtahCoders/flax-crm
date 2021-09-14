@@ -37,5 +37,6 @@ const buttonKindClasses = {
   [ButtonKind.secondary]:
     "text-gray-500 border-gray-500 border hover:text-gray-500",
   [ButtonKind.transparent]: "text-primary hover:text-primary",
-  [ButtonKind.classic]: "text-primary hover:text-primary hover:underline",
+  [ButtonKind.classic]:
+    "text-primary underline hover:text-primary hover:underline",
 };
