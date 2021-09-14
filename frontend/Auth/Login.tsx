@@ -9,7 +9,8 @@
 
 import React, { useState } from "react";
 import { useHistory, Link } from "react-router-dom";
-import { Button, Form, Card } from "semantic-ui-react";
+import { Button } from "../Styleguide/Button";
+import { Form, Card } from "semantic-ui-react";
 import { RouterProps } from "react-router";
 import { useMutation } from "react-query";
 import { flaxFetch } from "../Utils/flaxFetch";
@@ -113,16 +114,7 @@ export function Login(props: RouterProps) {
           <div className="py-8"></div>
 
           <div className="flex grid grid-cols-2 gap-4 space-x-4">
-            <Button
-              type="submit"
-              style={{
-                background: "#2a467b",
-                color: "white",
-              }}
-              className="h-15 rounded font-medium flex-shrink"
-            >
-              Sign in
-            </Button>
+            <Button type="submit">Sign in</Button>
             <Link
               to="/reset-password"
               className="h-15 rounded self-center text-center font-medium text-blue-900 bg-white flex-shrink"
