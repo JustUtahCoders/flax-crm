@@ -12,7 +12,8 @@ specifiers:
   '@types/passport-local': ^1.0.34
   '@types/react': ^17.0.11
   '@types/react-dom': ^17.0.8
-  '@types/react-router': ^5.1.15
+  '@types/react-router': ^5.1.16
+  '@types/react-router-dom': ^5.1.9
   '@types/sequelize': ^4.28.10
   '@vercel/ncc': ^0.29.1
   autoprefixer: ^10.3.1
@@ -32,6 +33,7 @@ specifiers:
   file-loader: ^6.2.0
   husky: ^6.0.0
   keygrip: ^1.1.0
+  kremling: ^2.1.0
   lodash-es: ^4.17.21
   mini-css-extract-plugin: ^1.6.0
   nodemon: ^2.0.7
@@ -76,7 +78,8 @@ dependencies:
   '@types/lodash-es': 4.17.4
   '@types/react': 17.0.11
   '@types/react-dom': 17.0.8
-  '@types/react-router': 5.1.15
+  '@types/react-router': 5.1.16
+  '@types/react-router-dom': 5.1.9
   '@types/sequelize': 4.28.10
   bcryptjs: 2.4.3
   body-parser: 1.19.0
@@ -86,6 +89,7 @@ dependencies:
   express-promise-router: 4.1.0_1e4d5aefc915886dae9e998bf55b0fd2
   express-validator: 6.12.0
   keygrip: 1.1.0
+  kremling: 2.1.0
   lodash-es: 4.17.21
   open: 8.2.1
   passport: 0.4.1
@@ -726,8 +730,16 @@ packages:
       '@types/react': 17.0.11
     dev: false
 
-  /@types/react-router/5.1.15:
-    resolution: {integrity: sha512-z3UlMG/x91SFEVmmvykk9FLTliDvfdIUky4k2rCfXWQ0NKbrP8o9BTCaCTPuYsB8gDkUnUmkcA2vYlm2DR+HAA==}
+  /@types/react-router-dom/5.1.9:
+    resolution: {integrity: sha512-Go0vxZSigXTyXx8xPkGiBrrc3YbBs82KE14WENMLS6TSUKcRFSmYVbL19zFOnNFqJhqrPqEs2h5eUpJhSRrwZw==}
+    dependencies:
+      '@types/history': 4.7.8
+      '@types/react': 17.0.11
+      '@types/react-router': 5.1.16
+    dev: false
+
+  /@types/react-router/5.1.16:
+    resolution: {integrity: sha512-8d7nR/fNSqlTFGHti0R3F9WwIertOaaA1UEB8/jr5l5mDMOs4CidEgvvYMw4ivqrBK+vtVLxyTj2P+Pr/dtgzg==}
     dependencies:
       '@types/history': 4.7.8
       '@types/react': 17.0.11
@@ -2516,6 +2528,7 @@ packages:
     resolution: {integrity: sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==}
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
+    requiresBuild: true
     dev: true
     optional: true
 
@@ -3291,6 +3304,12 @@ packages:
     resolution: {integrity: sha512-ZRbnvdg/NxqzC7L9Uyqzf4psi1OM4Cuc+sJAkQPjO6XkQIJTNbfK2Rsmbw8fx1p2mkZdp2FZYo2+LwXYY/uwIA==}
     engines: {node: '>= 8'}
     dev: true
+
+  /kremling/2.1.0:
+    resolution: {integrity: sha512-eFvlxMoR4T8rlz3oad1d6ZKfNEnxnzUcCWJ6WBNeO08JsHY3FUgy4aEWhT1IfI4XDIH39jcUyxE3nXp1Qli0ZA==}
+    dependencies:
+      prop-types: 15.7.2
+    dev: false
 
   /language-subtag-registry/0.3.21:
     resolution: {integrity: sha512-L0IqwlIXjilBVVYKFT37X9Ih11Um5NEl9cbJIuU/SwP/zEEAbBPOnEeeuxVMf45ydWQRDQN3Nqc96OgbH1K+Pg==}
