@@ -2,6 +2,8 @@ const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const { WebpackManifestPlugin } = require("webpack-manifest-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
+const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
+const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
 
 module.exports = (webpackConfigEnv, argv) => {
   const isProd = webpackConfigEnv.prod;
@@ -33,8 +35,18 @@ module.exports = (webpackConfigEnv, argv) => {
     module: {
       rules: [
         {
-          test: /\.tsx?$/,
-          loader: "ts-loader",
+          test: /\.(t|j)sx?$/,
+          exclude: /node_modules/,
+          use: [
+            {
+              loader: require.resolve("babel-loader"),
+              options: {
+                plugins: [
+                  !isProd && require.resolve("react-refresh/babel"),
+                ].filter(Boolean),
+              },
+            },
+          ],
         },
         {
           test: /\.css$/i,
@@ -66,8 +78,11 @@ module.exports = (webpackConfigEnv, argv) => {
         fileName: "webpack-manifest.json",
         publicPath: "",
       }),
-    ],
+      new ForkTsCheckerWebpackPlugin(),
+      !isProd && new ReactRefreshWebpackPlugin(),
+    ].filter(Boolean),
     devServer: {
+      hot: true,
       headers: {
         "Access-Control-Allow-Origin": "*",
       },
