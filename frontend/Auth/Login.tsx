@@ -8,10 +8,12 @@
 */
 
 import React, { useState } from "react";
-import { useHistory, Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { Button, ButtonKind } from "../Styleguide/Button";
 import { Anchor } from "../Styleguide/Anchor";
-import { Form, Card } from "semantic-ui-react";
+import { FormField } from "../Styleguide/FormField";
+import { FormFieldLabel } from "../Styleguide/FormFieldLabel";
+import { Input } from "../Styleguide/Input";
 import { RouterProps } from "react-router";
 import { useMutation } from "react-query";
 import { flaxFetch } from "../Utils/flaxFetch";
@@ -59,22 +61,12 @@ export function Login(props: RouterProps) {
         <h1 className="text-xl text-gray-500 place-self-start pt-40 mb-6">
           Sign in
         </h1>
-        <Form onSubmit={unary(submitMutation.mutate)}>
-          <Form.Field>
-            <label
-              htmlFor="username"
-              style={{
-                fontFamily: "Source Sans Pro", // san serif
-                color: "#403F3D",
-                fontWeight: 600,
-              }}
-            >
-              Email
-            </label>
-            <input
+        <form onSubmit={unary(submitMutation.mutate)}>
+          <FormField>
+            <FormFieldLabel htmlFor="username">Email</FormFieldLabel>
+            <Input
               id="username"
               type="email"
-              className="ui input"
               value={loginFormData.username}
               onChange={(evt) =>
                 setLoginFormData({
@@ -84,23 +76,12 @@ export function Login(props: RouterProps) {
               }
               required
             />
-          </Form.Field>
-
-          <Form.Field>
-            <label
-              htmlFor="password"
-              style={{
-                fontFamily: "Source Sans Pro",
-                color: "#403F3D",
-                fontWeight: 600,
-              }}
-            >
-              Password
-            </label>
-            <input
+          </FormField>
+          <FormField className="mt-4">
+            <FormFieldLabel htmlFor="password">Password</FormFieldLabel>
+            <Input
               id="password"
               type="password"
-              className="ui input"
               value={loginFormData.password}
               onChange={(evt) =>
                 setLoginFormData({
@@ -110,11 +91,8 @@ export function Login(props: RouterProps) {
               }
               required
             />
-          </Form.Field>
-
-          <div className="py-8"></div>
-
-          <div className="flex grid grid-cols-2 gap-4 space-x-4">
+          </FormField>
+          <div className="flex grid grid-cols-2 gap-4 space-x-4 my-8">
             <Button kind={ButtonKind.primary} type="submit">
               Sign in
             </Button>
@@ -143,7 +121,7 @@ export function Login(props: RouterProps) {
               Create an account
             </Anchor>
           </p>
-        </Form>
+        </form>
       </div>
 
       <div className="flex items-center"></div>

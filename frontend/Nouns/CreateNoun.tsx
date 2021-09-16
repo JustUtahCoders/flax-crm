@@ -1,19 +1,15 @@
 import React, { useState, useEffect, useReducer } from "react";
-import {
-  Input,
-  Form,
-  Button,
-  DropdownItemProps,
-  Card,
-  Header,
-  HeaderContent,
-} from "semantic-ui-react";
+import { Input } from "../Styleguide/Input";
 import { RouterProps, useHistory } from "react-router";
 import { useMutation } from "react-query";
 import { flaxFetch } from "../Utils/flaxFetch";
 import { unary, kebabCase } from "lodash-es";
 import { Noun } from "../../backend/DB/models/noun";
 import { FieldToCreate } from "../../backend/Fields/BatchPostFields";
+import { FormField } from "../Styleguide/FormField";
+import { FormFieldLabel } from "../Styleguide/FormFieldLabel";
+import { Button, ButtonKind } from "../Styleguide/Button";
+import { Card } from "../Styleguide/Card";
 
 export function CreateNoun(props: RouterProps) {
   const [nounName, setNounName] = useState<string>("");
@@ -66,76 +62,71 @@ export function CreateNoun(props: RouterProps) {
   });
 
   return (
-    <Form onSubmit={unary(submitMutation.mutate)} className="container p-20">
-      <Header>
-        <HeaderContent>Create Noun</HeaderContent>
-      </Header>
-      <Form.Field>
-        <label htmlFor="noun-name">
+    <form onSubmit={unary(submitMutation.mutate)} className="container p-20">
+      <h1>Create Noun</h1>
+      <FormField>
+        <FormFieldLabel htmlFor="noun-name">
           What is the name for this data? (Client, Donor, Lead, Invoice)
-        </label>
+        </FormFieldLabel>
         <Input
           id="noun-name"
           value={nounName}
           onChange={(evt) => setNounName(evt.target.value)}
           required
         />
-      </Form.Field>
-      <Card.Group onClick={(evt) => evt.stopPropagation()}>
-        {fields.map((field, i) => {
-          const isEditing = i === editIndex;
-          return (
-            <React.Fragment key={i}>
-              <Card
-                onClick={() =>
-                  dispatchFieldState({
-                    type: FieldActions.EditField,
-                    editIndex: i,
-                  })
-                }
-              >
-                <Card.Content>
-                  {!isEditing && (
-                    <Card.Header>
-                      {field.friendlyName || "(No Name)"}
-                    </Card.Header>
-                  )}
-                  <Card.Meta>
-                    {isEditing ? (
-                      <>
-                        <Form.Field>
-                          <label htmlFor={`field-name-${i}`}>Field Name</label>
-                          <Input
-                            id={`field-name-${i}`}
-                            value={field.friendlyName}
-                            onChange={(evt) => updateFriendlyName(i, evt)}
-                          />
-                        </Form.Field>
-                        <Form.Field>
-                          <label htmlFor={`field-type-${i}`}>Field Type</label>
-                          <Form.Select
-                            options={fieldTypes}
-                            id={`field-type-${i}`}
-                            value={field.type}
-                            onChange={(evt, props) => {
-                              updateFieldType(i, props.value as string);
-                            }}
-                          ></Form.Select>
-                        </Form.Field>
-                      </>
-                    ) : (
-                      field.type || "No type"
-                    )}
-                  </Card.Meta>
-                </Card.Content>
-              </Card>
-            </React.Fragment>
-          );
-        })}
-      </Card.Group>
+      </FormField>
+      {fields.map((field, i) => {
+        const isEditing = i === editIndex;
+        return (
+          <React.Fragment key={i}>
+            <Card
+              onClick={(evt) => {
+                evt.stopPropagation();
+                dispatchFieldState({
+                  type: FieldActions.EditField,
+                  editIndex: i,
+                });
+              }}
+            >
+              {!isEditing && <h1>{field.friendlyName || "(No Name)"}</h1>}
+              {isEditing ? (
+                <>
+                  <FormField>
+                    <FormFieldLabel htmlFor={`field-name-${i}`}>
+                      Field Name
+                    </FormFieldLabel>
+                    <Input
+                      id={`field-name-${i}`}
+                      value={field.friendlyName}
+                      onChange={(evt) => updateFriendlyName(i, evt)}
+                    />
+                  </FormField>
+                  <FormField>
+                    <FormFieldLabel htmlFor={`field-type-${i}`}>
+                      Field Type
+                    </FormFieldLabel>
+                    <select
+                      id={`field-type-${i}`}
+                      value={field.type}
+                      onChange={(evt) => {
+                        updateFieldType(i, evt.target.value);
+                      }}
+                    >
+                      <option value="text">Text</option>
+                      <option value="date">Date</option>
+                    </select>
+                  </FormField>
+                </>
+              ) : (
+                field.type || "No type"
+              )}
+            </Card>
+          </React.Fragment>
+        );
+      })}
       <div className="mt-8">
         <Button
-          primary
+          kind={ButtonKind.primary}
           type="button"
           onClick={() =>
             dispatchFieldState({
@@ -145,11 +136,11 @@ export function CreateNoun(props: RouterProps) {
         >
           Add Field
         </Button>
-        <Button secondary type="submit">
+        <Button kind={ButtonKind.secondary} type="submit">
           Create Noun
         </Button>
       </div>
-    </Form>
+    </form>
   );
 
   function updateFriendlyName(i, evt: React.ChangeEvent<HTMLInputElement>) {
@@ -184,17 +175,6 @@ export function CreateNoun(props: RouterProps) {
     });
   }
 }
-
-const fieldTypes: DropdownItemProps[] = [
-  {
-    text: "Text",
-    value: "string",
-  },
-  {
-    text: "Date",
-    value: "date",
-  },
-];
 
 function emptyField(): FieldToCreate {
   return {

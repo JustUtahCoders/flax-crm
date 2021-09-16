@@ -104,8 +104,6 @@
     "react-query": "^3.17.2",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
-    "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^2.0.3",
     "sequelize": "^6.6.2",
     "tree-kill": "^1.2.2",
     "umzug": "^2.3.0"
