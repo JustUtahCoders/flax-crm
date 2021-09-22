@@ -72,7 +72,6 @@ export function CreateEditIntakeForm(props: RouterProps) {
 
   return (
     <div className="container p-20">
-      <Loader description="Hi"></Loader>
       <h1>Intake form for Noun</h1>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="intake-form">
