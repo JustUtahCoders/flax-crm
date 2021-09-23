@@ -87,8 +87,8 @@ export function Login(props: RouterProps) {
             required
           />
         </FormField>
-        <div className="flex grid grid-cols-2 gap-4 space-x-4 my-8">
-          <Button kind={ButtonKind.primary} type="submit">
+        <div className="flex space-x-4 my-8">
+          <Button kind={ButtonKind.primary} type="submit" className="mr-8">
             Sign in
           </Button>
           <Anchor kind={ButtonKind.transparent} to="/reset-password">
