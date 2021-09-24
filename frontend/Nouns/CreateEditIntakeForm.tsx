@@ -10,6 +10,10 @@ import { Field } from "../../backend/DB/models/field";
 import { useQuery } from "react-query";
 import { Card } from "../Styleguide/Card";
 import { Loader } from "../Styleguide/Loader";
+import { Input } from "../Styleguide/Input";
+import { FormFieldLabel } from "../Styleguide/FormFieldLabel";
+import { FormField } from "../Styleguide/FormField";
+import { Modal } from "../Styleguide/Modal";
 
 export function CreateEditIntakeForm(props: RouterProps) {
   const [state, dispatch] = useReducer<Reducer, State>(
@@ -18,39 +22,57 @@ export function CreateEditIntakeForm(props: RouterProps) {
     () => initialState
   );
   const { nounId } = useParams<RouteParams>();
-  const { isLoading, isError, error } = useQuery<Field[]>(
+  const { isLoading, isError, error } = useQuery<IntakeItem[]>(
     `fields-${nounId}`,
     async () => {
       // const r = await flaxFetch<GetFieldsResponse>(`/api/nouns/${nounId}/fields`)
-      const r: GetFieldsResponse = {
-        fields: [
+      const r: GetIntakeItemsResponse = {
+        intakeItems: [
           {
-            createdAt: Date.now().toString(),
+            type: IntakeItemType.Field,
+            field: {
+              createdAt: Date.now().toString(),
+              id: 1,
+              activeStatus: true,
+              columnName: "givenName",
+              friendlyName: "First Name",
+              nounId: 10,
+              type: "text",
+              updatedAt: Date.now().toString(),
+            },
             id: 1,
-            activeStatus: true,
-            columnName: "givenName",
-            friendlyName: "First Name",
-            nounId: 10,
-            type: "text",
-            updatedAt: Date.now().toString(),
+            question: {
+              label: "First Name",
+              placeholderText: "Jane",
+              required: true,
+            },
           },
           {
-            createdAt: Date.now().toString(),
+            type: IntakeItemType.Field,
+            field: {
+              createdAt: Date.now().toString(),
+              id: 2,
+              activeStatus: true,
+              columnName: "surname",
+              friendlyName: "Last Name",
+              nounId: 10,
+              type: "text",
+              updatedAt: Date.now().toString(),
+            },
             id: 2,
-            activeStatus: true,
-            columnName: "surname",
-            friendlyName: "Last Name",
-            nounId: 10,
-            type: "text",
-            updatedAt: Date.now().toString(),
+            question: {
+              label: "Last Name",
+              placeholderText: "Doe",
+              required: true,
+            },
           },
         ],
       };
       dispatch({
-        type: ActionTypes.FieldsLoaded,
-        fields: r.fields,
+        type: ActionTypes.IntakeItemsLoaded,
+        intakeItems: r.intakeItems,
       });
-      return r.fields;
+      return r.intakeItems;
     }
   );
 
@@ -77,23 +99,58 @@ export function CreateEditIntakeForm(props: RouterProps) {
         <Droppable droppableId="intake-form">
           {(provided, snapshot) => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
-              {state.intakeForm.intakeItems.map((item, i) => (
-                <Draggable key={i} draggableId={String(item.id)} index={i}>
-                  {(provided, snapshot) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                    >
-                      {(item as IntakeFieldItem).field.friendlyName}
-                    </div>
-                  )}
-                </Draggable>
-              ))}
+              {state.intakeForm.intakeItems.map((item, i) => {
+                const fieldItem = item as IntakeFieldItem;
+                return (
+                  <Draggable
+                    key={item.id}
+                    draggableId={String(item.id)}
+                    index={i}
+                  >
+                    {(provided, snapshot) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        className={snapshot.isDragging ? "outline-primary" : ""}
+                        role="button"
+                        tabIndex={0}
+                        onClick={() =>
+                          dispatch({
+                            type: ActionTypes.EditItem,
+                            item,
+                          })
+                        }
+                      >
+                        <FormField className="pointer-events-none mt-3">
+                          <FormFieldLabel>
+                            {fieldItem.question.label}
+                          </FormFieldLabel>
+                          <Input
+                            placeholder={fieldItem.question.placeholderText}
+                            required={fieldItem.question.required}
+                            disabled
+                          />
+                        </FormField>
+                      </div>
+                    )}
+                  </Draggable>
+                );
+              })}
               {provided.placeholder}
             </div>
           )}
         </Droppable>
+        {state.itemToEdit && (
+          <Modal
+            title={`Edit ${state.itemToEdit.field.friendlyName}`}
+            close={() =>
+              dispatch({
+                type: ActionTypes.CancelEdit,
+              })
+            }
+          />
+        )}
       </DragDropContext>
     </div>
   );
@@ -123,13 +180,9 @@ const initialState: State = {
 
 function reducer(state: State, action: Action): State {
   switch (action.type) {
-    case ActionTypes.FieldsLoaded:
+    case ActionTypes.IntakeItemsLoaded:
       return modifyIntakeForm(state, {
-        intakeItems: action.fields.map((field) => ({
-          type: IntakeItemType.Field,
-          id: field.id,
-          field,
-        })),
+        intakeItems: action.intakeItems,
       });
     case ActionTypes.Reorder:
       const newItems = [...state.intakeForm.intakeItems];
@@ -139,6 +192,16 @@ function reducer(state: State, action: Action): State {
       return modifyIntakeForm(state, {
         intakeItems: newItems,
       });
+    case ActionTypes.EditItem:
+      return {
+        ...state,
+        itemToEdit: action.item,
+      };
+    case ActionTypes.CancelEdit:
+      return {
+        ...state,
+        itemToEdit: undefined,
+      };
     default:
       throw Error();
   }
@@ -159,6 +222,7 @@ function modifyIntakeForm(
 
 interface State {
   intakeForm: IntakeForm;
+  itemToEdit?: IntakeItem;
 }
 
 interface IntakeForm {
@@ -166,8 +230,10 @@ interface IntakeForm {
 }
 
 enum ActionTypes {
-  FieldsLoaded = "FieldsLoaded",
+  IntakeItemsLoaded = "IntakeItemsLoaded",
   Reorder = "Reorder",
+  EditItem = "EditItem",
+  CancelEdit = "CancelEdit",
 }
 
 enum IntakeItemType {
@@ -178,13 +244,20 @@ interface IntakeFieldItem {
   type: IntakeItemType.Field;
   id: number;
   field: Field;
+  question: FieldQuestion;
+}
+
+interface FieldQuestion {
+  label: string;
+  required: boolean;
+  placeholderText: string;
 }
 
 type IntakeItem = IntakeFieldItem;
 
-interface FieldsLoadedAction {
-  type: ActionTypes.FieldsLoaded;
-  fields: Field[];
+interface IntakeItemsLoadedAction {
+  type: ActionTypes.IntakeItemsLoaded;
+  intakeItems: IntakeItem[];
 }
 
 interface ReorderAction {
@@ -193,7 +266,20 @@ interface ReorderAction {
   destIndex: number;
 }
 
-type Action = FieldsLoadedAction | ReorderAction;
+interface EditItemAction {
+  type: ActionTypes.EditItem;
+  item: IntakeItem;
+}
+
+interface CancelEditAction {
+  type: ActionTypes.CancelEdit;
+}
+
+type Action =
+  | IntakeItemsLoadedAction
+  | ReorderAction
+  | EditItemAction
+  | CancelEditAction;
 
 type Reducer = (state: State, action: Action) => State;
 
@@ -201,6 +287,6 @@ interface RouteParams {
   nounId: string;
 }
 
-interface GetFieldsResponse {
-  fields: Field[];
+interface GetIntakeItemsResponse {
+  intakeItems: IntakeItem[];
 }
