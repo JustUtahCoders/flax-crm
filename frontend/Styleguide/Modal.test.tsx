@@ -15,7 +15,7 @@ describe(`<Modal />`, () => {
     expect(header).toBeInTheDocument();
     const dialog = document.querySelector<HTMLDialogElement>("dialog");
     expect(dialog).toBeInTheDocument();
-    // @ts-ignore
+    // @ts-ignore Typescript seems to have a bug? It doesn't think HTMLDialogElement has an "open" property, but it does
     expect(dialog.open).toBe(true);
     expect(dialog.contains(header)).toBe(true);
   });

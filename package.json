@@ -19,7 +19,7 @@
     "format": "prettier --write .",
     "lint": "eslint \"backend/**/*\" \"frontend/**/*\"",
     "test": "concurrently \"pnpm:test:*\"",
-    "test:frontend": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
+    "test:frontend": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --config jest.browser.config.js --coverage",
     "prepare": "husky install"
   },
   "repository": {
@@ -68,7 +68,6 @@
     "husky": "^6.0.0",
     "jest": "^27.2.1",
     "jest-cli": "^27.2.1",
-    "jest-config": "^27.2.1",
     "mini-css-extract-plugin": "^1.6.0",
     "nodemon": "^2.0.7",
     "postcss": "^8.3.6",
