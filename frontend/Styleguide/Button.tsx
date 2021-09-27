@@ -30,7 +30,7 @@ export function buttonClasses(kind: ButtonKind, extraClassName: string = "") {
     .toString();
 }
 
-const styledButtonClasses = `flex items-center justify-center cursor-pointer py-2.5 rounded font-medium`;
+const styledButtonClasses = `flex items-center justify-center cursor-pointer py-2.5 px-5 rounded font-medium`;
 
 const buttonKindClasses = {
   [ButtonKind.primary]: "bg-primary text-white",

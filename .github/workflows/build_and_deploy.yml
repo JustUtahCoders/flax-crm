@@ -27,6 +27,7 @@ jobs:
       - run: pnpm install
       - run: pnpm run check-format
       - run: pnpm run lint
+      - run: pnpm run test
       - run: pnpm run build
       - run: cp dist/webpack-manifest.json lib/backend
       - run: find lib

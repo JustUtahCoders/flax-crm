@@ -4,7 +4,9 @@ import { Button, ButtonKind } from "./Button";
 export function Modal(props: ModalProps) {
   return (
     <>
+      {/* modal screen / overlay */}
       <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full"></div>
+      {/* dialog / content */}
       <dialog
         className="relative mx-auto p-5 border w-96 shadow-lg rounded-md bg-white"
         open

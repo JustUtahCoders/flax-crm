@@ -54,77 +54,69 @@ export function Login(props: RouterProps) {
   );
 
   return (
-    <div className="flex flex-col items-center grid grid-cols-3 gap-r">
-      <div className="flex items-center"></div>
-
-      <div>
-        <h1 className="text-xl text-gray-500 place-self-start pt-40 mb-6">
-          Sign in
-        </h1>
-        <form onSubmit={unary(submitMutation.mutate)}>
-          <FormField>
-            <FormFieldLabel htmlFor="username">Email</FormFieldLabel>
-            <Input
-              id="username"
-              type="email"
-              value={loginFormData.username}
-              onChange={(evt) =>
-                setLoginFormData({
-                  ...loginFormData,
-                  username: evt.target.value,
-                })
-              }
-              required
-            />
-          </FormField>
-          <FormField className="mt-4">
-            <FormFieldLabel htmlFor="password">Password</FormFieldLabel>
-            <Input
-              id="password"
-              type="password"
-              value={loginFormData.password}
-              onChange={(evt) =>
-                setLoginFormData({
-                  ...loginFormData,
-                  password: evt.target.value,
-                })
-              }
-              required
-            />
-          </FormField>
-          <div className="flex grid grid-cols-2 gap-4 space-x-4 my-8">
-            <Button kind={ButtonKind.primary} type="submit">
-              Sign in
-            </Button>
-            <Anchor kind={ButtonKind.transparent} to="/reset-password">
-              Reset Password
-            </Anchor>
-          </div>
-
-          <div className="pt-6 pb-2 flex flex-row">
-            <hr className="w-full mt-4 mb-8 border-gray-400"></hr>
-            <span className="bg-white py-2 px-2 text-gray-400 text-sm">or</span>
-            <hr className="w-full mt-4 mb-8 border-gray-400"></hr>
-          </div>
-
-          <Anchor
-            kind={ButtonKind.secondary}
-            className="w-full"
-            href="/auth/google"
-          >
-            Continue with Google
+    <div className="flex justify-center h-screen">
+      <form onSubmit={unary(submitMutation.mutate)} className="pt-40">
+        <h1 className="text-xl text-gray-500 place-self-start mb-6">Sign in</h1>
+        <FormField>
+          <FormFieldLabel htmlFor="username">Email</FormFieldLabel>
+          <Input
+            id="username"
+            type="email"
+            value={loginFormData.username}
+            onChange={(evt) =>
+              setLoginFormData({
+                ...loginFormData,
+                username: evt.target.value,
+              })
+            }
+            required
+          />
+        </FormField>
+        <FormField className="mt-4">
+          <FormFieldLabel htmlFor="password">Password</FormFieldLabel>
+          <Input
+            id="password"
+            type="password"
+            value={loginFormData.password}
+            onChange={(evt) =>
+              setLoginFormData({
+                ...loginFormData,
+                password: evt.target.value,
+              })
+            }
+            required
+          />
+        </FormField>
+        <div className="flex space-x-4 my-8">
+          <Button kind={ButtonKind.primary} type="submit" className="mr-8">
+            Sign in
+          </Button>
+          <Anchor kind={ButtonKind.transparent} to="/reset-password">
+            Reset Password
           </Anchor>
+        </div>
 
-          <p className="text-center text-xs text-gray-600 py-8">
-            New to Flax?{" "}
-            <Anchor kind={ButtonKind.classic} href="/create-account">
-              Create an account
-            </Anchor>
-          </p>
-        </form>
-      </div>
+        <div className="pt-6 pb-2 flex flex-row">
+          <hr className="w-full mt-4 mb-8 border-gray-400"></hr>
+          <span className="bg-white py-2 px-2 text-gray-400 text-sm">or</span>
+          <hr className="w-full mt-4 mb-8 border-gray-400"></hr>
+        </div>
 
-      <div className="flex items-center"></div>
+        <Anchor
+          kind={ButtonKind.secondary}
+          className="w-full"
+          href="/auth/google"
+        >
+          Continue with Google
+        </Anchor>
+
+        <p className="text-center text-xs text-gray-600 py-8">
+          New to Flax?{" "}
+          <Anchor kind={ButtonKind.classic} href="/create-account">
+            Create an account
+          </Anchor>
+        </p>
+      </form>
     </div>
   );
 }
