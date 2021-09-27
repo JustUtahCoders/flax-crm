@@ -41,6 +41,7 @@ export const renderWebApp = async (req, res: Response) => {
 
   stream.on("error", (err) => {
     console.log("ERROR", err);
+    res.end();
   });
 
   stream.on("end", () => {
