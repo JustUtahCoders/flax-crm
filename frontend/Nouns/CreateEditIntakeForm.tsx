@@ -13,7 +13,7 @@ import { Loader } from "../Styleguide/Loader";
 import { Input } from "../Styleguide/Input";
 import { FormFieldLabel } from "../Styleguide/FormFieldLabel";
 import { FormField } from "../Styleguide/FormField";
-import { Modal } from "../Styleguide/Modal";
+import { EditIntakeItem } from "./EditIntakeItem";
 
 export function CreateEditIntakeForm(props: RouterProps) {
   const [state, dispatch] = useReducer<Reducer, State>(
@@ -142,13 +142,13 @@ export function CreateEditIntakeForm(props: RouterProps) {
           )}
         </Droppable>
         {state.itemToEdit && (
-          <Modal
-            title={`Edit ${state.itemToEdit.field.friendlyName}`}
-            close={() =>
+          <EditIntakeItem
+            intakeItem={state.itemToEdit}
+            close={() => {
               dispatch({
                 type: ActionTypes.CancelEdit,
-              })
-            }
+              });
+            }}
           />
         )}
       </DragDropContext>
@@ -235,11 +235,11 @@ enum ActionTypes {
   CancelEdit = "CancelEdit",
 }
 
-enum IntakeItemType {
+export enum IntakeItemType {
   Field = "Field",
 }
 
-interface IntakeFieldItem {
+export interface IntakeFieldItem {
   type: IntakeItemType.Field;
   id: number;
   field: Field;
@@ -252,7 +252,7 @@ interface FieldQuestion {
   placeholderText: string;
 }
 
-type IntakeItem = IntakeFieldItem;
+export type IntakeItem = IntakeFieldItem;
 
 interface IntakeItemsLoadedAction {
   type: ActionTypes.IntakeItemsLoaded;
