@@ -3,6 +3,7 @@ import { BrowserRouter } from "react-router-dom";
 import { CreateNoun } from "./Nouns/CreateNoun";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Login } from "./Auth/Login";
+import { CreateEditIntakeForm } from "./Nouns/CreateEditIntakeForm";
 
 const queryClient = new QueryClient();
 
@@ -42,6 +43,10 @@ export function App(props: AppProps) {
         <Router context={props.routerContext} location={props.reqUrl}>
           <Route path="/create-noun" component={CreateNoun} />
           <Route path="/login" component={Login} />
+          <Route
+            path="/create-intake-form/:nounId"
+            component={CreateEditIntakeForm}
+          />
         </Router>
         {props.jsFiles.map((jsFile) => (
           <script key={jsFile} src={`${props.assetBase}/${jsFile}`}></script>

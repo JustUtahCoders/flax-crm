@@ -10,5 +10,10 @@ module.exports = {
       gray: colors.gray,
       coolGray: colors.coolGray,
     },
+    extend: {
+      outline: {
+        primary: ["2px solid #2a467b"],
+      },
+    },
   },
 };

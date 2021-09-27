@@ -1,6 +1,5 @@
 import { Model } from "sequelize/lib/model.js";
 import { DefaultModelAttrs } from "./defaults";
-import { NounAttributes } from "./noun";
 
 export type FieldModel = Model<FieldAttributes>;
 
@@ -12,4 +11,4 @@ export interface FieldAttributes {
   activeStatus: boolean;
 }
 
-export type Field = NounAttributes & DefaultModelAttrs;
+export interface Field extends FieldAttributes, DefaultModelAttrs {}
