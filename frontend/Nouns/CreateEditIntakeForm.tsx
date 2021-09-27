@@ -14,6 +14,7 @@ import { Input } from "../Styleguide/Input";
 import { FormFieldLabel } from "../Styleguide/FormFieldLabel";
 import { FormField } from "../Styleguide/FormField";
 import { EditIntakeItem } from "./EditIntakeItem";
+import { Button, ButtonKind } from "../Styleguide/Button";
 
 export function CreateEditIntakeForm(props: RouterProps) {
   const [state, dispatch] = useReducer<Reducer, State>(
@@ -94,7 +95,10 @@ export function CreateEditIntakeForm(props: RouterProps) {
 
   return (
     <div className="container p-20">
-      <h1>Intake form for Noun</h1>
+      <div className="flex justify-between">
+        <h1>Intake form for Noun</h1>
+        <Button kind={ButtonKind.primary}>Add Field</Button>
+      </div>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="intake-form">
           {(provided, snapshot) => (
