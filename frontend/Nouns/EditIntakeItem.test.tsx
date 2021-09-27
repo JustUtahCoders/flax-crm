@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom";
 import { render } from "@testing-library/react";
-import { noop } from "lodash";
+import { noop } from "lodash-es";
 import { IntakeItemType } from "./CreateEditIntakeForm";
 import { EditIntakeItem } from "./EditIntakeItem";
 

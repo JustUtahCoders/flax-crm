@@ -1,5 +1,5 @@
 import { Input } from "./Input";
-import { noop } from "lodash";
+import { noop } from "lodash-es";
 import { ChangeEventHandler, HTMLProps } from "react";
 
 export function Toggle(props: ToggleProps) {
