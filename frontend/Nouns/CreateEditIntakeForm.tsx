@@ -163,7 +163,6 @@ export function CreateEditIntakeForm(props: RouterProps) {
       return;
     }
 
-    console.log("reordering", result);
     dispatch({
       type: ActionTypes.Reorder,
       sourceIndex: result.source.index,
