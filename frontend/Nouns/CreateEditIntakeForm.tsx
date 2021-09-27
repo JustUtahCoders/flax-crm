@@ -123,10 +123,11 @@ export function CreateEditIntakeForm(props: RouterProps) {
                         }
                       >
                         <FormField className="pointer-events-none mt-3">
-                          <FormFieldLabel>
+                          <FormFieldLabel htmlFor={`input-item-${item.id}`}>
                             {fieldItem.question.label}
                           </FormFieldLabel>
                           <Input
+                            id={`input-item-${item.id}`}
                             placeholder={fieldItem.question.placeholderText}
                             required={fieldItem.question.required}
                             disabled
