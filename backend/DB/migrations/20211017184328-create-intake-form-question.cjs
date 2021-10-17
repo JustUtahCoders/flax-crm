@@ -9,7 +9,14 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       label: {
+        allowNull: false,
         type: Sequelize.STRING,
+      },
+      placeholderText: {
+        type: Sequelize.STRING,
+      },
+      required: {
+        type: Sequelize.BOOLEAN,
       },
       createdAt: {
         allowNull: false,

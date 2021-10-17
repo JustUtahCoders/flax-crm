@@ -14,6 +14,8 @@ module.exports = (sequelize, DataTypes) => {
   IntakeFormQuestion.init(
     {
       label: DataTypes.STRING,
+      placeholderText: DataTypes.STRING,
+      required: DataTypes.BOOLEAN,
     },
     {
       sequelize,

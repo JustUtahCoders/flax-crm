@@ -15,20 +15,23 @@ module.exports = (sequelize, DataTypes) => {
           allowNull: false,
         },
       });
+      models.IntakeFormItem.belongsTo(models.IntakeForm);
 
-      models.Field.hasMany(models.IntakeFormItem, {
+      models.Field.hasOne(models.IntakeFormItem, {
         foreignKey: {
           name: "fieldId",
           allowNull: true,
         },
       });
+      models.IntakeFormItem.belongsTo(models.Field);
 
-      models.IntakeFormQuestion.hasMany(models.IntakeFormItem, {
+      models.IntakeFormQuestion.hasOne(models.IntakeFormItem, {
         foreignKey: {
           name: "intakeFormQuestionId",
           allowNull: true,
         },
       });
+      models.IntakeFormItem.belongsTo(models.IntakeFormQuestion);
 
       models.IntakeFormItem.hasMany(models.IntakeFormItem, {
         foreignKey: {
@@ -36,6 +39,7 @@ module.exports = (sequelize, DataTypes) => {
           allowNull: true,
         },
       });
+      models.IntakeFormItem.belongsTo(models.IntakeFormItem);
 
       models.IntakeFormItem.hasMany(models.IntakeFormItem, {
         foreignKey: {
@@ -43,11 +47,18 @@ module.exports = (sequelize, DataTypes) => {
           allowNull: true,
         },
       });
+      models.IntakeFormItem.belongsTo(models.IntakeFormItem);
     }
   }
   IntakeFormItem.init(
     {
       type: DataTypes.STRING,
+      intakeFormId: DataTypes.INTEGER,
+      fieldId: DataTypes.INTEGER,
+      intakeFormQuestionId: DataTypes.INTEGER,
+      pageId: DataTypes.INTEGER,
+      sectionId: DataTypes.INTEGER,
+      orderIndex: DataTypes.INTEGER,
     },
     {
       sequelize,

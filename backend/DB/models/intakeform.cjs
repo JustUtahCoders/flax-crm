@@ -9,17 +9,19 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      models.Noun.hasMany(models.IntakeForm, {
+      models.IntakeForm.belongsTo(models.Noun, {
         foreignKey: {
           name: "nounId",
           allowNull: false,
         },
       });
+      models.Noun.hasMany(models.IntakeForm);
     }
   }
   IntakeForm.init(
     {
       title: DataTypes.STRING,
+      nounId: DataTypes.INTEGER,
     },
     {
       sequelize,
