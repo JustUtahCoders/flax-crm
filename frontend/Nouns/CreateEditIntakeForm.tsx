@@ -100,7 +100,7 @@ export function CreateEditIntakeForm(props: RouterProps) {
           {(provided, snapshot) => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
               {state.intakeForm.intakeItems.map((item, i) => {
-                const fieldItem = item as IntakeFieldItem;
+                const fieldItem = item as IntakeFormItem;
                 return (
                   <Draggable
                     key={item.id}
@@ -240,20 +240,20 @@ enum IntakeItemType {
   Field = "Field",
 }
 
-interface IntakeFieldItem {
+interface IntakeFormItem {
   type: IntakeItemType.Field;
   id: number;
   field: Field;
-  question: FieldQuestion;
+  question: IntakeFormQuestion;
 }
 
-interface FieldQuestion {
+interface IntakeFormQuestion {
   label: string;
   required: boolean;
   placeholderText: string;
 }
 
-type IntakeItem = IntakeFieldItem;
+type IntakeItem = IntakeFormItem;
 
 interface IntakeItemsLoadedAction {
   type: ActionTypes.IntakeItemsLoaded;
