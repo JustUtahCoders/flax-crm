@@ -3,7 +3,7 @@ import { theGlobal } from "./Global";
 
 export function flaxFetch<ResponseDataType = object>(
   url: string,
-  options: FlaxFetchOptions
+  options: FlaxFetchOptions = {}
 ): Promise<ResponseDataType> {
   if (isPlainObject(options?.body) && !(options?.body instanceof FormData)) {
     options.body = JSON.stringify(options.body);
