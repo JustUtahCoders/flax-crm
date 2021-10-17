@@ -9,13 +9,6 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-
-      // - IntakeFormId
-      // - FieldId
-      // - QuestionId
-      // - PageId
-      // - SectionId
-
       models.IntakeForm.hasMany(models.IntakeFormItem, {
         foreignKey: {
           name: "intakeFormId",
