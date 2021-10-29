@@ -3,12 +3,10 @@ import path from "path";
 import { encode } from "js-base64";
 import dotenv from "dotenv";
 
-dotenv.config();
-
 async function makeEmail({ to, from, subject }) {
   const message = `This is a test email for reset password.`;
 
-  // the white space is important, string template is space sensitive
+  // the white space is important, template literals are space sensitive
   const str = `
 Content-Type: text/html; charset="UTF-8"
 to: ${to}
@@ -16,7 +14,7 @@ from: ${from}
 subject: =?utf-8?B? ${encode(subject, true)}?=
 
 ${message} 
-    `.trim();
+`.trim();
 
   return encode(str, true);
 }
