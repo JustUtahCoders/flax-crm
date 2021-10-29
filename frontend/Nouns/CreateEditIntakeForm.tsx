@@ -10,13 +10,11 @@ import { Field } from "../../backend/DB/models/field";
 import { useQuery } from "react-query";
 import { Card } from "../Styleguide/Card";
 import { Loader } from "../Styleguide/Loader";
-import { Input } from "../Styleguide/Input";
-import { FormFieldLabel } from "../Styleguide/FormFieldLabel";
-import { FormField } from "../Styleguide/FormField";
 import { EditIntakeItem } from "./EditIntakeItem";
 import { Button, ButtonKind } from "../Styleguide/Button";
 import { CreateIntakeItem } from "./CreateIntakeItem";
 import { flaxFetch } from "../Utils/flaxFetch";
+import { ViewIntakeItem } from "./ViewIntakeItem/ViewIntakeItem";
 
 export function CreateEditIntakeForm(
   props: RouteComponentProps<{ nounId: string }>
@@ -142,7 +140,6 @@ export function CreateEditIntakeForm(
           {(provided, snapshot) => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
               {state.intakeForm.intakeItems.map((item, i) => {
-                const fieldItem = item as IntakeFieldItem;
                 return (
                   <Draggable
                     key={item.id}
@@ -164,17 +161,7 @@ export function CreateEditIntakeForm(
                           })
                         }
                       >
-                        <FormField className="pointer-events-none mt-3">
-                          <FormFieldLabel htmlFor={`intake-item-${item.id}`}>
-                            {fieldItem.question.label}
-                          </FormFieldLabel>
-                          <Input
-                            id={`intake-item-${item.id}`}
-                            placeholder={fieldItem.question.placeholderText}
-                            required={fieldItem.question.required}
-                            disabled
-                          />
-                        </FormField>
+                        <ViewIntakeItem intakeItem={item} />
                       </div>
                     )}
                   </Draggable>
@@ -349,13 +336,22 @@ export interface IntakeSectionItem {
   intakeItems: IntakeItem[];
 }
 
+export interface IntakeParagraphItem {
+  type: IntakeItemType.Paragraph;
+  id: number;
+  textContent: string;
+}
+
 interface FieldQuestion {
   label: string;
   required: boolean;
   placeholderText: string;
 }
 
-export type IntakeItem = IntakeFieldItem | IntakeSectionItem;
+export type IntakeItem =
+  | IntakeFieldItem
+  | IntakeSectionItem
+  | IntakeParagraphItem;
 
 interface IntakeItemsLoadedAction {
   type: ActionTypes.IntakeItemsLoaded;
