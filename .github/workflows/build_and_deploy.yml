@@ -46,35 +46,35 @@ jobs:
         with:
           name: backend-code
           path: lib
+# Commented until we fix the app engine environment to not cost us so much money
+# deploy-server:
+#   runs-on: ubuntu-latest
+#   if: github.ref == 'refs/heads/main' && github.repository_owner == 'JustUtahCoders'
+#   needs: [build]
+#   env:
+#     ENV_VARS_YAML: ${{ secrets.ENV_VARS_YAML }}
+#   steps:
+#     - uses: actions/checkout@v2
+#     - uses: actions/download-artifact@v2
+#       with:
+#         name: frontend-assets
+#         path: dist
+#     - uses: actions/download-artifact@v2
+#       with:
+#         name: backend-code
+#         path: lib
+#     - run: find lib
+#     - run: find dist
+#     # Upload frontend assets to GCP bucket
+#     - id: upload-files
+#       uses: google-github-actions/upload-cloud-storage@main
+#       with:
+#         path: dist
+#         credentials: ${{ secrets.GCP_SA_KEY }}
+#         destination: ${{ secrets.GCP_FRONTEND_BUCKET }}
 
-  deploy-server:
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.repository_owner == 'JustUtahCoders'
-    needs: [build]
-    env:
-      ENV_VARS_YAML: ${{ secrets.ENV_VARS_YAML }}
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/download-artifact@v2
-        with:
-          name: frontend-assets
-          path: dist
-      - uses: actions/download-artifact@v2
-        with:
-          name: backend-code
-          path: lib
-      - run: find lib
-      - run: find dist
-      # Upload frontend assets to GCP bucket
-      - id: upload-files
-        uses: google-github-actions/upload-cloud-storage@main
-        with:
-          path: dist
-          credentials: ${{ secrets.GCP_SA_KEY }}
-          destination: ${{ secrets.GCP_FRONTEND_BUCKET }}
-
-      # App Engine deployment
-      - run: echo "$ENV_VARS_YAML" > env-vars.yaml
-      - uses: google-github-actions/deploy-appengine@main
-        with:
-          credentials: ${{ secrets.GCP_SA_KEY }}
+#     # App Engine deployment
+#     - run: echo "$ENV_VARS_YAML" > env-vars.yaml
+#     - uses: google-github-actions/deploy-appengine@main
+#       with:
+#         credentials: ${{ secrets.GCP_SA_KEY }}

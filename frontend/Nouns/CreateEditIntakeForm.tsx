@@ -1,11 +1,11 @@
-import { useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import {
   DragDropContext,
   Droppable,
   Draggable,
   DropResult,
 } from "react-beautiful-dnd";
-import { RouterProps, useParams } from "react-router";
+import { RouteComponentProps } from "react-router";
 import { Field } from "../../backend/DB/models/field";
 import { useQuery } from "react-query";
 import { Card } from "../Styleguide/Card";
@@ -18,15 +18,19 @@ import { Button, ButtonKind } from "../Styleguide/Button";
 import { CreateIntakeItem } from "./CreateIntakeItem";
 import { flaxFetch } from "../Utils/flaxFetch";
 
-export function CreateEditIntakeForm(props: RouterProps) {
+export function CreateEditIntakeForm(
+  props: RouteComponentProps<{ id: string }>
+) {
   const [state, dispatch] = useReducer<Reducer, State>(
     reducer,
     initialState,
     () => initialState
   );
-  const { nounId } = useParams<RouteParams>();
+
+  const nounId = props.match.params.id;
 
   const {
+    data: fields,
     isLoading: isLoadingFields,
     isError: isErrorFields,
     error: errorFields,
@@ -34,67 +38,75 @@ export function CreateEditIntakeForm(props: RouterProps) {
     const r = await flaxFetch<{ fields: Field[] }>(
       `/api/nouns/${nounId}/fields`
     );
-    dispatch({
-      type: ActionTypes.NounFieldsLoaded,
-      nounFields: r.fields,
-    });
     return r.fields;
   });
 
-  const { isLoading, isError, error } = useQuery<IntakeItem[]>(
-    `intake-form-${nounId}`,
-    async () => {
-      const r: GetIntakeItemsResponse = {
-        intakeItems: [
-          {
-            type: IntakeItemType.Field,
-            field: {
-              createdAt: Date.now().toString(),
-              id: 1,
-              activeStatus: true,
-              columnName: "givenName",
-              friendlyName: "First Name",
-              nounId: 10,
-              type: "text",
-              updatedAt: Date.now().toString(),
-            },
+  const {
+    data: intakeItems,
+    isLoading: isLoadingIntakeItems,
+    isError: isErrorIntakeItems,
+    error: errorIntakeItems,
+  } = useQuery<IntakeItem[]>(`intake-form-${nounId}`, async () => {
+    const r: GetIntakeItemsResponse = {
+      intakeItems: [
+        {
+          type: IntakeItemType.Field,
+          field: {
+            createdAt: Date.now().toString(),
             id: 1,
-            question: {
-              label: "First Name",
-              placeholderText: "Jane",
-              required: true,
-            },
+            activeStatus: true,
+            columnName: "givenName",
+            friendlyName: "First Name",
+            nounId: 10,
+            type: "text",
+            updatedAt: Date.now().toString(),
           },
-          {
-            type: IntakeItemType.Field,
-            field: {
-              createdAt: Date.now().toString(),
-              id: 2,
-              activeStatus: true,
-              columnName: "surname",
-              friendlyName: "Last Name",
-              nounId: 10,
-              type: "text",
-              updatedAt: Date.now().toString(),
-            },
+          id: 1,
+          question: {
+            label: "First Name",
+            placeholderText: "Jane",
+            required: true,
+          },
+        },
+        {
+          type: IntakeItemType.Field,
+          field: {
+            createdAt: Date.now().toString(),
             id: 2,
-            question: {
-              label: "Last Name",
-              placeholderText: "Doe",
-              required: true,
-            },
+            activeStatus: true,
+            columnName: "surname",
+            friendlyName: "Last Name",
+            nounId: 10,
+            type: "text",
+            updatedAt: Date.now().toString(),
           },
-        ],
-      };
-      dispatch({
-        type: ActionTypes.IntakeItemsLoaded,
-        intakeItems: r.intakeItems,
-      });
-      return r.intakeItems;
-    }
-  );
+          id: 2,
+          question: {
+            label: "Last Name",
+            placeholderText: "Doe",
+            required: true,
+          },
+        },
+      ],
+    };
+    return r.intakeItems;
+  });
 
-  if (isLoading || isLoadingFields) {
+  useEffect(() => {
+    dispatch({
+      type: ActionTypes.NounFieldsLoaded,
+      nounFields: fields || [],
+    });
+  }, [fields]);
+
+  useEffect(() => {
+    dispatch({
+      type: ActionTypes.IntakeItemsLoaded,
+      intakeItems: intakeItems || [],
+    });
+  }, [intakeItems]);
+
+  if (isLoadingIntakeItems || isLoadingFields) {
     return (
       <Card>
         <Loader description="Loading intake form" />
@@ -102,7 +114,7 @@ export function CreateEditIntakeForm(props: RouterProps) {
     );
   }
 
-  if (isError || isErrorFields) {
+  if (isErrorIntakeItems || isErrorFields) {
     return (
       <Card>
         <h1>Error loading intake form</h1>
