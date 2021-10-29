@@ -82,7 +82,7 @@ describe(`<CreateEditIntakeForm />`, () => {
       <QueryClientProvider client={queryClient}>
         <MemoryRouter initialEntries={["/create-intake-form/1"]}>
           <Route
-            path="/create-intake-form/:id"
+            path="/create-intake-form/:nounId"
             component={CreateEditIntakeForm}
           />
         </MemoryRouter>
@@ -102,7 +102,7 @@ describe(`<CreateEditIntakeForm />`, () => {
       <QueryClientProvider client={queryClient}>
         <MemoryRouter initialEntries={["/create-intake-form/1"]}>
           <Route
-            path="/create-intake-form/:id"
+            path="/create-intake-form/:nounId"
             component={CreateEditIntakeForm}
           />
         </MemoryRouter>

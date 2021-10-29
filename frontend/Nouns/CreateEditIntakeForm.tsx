@@ -19,7 +19,7 @@ import { CreateIntakeItem } from "./CreateIntakeItem";
 import { flaxFetch } from "../Utils/flaxFetch";
 
 export function CreateEditIntakeForm(
-  props: RouteComponentProps<{ id: string }>
+  props: RouteComponentProps<{ nounId: string }>
 ) {
   const [state, dispatch] = useReducer<Reducer, State>(
     reducer,
@@ -27,7 +27,7 @@ export function CreateEditIntakeForm(
     () => initialState
   );
 
-  const nounId = props.match.params.id;
+  const nounId = props.match.params.nounId;
 
   const {
     data: fields,
