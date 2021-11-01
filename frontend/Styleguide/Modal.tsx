@@ -1,5 +1,6 @@
 import { HTMLProps } from "react";
 import { Button, ButtonKind } from "./Button";
+import { Icon, IconVariant } from "./Icon";
 
 export function Modal(props: ModalProps) {
   return (
@@ -13,12 +14,8 @@ export function Modal(props: ModalProps) {
       >
         <header className="flex items-center justify-between mb-2">
           <h1 className="text-xl">{props.title}</h1>
-          <Button
-            kind={ButtonKind.transparent}
-            onClick={props.close}
-            className="hover:bg-gray-200"
-          >
-            {"\u2716"}
+          <Button kind={ButtonKind.icon} onClick={props.close}>
+            <Icon variant={IconVariant.close} alt="Close Modal Icon" />
           </Button>
         </header>
         <div className="pt-5">{props.children}</div>
