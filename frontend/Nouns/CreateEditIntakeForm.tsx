@@ -1,11 +1,11 @@
-import { useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import {
   DragDropContext,
   Droppable,
   Draggable,
   DropResult,
 } from "react-beautiful-dnd";
-import { RouterProps, useParams } from "react-router";
+import { RouteComponentProps } from "react-router";
 import { Field } from "../../backend/DB/models/field";
 import { useQuery } from "react-query";
 import { Card } from "../Styleguide/Card";
@@ -14,69 +14,99 @@ import { Input } from "../Styleguide/Input";
 import { FormFieldLabel } from "../Styleguide/FormFieldLabel";
 import { FormField } from "../Styleguide/FormField";
 import { EditIntakeItem } from "./EditIntakeItem";
+import { Button, ButtonKind } from "../Styleguide/Button";
+import { CreateIntakeItem } from "./CreateIntakeItem";
+import { flaxFetch } from "../Utils/flaxFetch";
 
-export function CreateEditIntakeForm(props: RouterProps) {
+export function CreateEditIntakeForm(
+  props: RouteComponentProps<{ nounId: string }>
+) {
   const [state, dispatch] = useReducer<Reducer, State>(
     reducer,
     initialState,
     () => initialState
   );
-  const { nounId } = useParams<RouteParams>();
-  const { isLoading, isError, error } = useQuery<IntakeItem[]>(
-    `fields-${nounId}`,
-    async () => {
-      // const r = await flaxFetch<GetFieldsResponse>(`/api/nouns/${nounId}/fields`)
-      const r: GetIntakeItemsResponse = {
-        intakeItems: [
-          {
-            type: IntakeItemType.Field,
-            field: {
-              createdAt: Date.now().toString(),
-              id: 1,
-              activeStatus: true,
-              columnName: "givenName",
-              friendlyName: "First Name",
-              nounId: 10,
-              type: "text",
-              updatedAt: Date.now().toString(),
-            },
-            id: 1,
-            question: {
-              label: "First Name",
-              placeholderText: "Jane",
-              required: true,
-            },
-          },
-          {
-            type: IntakeItemType.Field,
-            field: {
-              createdAt: Date.now().toString(),
-              id: 2,
-              activeStatus: true,
-              columnName: "surname",
-              friendlyName: "Last Name",
-              nounId: 10,
-              type: "text",
-              updatedAt: Date.now().toString(),
-            },
-            id: 2,
-            question: {
-              label: "Last Name",
-              placeholderText: "Doe",
-              required: true,
-            },
-          },
-        ],
-      };
-      dispatch({
-        type: ActionTypes.IntakeItemsLoaded,
-        intakeItems: r.intakeItems,
-      });
-      return r.intakeItems;
-    }
-  );
 
-  if (isLoading) {
+  const nounId = props.match.params.nounId;
+
+  const {
+    data: fields,
+    isLoading: isLoadingFields,
+    isError: isErrorFields,
+    error: errorFields,
+  } = useQuery<Field[]>(`fields-${nounId}`, async () => {
+    const r = await flaxFetch<{ fields: Field[] }>(
+      `/api/nouns/${nounId}/fields`
+    );
+    return r.fields;
+  });
+
+  const {
+    data: intakeItems,
+    isLoading: isLoadingIntakeItems,
+    isError: isErrorIntakeItems,
+    error: errorIntakeItems,
+  } = useQuery<IntakeItem[]>(`intake-form-${nounId}`, async () => {
+    const r: GetIntakeItemsResponse = {
+      intakeItems: [
+        {
+          type: IntakeItemType.Field,
+          field: {
+            createdAt: Date.now().toString(),
+            id: 1,
+            activeStatus: true,
+            columnName: "givenName",
+            friendlyName: "First Name",
+            nounId: 10,
+            type: "text",
+            updatedAt: Date.now().toString(),
+          },
+          id: 1,
+          question: {
+            label: "First Name",
+            placeholderText: "Jane",
+            required: true,
+          },
+        },
+        {
+          type: IntakeItemType.Field,
+          field: {
+            createdAt: Date.now().toString(),
+            id: 2,
+            activeStatus: true,
+            columnName: "surname",
+            friendlyName: "Last Name",
+            nounId: 10,
+            type: "text",
+            updatedAt: Date.now().toString(),
+          },
+          id: 2,
+          question: {
+            label: "Last Name",
+            placeholderText: "Doe",
+            required: true,
+          },
+        },
+      ],
+    };
+    return r.intakeItems;
+  });
+
+  useEffect(() => {
+    dispatch({
+      type: ActionTypes.NounFieldsLoaded,
+      nounFields: fields || [],
+    });
+  }, [fields]);
+
+  useEffect(() => {
+    dispatch({
+      type: ActionTypes.IntakeItemsLoaded,
+      intakeItems: intakeItems || [],
+    });
+  }, [intakeItems]);
+
+  if (isLoadingIntakeItems || isLoadingFields) {
     return (
       <Card>
         <Loader description="Loading intake form" />
@@ -84,7 +114,7 @@ export function CreateEditIntakeForm(props: RouterProps) {
     );
   }
 
-  if (isError) {
+  if (isErrorIntakeItems || isErrorFields) {
     return (
       <Card>
         <h1>Error loading intake form</h1>
@@ -94,7 +124,19 @@ export function CreateEditIntakeForm(props: RouterProps) {
 
   return (
     <div className="container p-20">
-      <h1>Intake form for Noun</h1>
+      <div className="flex justify-between">
+        <h1>Intake form for Noun</h1>
+        <Button
+          kind={ButtonKind.primary}
+          onClick={() =>
+            dispatch({
+              type: ActionTypes.CreateItem,
+            })
+          }
+        >
+          Add Field
+        </Button>
+      </div>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="intake-form">
           {(provided, snapshot) => (
@@ -142,17 +184,34 @@ export function CreateEditIntakeForm(props: RouterProps) {
             </div>
           )}
         </Droppable>
-        {state.itemToEdit && (
-          <EditIntakeItem
-            intakeItem={state.itemToEdit}
-            close={() => {
-              dispatch({
-                type: ActionTypes.CancelEdit,
-              });
-            }}
-          />
-        )}
       </DragDropContext>
+      {state.itemToEdit && (
+        <EditIntakeItem
+          fields={state.nounFields}
+          intakeItem={state.itemToEdit}
+          close={() => {
+            dispatch({
+              type: ActionTypes.CancelEdit,
+            });
+          }}
+        />
+      )}
+      {state.creatingItem && (
+        <CreateIntakeItem
+          fields={state.nounFields}
+          addNewItem={(intakeItem: IntakeItem) => {
+            dispatch({
+              type: ActionTypes.AddNewItem,
+              intakeItem,
+            });
+          }}
+          close={() => {
+            dispatch({
+              type: ActionTypes.CancelCreate,
+            });
+          }}
+        />
+      )}
     </div>
   );
 
@@ -176,6 +235,9 @@ const initialState: State = {
   intakeForm: {
     intakeItems: [],
   },
+  nounFields: [],
+  creatingItem: false,
+  itemToEdit: undefined,
 };
 
 function reducer(state: State, action: Action): State {
@@ -202,6 +264,30 @@ function reducer(state: State, action: Action): State {
         ...state,
         itemToEdit: undefined,
       };
+    case ActionTypes.CreateItem:
+      return {
+        ...state,
+        creatingItem: true,
+      };
+    case ActionTypes.CancelCreate:
+      return {
+        ...state,
+        creatingItem: false,
+      };
+    case ActionTypes.AddNewItem:
+      return {
+        ...state,
+        intakeForm: {
+          ...state.intakeForm,
+          intakeItems: [...state.intakeForm.intakeItems, action.intakeItem],
+        },
+        creatingItem: false,
+      };
+    case ActionTypes.NounFieldsLoaded:
+      return {
+        ...state,
+        nounFields: action.nounFields,
+      };
     default:
       throw Error();
   }
@@ -223,6 +309,8 @@ function modifyIntakeForm(
 interface State {
   intakeForm: IntakeForm;
   itemToEdit?: IntakeItem;
+  creatingItem?: boolean;
+  nounFields: Field[];
 }
 
 interface IntakeForm {
@@ -234,10 +322,18 @@ enum ActionTypes {
   Reorder = "Reorder",
   EditItem = "EditItem",
   CancelEdit = "CancelEdit",
+  CreateItem = "CreateItem",
+  CancelCreate = "CancelCreate",
+  AddNewItem = "AddNewItem",
+  NounFieldsLoaded = "NounFieldsLoaded",
 }
 
 export enum IntakeItemType {
   Field = "Field",
+  Section = "Section",
+  Page = "Page",
+  Header = "Header",
+  Paragraph = "Paragraph",
 }
 
 export interface IntakeFieldItem {
@@ -247,13 +343,19 @@ export interface IntakeFieldItem {
   question: FieldQuestion;
 }
 
+export interface IntakeSectionItem {
+  type: IntakeItemType.Section;
+  id: number;
+  intakeItems: IntakeItem[];
+}
+
 interface FieldQuestion {
   label: string;
   required: boolean;
   placeholderText: string;
 }
 
-export type IntakeItem = IntakeFieldItem;
+export type IntakeItem = IntakeFieldItem | IntakeSectionItem;
 
 interface IntakeItemsLoadedAction {
   type: ActionTypes.IntakeItemsLoaded;
@@ -275,11 +377,33 @@ interface CancelEditAction {
   type: ActionTypes.CancelEdit;
 }
 
+interface CreateAction {
+  type: ActionTypes.CreateItem;
+}
+
+interface CancelCreateAction {
+  type: ActionTypes.CancelCreate;
+}
+
+interface AddNewItem {
+  type: ActionTypes.AddNewItem;
+  intakeItem: IntakeItem;
+}
+
+interface NounFieldsLoaded {
+  type: ActionTypes.NounFieldsLoaded;
+  nounFields: Field[];
+}
+
 type Action =
   | IntakeItemsLoadedAction
   | ReorderAction
   | EditItemAction
-  | CancelEditAction;
+  | CancelEditAction
+  | CreateAction
+  | CancelCreateAction
+  | AddNewItem
+  | NounFieldsLoaded;
 
 type Reducer = (state: State, action: Action) => State;
 
