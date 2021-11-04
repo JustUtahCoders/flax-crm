@@ -1,11 +1,11 @@
 import { SelectHTMLAttributes, useState } from "react";
-import { useMutation } from "react-query";
 import { Field } from "../../backend/DB/models/field";
+import { FormFieldLabel } from "../Styleguide/FormFieldLabel";
 import { Modal } from "../Styleguide/Modal";
 import { Select } from "../Styleguide/Select";
-import { flaxFetch } from "../Utils/flaxFetch";
 import { IntakeItem, IntakeItemType } from "./CreateEditIntakeForm";
-import { EditIntakeTextField } from "./EditIntakeField/EditIntakeTextField";
+import { EditIntakeTextField } from "./EditIntakeItem/EditIntakeTextField";
+import { EditIntakeParagraph } from "./EditIntakeItem/EditIntakeParagraph";
 
 export function CreateIntakeItem(props: CreateIntakeItemProps) {
   const [intakeItemType, setIntakeItemType] = useState<IntakeItemType>(
@@ -32,6 +32,8 @@ function getCreateComponent(
   switch (intakeItemType) {
     case IntakeItemType.Field:
       return CreateFieldItem;
+    case IntakeItemType.Paragraph:
+      return CreateParagraphItem;
     default:
       throw Error(
         `No create component implemented for intake item type ${intakeItemType}`
@@ -55,20 +57,42 @@ function CreateFieldItem(props: CreateItemProps) {
   );
 }
 
+function CreateParagraphItem(props: CreateItemProps) {
+  return (
+    <EditIntakeParagraph
+      close={props.close}
+      intakeItem={null}
+      save={props.doCreate}
+      fields={props.fields}
+    >
+      <IntakeItemTypeSelect
+        value={props.intakeItemType}
+        setIntakeItemType={props.setIntakeItemType}
+      />
+    </EditIntakeParagraph>
+  );
+}
+
 function IntakeItemTypeSelect(props: IntakeItemTypeSelectProps) {
   return (
-    <Select
-      value={props.value}
-      onChange={(evt) =>
-        props.setIntakeItemType(evt.target.value as IntakeItemType)
-      }
-    >
-      {Object.keys(IntakeItemType).map((intakeItemType) => (
-        <option key={intakeItemType} value={intakeItemType}>
-          {intakeItemType}
-        </option>
-      ))}
-    </Select>
+    <>
+      <FormFieldLabel htmlFor="intake-item-type-select">
+        Intake Item Type
+      </FormFieldLabel>
+      <Select
+        id="intake-item-type-select"
+        value={props.value}
+        onChange={(evt) =>
+          props.setIntakeItemType(evt.target.value as IntakeItemType)
+        }
+      >
+        {Object.keys(IntakeItemType).map((intakeItemType) => (
+          <option key={intakeItemType} value={intakeItemType}>
+            {intakeItemType}
+          </option>
+        ))}
+      </Select>
+    </>
   );
 }
 

@@ -6,7 +6,8 @@ import {
   IntakeItemType,
   IntakeSectionItem,
 } from "./CreateEditIntakeForm";
-import { EditIntakeTextField } from "./EditIntakeField/EditIntakeTextField";
+import { EditIntakeParagraph } from "./EditIntakeItem/EditIntakeParagraph";
+import { EditIntakeTextField } from "./EditIntakeItem/EditIntakeTextField";
 
 export function EditIntakeItem(props: EditIntakeItemProps) {
   const Edit = getEditComponent(props.intakeItem);
@@ -50,6 +51,8 @@ function getEditComponent(
             }' - edit component not implemented`
           );
       }
+    case IntakeItemType.Paragraph:
+      return EditIntakeParagraph;
     case IntakeItemType.Section:
       return EditSectionItem;
   }
