@@ -53,14 +53,7 @@ export async function findOrCreateGoogleUser(profile) {
 
 export async function findUser(email, password) {
   const hashpass = await bcrypt.hash(password, 5);
-
-  const users = await sequelize.models.User.findAll({
-    where: {
-      email: email,
-    },
-  });
-
-  const user = users.length > 0 ? users[0] : null;
+  const user = await findUserByEmail(email);
 
   if (user) {
     const hash = user.get("password");
@@ -70,4 +63,14 @@ export async function findUser(email, password) {
   } else {
     return null;
   }
+}
+
+export async function findUserByEmail(email) {
+  const users = await sequelize.models.User.findAll({
+    where: {
+      email: email,
+    },
+  });
+  console.log("find user by email fires, log user: ", users[0]);
+  return users.length > 0 ? users[0] : null;
 }
