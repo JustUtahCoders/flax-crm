@@ -8,11 +8,17 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
       models.Noun.hasMany(models.Field, {
         foreignKey: {
           name: "nounId",
           allowNull: false,
+        },
+      });
+
+      models.IntakeFormItem.belongsTo(models.Field, {
+        foreignKey: {
+          name: "fieldId",
+          allowNull: true,
         },
       });
     }

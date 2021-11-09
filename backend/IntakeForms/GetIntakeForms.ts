@@ -1,4 +1,5 @@
 import { sequelize } from "../DB.js";
+import s from "sequelize";
 import { router } from "../Router.js";
 import { param, validationResult } from "express-validator";
 import { invalidRequest, notFound } from "../Utils/EndpointResponses.js";
@@ -19,8 +20,6 @@ router.get<Params>(
       return invalidRequest(res, validationErrors);
     }
 
-    // TODO: optimize all of these queries to happen in one DB transaction?
-
     const { intakeFormId } = req.params;
     const intakeForm = await sequelize.models.IntakeForm.findByPk(intakeFormId);
 
@@ -33,13 +32,42 @@ router.get<Params>(
         },
         include: [
           {
-            model: sequelize.models.IntakeFormQuestion,
+            association: "pageChildren",
             required: true,
+            where: {
+              // Only include sections or items with no sections
+              [s.Op.or]: [{ sectionId: null }, { type: "section" }],
+            },
+            include: [
+              {
+                association: "sectionChildren",
+                required: false,
+                include: [
+                  {
+                    model: sequelize.models.IntakeFormQuestion,
+                    required: false,
+                  },
+                  {
+                    model: sequelize.models.Field,
+                    required: false,
+                  },
+                ],
+                order: ["orderIndex"],
+              },
+              {
+                model: sequelize.models.IntakeFormQuestion,
+                required: false,
+              },
+              {
+                model: sequelize.models.Field,
+                required: false,
+              },
+            ],
+            order: ["orderIndex"],
           },
         ],
+        order: ["orderIndex"],
       });
-
-      console.log({ intakeFormItems });
 
       res.send(intakeFormItems);
     }

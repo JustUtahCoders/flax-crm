@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
           allowNull: false,
         },
       });
-      models.IntakeFormItem.belongsTo(models.IntakeForm);
+      // models.IntakeFormItem.belongsTo(models.IntakeForm);
 
       models.Field.hasOne(models.IntakeFormItem, {
         foreignKey: {
@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
           allowNull: true,
         },
       });
-      models.IntakeFormItem.belongsTo(models.Field);
+      // models.IntakeFormItem.belongsTo(models.Field);
 
       models.IntakeFormQuestion.hasOne(models.IntakeFormItem, {
         foreignKey: {
@@ -31,23 +31,25 @@ module.exports = (sequelize, DataTypes) => {
           allowNull: true,
         },
       });
-      models.IntakeFormItem.belongsTo(models.IntakeFormQuestion);
+      // models.IntakeFormItem.belongsTo(models.IntakeFormQuestion);
 
       models.IntakeFormItem.hasMany(models.IntakeFormItem, {
+        as: "pageChildren",
         foreignKey: {
           name: "pageId",
           allowNull: true,
         },
       });
-      models.IntakeFormItem.belongsTo(models.IntakeFormItem);
+      // models.IntakeFormItem.belongsTo(models.IntakeFormItem);
 
       models.IntakeFormItem.hasMany(models.IntakeFormItem, {
+        as: "sectionChildren",
         foreignKey: {
           name: "sectionId",
           allowNull: true,
         },
       });
-      models.IntakeFormItem.belongsTo(models.IntakeFormItem);
+      // models.IntakeFormItem.belongsTo(models.IntakeFormItem);
     }
   }
   IntakeFormItem.init(

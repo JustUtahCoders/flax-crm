@@ -15,7 +15,6 @@ module.exports = (sequelize, DataTypes) => {
           allowNull: false,
         },
       });
-      models.Noun.hasMany(models.IntakeForm);
     }
   }
   IntakeForm.init(
