@@ -4,6 +4,8 @@
 
 First, install [pnpm](https://pnpm.io/) and [Docker](https://www.docker.com/)
 
+Then, create a `.env` file at the root of the project using `.env.example` as an example, and add the client ID & secret.
+
 ```sh
 pnpm install
 pnpm run develop

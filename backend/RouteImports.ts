@@ -8,6 +8,8 @@ import "./Nouns/PatchNouns.js";
 import "./Nouns/DeleteNouns.js";
 import "./Fields/BatchPostFields.js";
 import "./Fields/GetNounFields.js";
+import "./IntakeForms/GetIntakeForms";
+import "./IntakeForms/PutIntakeForms";
 
 // The default API Handler responds with a 404
 import "./ApiNotFound.js";

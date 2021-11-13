@@ -342,6 +342,12 @@ export interface IntakeParagraphItem {
   textContent: string;
 }
 
+export interface IntakePageItem {
+  type: IntakeItemType.Page;
+  id: number;
+  intakeItems: IntakeItem[];
+}
+
 interface FieldQuestion {
   label: string;
   required: boolean;
@@ -351,7 +357,8 @@ interface FieldQuestion {
 export type IntakeItem =
   | IntakeFieldItem
   | IntakeSectionItem
-  | IntakeParagraphItem;
+  | IntakeParagraphItem
+  | IntakePageItem;
 
 interface IntakeItemsLoadedAction {
   type: ActionTypes.IntakeItemsLoaded;
