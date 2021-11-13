@@ -44,7 +44,7 @@ export function CreateEditIntakeForm(
     isLoading: isLoadingIntakeItems,
     isError: isErrorIntakeItems,
     error: errorIntakeItems,
-  } = useQuery<IntakeFormItem[]>(`intake-form-${nounId}`, async () => {
+  } = useQuery<IntakeItem[]>(`intake-form-${nounId}`, async () => {
     const r: GetIntakeItemsResponse = {
       intakeItems: [
         {
@@ -186,7 +186,7 @@ export function CreateEditIntakeForm(
       {state.creatingItem && (
         <CreateIntakeItem
           fields={state.nounFields}
-          addNewItem={(intakeItem: IntakeFormItem) => {
+          addNewItem={(intakeItem: IntakeItem) => {
             dispatch({
               type: ActionTypes.AddNewItem,
               intakeItem,
@@ -295,13 +295,13 @@ function modifyIntakeForm(
 
 interface State {
   intakeForm: IntakeForm;
-  itemToEdit?: IntakeFormItem;
+  itemToEdit?: IntakeItem;
   creatingItem?: boolean;
   nounFields: Field[];
 }
 
 interface IntakeForm {
-  intakeItems: IntakeFormItem[];
+  intakeItems: IntakeItem[];
 }
 
 enum ActionTypes {
@@ -323,39 +323,46 @@ export enum IntakeItemType {
   Paragraph = "Paragraph",
 }
 
-export interface IntakeFormField {
+export interface IntakeFieldItem {
   type: IntakeItemType.Field;
   id: number;
   field: Field;
-  question: IntakeFormQuestion;
+  question: FieldQuestion;
 }
 
-export interface IntakeFormSection {
+export interface IntakeSectionItem {
   type: IntakeItemType.Section;
   id: number;
-  intakeItems: IntakeFormItem[];
+  intakeItems: IntakeItem[];
 }
 
-export interface IntakeFormPage {
-  type: IntakeItemType.Page;
+export interface IntakeParagraphItem {
+  type: IntakeItemType.Paragraph;
   id: number;
   textContent: string;
 }
 
-interface IntakeFormQuestion {
+export interface IntakePageItem {
+  type: IntakeItemType.Page;
+  id: number;
+  intakeItems: IntakeItem[];
+}
+
+interface FieldQuestion {
   label: string;
   required: boolean;
   placeholderText: string;
 }
 
-export type IntakeFormItem =
-  | IntakeFormField
-  | IntakeFormSection
-  | IntakeFormPage;
+export type IntakeItem =
+  | IntakeFieldItem
+  | IntakeSectionItem
+  | IntakeParagraphItem
+  | IntakePageItem;
 
 interface IntakeItemsLoadedAction {
   type: ActionTypes.IntakeItemsLoaded;
-  intakeItems: IntakeFormItem[];
+  intakeItems: IntakeItem[];
 }
 
 interface ReorderAction {
@@ -366,7 +373,7 @@ interface ReorderAction {
 
 interface EditItemAction {
   type: ActionTypes.EditItem;
-  item: IntakeFormItem;
+  item: IntakeItem;
 }
 
 interface CancelEditAction {
@@ -383,7 +390,7 @@ interface CancelCreateAction {
 
 interface AddNewItem {
   type: ActionTypes.AddNewItem;
-  intakeItem: IntakeFormItem;
+  intakeItem: IntakeItem;
 }
 
 interface NounFieldsLoaded {
@@ -408,5 +415,5 @@ interface RouteParams {
 }
 
 interface GetIntakeItemsResponse {
-  intakeItems: IntakeFormItem[];
+  intakeItems: IntakeItem[];
 }

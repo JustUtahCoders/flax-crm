@@ -55,6 +55,7 @@ module.exports = (sequelize, DataTypes) => {
       intakeFormQuestionId: DataTypes.INTEGER,
       pageId: DataTypes.INTEGER,
       sectionId: DataTypes.INTEGER,
+      textContent: DataTypes.STRING,
       orderIndex: DataTypes.INTEGER,
     },
     {

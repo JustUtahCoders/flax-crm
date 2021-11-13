@@ -57,6 +57,9 @@ module.exports = {
             key: "id",
           },
         },
+        textContent: {
+          type: Sequelize.STRING,
+        },
         orderIndex: {
           allowNull: false,
           type: Sequelize.INTEGER,
