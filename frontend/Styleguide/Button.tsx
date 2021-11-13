@@ -20,17 +20,20 @@ export enum ButtonKind {
   secondary = "secondary",
   transparent = "transparent",
   classic = "classic",
+  icon = "icon",
 }
 
 export function buttonClasses(kind: ButtonKind, extraClassName: string = "") {
   const kindClasses = buttonKindClasses[kind] || "";
   return always(kindClasses)
     .always(extraClassName)
-    .maybe(styledButtonClasses, kind !== ButtonKind.classic)
+    .maybe(styledButtonClasses, styledButtonKinds.includes(kind))
     .toString();
 }
 
 const styledButtonClasses = `flex items-center justify-center cursor-pointer py-2.5 px-5 rounded font-medium`;
+
+const styledButtonKinds = [ButtonKind.primary, ButtonKind.secondary];
 
 const buttonKindClasses = {
   [ButtonKind.primary]: "bg-primary text-white",
@@ -39,4 +42,6 @@ const buttonKindClasses = {
   [ButtonKind.transparent]: "text-primary hover:text-primary",
   [ButtonKind.classic]:
     "text-primary underline hover:text-primary hover:underline",
+  [ButtonKind.icon]:
+    "text-primary hover:bg-gray-200 flex justify-items-center align-items-center p-2 rounded",
 };
