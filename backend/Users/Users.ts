@@ -1,4 +1,5 @@
 import { sequelize } from "../DB.js";
+import Sequelize, { Sequelize as SequelizeType } from "sequelize";
 import bcrypt from "bcryptjs";
 
 export async function findOrCreateLocalUser(email) {
@@ -68,9 +69,12 @@ export async function findUser(email, password) {
 export async function findUserByEmail(email) {
   const users = await sequelize.models.User.findAll({
     where: {
-      email: email,
+      email: Sequelize.where(
+        Sequelize.fn("LOWER", Sequelize.col("email")),
+        "ILIKE",
+        email
+      ),
     },
   });
-  console.log("find user by email fires, log user: ", users[0]);
   return users.length > 0 ? users[0] : null;
 }
