@@ -19,7 +19,7 @@ ${message}
   return encode(str, true);
 }
 
-export async function sendResetPasswordEmail({ to, subject }) {
+export async function sendEmail({ to, subject }) {
   const authClient = new google.Auth.JWT({
     keyFile: path.resolve(
       process.cwd(),
