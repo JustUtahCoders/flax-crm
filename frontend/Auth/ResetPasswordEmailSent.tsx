@@ -1,6 +1,7 @@
 import React from "react";
 import { useHistory } from "react-router";
 import { Button, ButtonKind } from "../Styleguide/Button";
+import { Anchor } from "../Styleguide/Anchor";
 
 export function ResetPasswordEmailSent(props) {
   const { email } = props.location.state;
@@ -22,7 +23,9 @@ export function ResetPasswordEmailSent(props) {
         </p>
         <div className="flex space-x-4 my-8">
           <Button kind={ButtonKind.primary} className="w-full mt-2">
-            <a href="/login">Return To Sign In</a>
+            <Anchor kind={ButtonKind.primary} to="/login">
+              Return To Sign In
+            </Anchor>
           </Button>
         </div>
       </div>
