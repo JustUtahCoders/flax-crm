@@ -22,6 +22,6 @@ router.post(
         subject: "Reset Password",
       });
     }
-    return res.status(204);
+    return res.status(204).end();
   }
 );
