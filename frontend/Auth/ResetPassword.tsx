@@ -18,21 +18,18 @@ export function ResetPassword(props: RouterProps) {
   const history = useHistory();
 
   const submitMutation = useMutation<
-    ResetPasswordResultData,
+    void,
     Error,
     React.FormEvent<HTMLFormElement>
   >(
     (evt) => {
       evt.preventDefault();
-      let requestPromise = flaxFetch<ResetPasswordResultData>(
-        `/send-reset-password-email`,
-        {
-          method: "POST",
-          body: {
-            email: resetPasswordFormData.email,
-          },
-        }
-      );
+      let requestPromise = flaxFetch<void>(`/send-reset-password-email`, {
+        method: "POST",
+        body: {
+          email: resetPasswordFormData.email,
+        },
+      });
       return requestPromise;
     },
     {
@@ -41,9 +38,6 @@ export function ResetPassword(props: RouterProps) {
           pathname: "/reset-password-email-sent",
           state: { email: resetPasswordFormData.email },
         });
-      },
-      onError: (error, variables, context) => {
-        console.log(error);
       },
     }
   );
@@ -84,10 +78,6 @@ export function ResetPassword(props: RouterProps) {
   );
 }
 
-export interface ResetPasswordResultData {
-  success: boolean;
-}
-
-export interface ResetPasswordFormData {
+interface ResetPasswordFormData {
   email: string;
 }
