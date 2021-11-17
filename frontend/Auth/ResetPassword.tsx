@@ -43,19 +43,27 @@ export function ResetPassword(props: RouterProps) {
   );
 
   return (
-    <div className="flex justify-center h-screen">
-      <form onSubmit={unary(submitMutation.mutate)} className="pt-40 max-w-sm">
-        <h1 className="text-xl text-gray-500 place-self-start mb-2">
+    <div className="flex justify-center h-screen p-24 sm:pt-80">
+      {/* <div className="flex justify-center h-screen sm:p-20"></div> */}
+      <form
+        onSubmit={unary(submitMutation.mutate)}
+        className="relative lg:max-w-sm"
+      >
+        {/* <form onSubmit={unary(submitMutation.mutate)} className="pt-40"> */}
+        <h1 className="text-gray-500 place-self-start mb-2 text-5xl lg:text-xl">
           Need a new password?
         </h1>
-        <p className="text-left text-s text-gray-600 py-8">
+        <p className="text-left text-gray-600 py-8 text-4xl lg:text-sm">
           Enter the email address associated with your account and we'll send an
           email with a link to reset your password.
         </p>
         <FormField className="mb-40">
-          <FormFieldLabel htmlFor="email">Email</FormFieldLabel>
+          <FormFieldLabel className="text-3xl lg:text-xs" htmlFor="email">
+            Email
+          </FormFieldLabel>
           <Input
             id="email"
+            className="text-5xl lg:text-sm"
             type="email"
             value={resetPasswordFormData.email}
             onChange={(evt) =>
@@ -68,8 +76,12 @@ export function ResetPassword(props: RouterProps) {
           />
         </FormField>
 
-        <div className="flex space-x-4 my-8">
-          <Button kind={ButtonKind.primary} type="submit" className="w-full">
+        <div className="absolute inset-x-0 my-8 bottom-0">
+          <Button
+            kind={ButtonKind.primary}
+            type="submit"
+            className="w-full md:h-10 text-3xl lg:text-sm"
+          >
             Send Reset Email
           </Button>
         </div>
