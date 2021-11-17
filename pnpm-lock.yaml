@@ -47,8 +47,6 @@ specifiers:
   husky: ^6.0.0
   jest: ^27.2.1
   jest-cli: ^27.2.1
-  js-base64: ^3.7.2
-  jsonwebtoken: ^8.5.1
   keygrip: ^1.1.0
   kremling: ^2.1.0
   lodash-es: ^4.17.21
@@ -108,8 +106,6 @@ dependencies:
   express-promise-router: 4.1.0_1e4d5aefc915886dae9e998bf55b0fd2
   express-validator: 6.12.0
   googleapis: 67.1.1
-  js-base64: 3.7.2
-  jsonwebtoken: 8.5.1
   keygrip: 1.1.0
   kremling: 2.1.0
   lodash-es: 4.17.21
@@ -4462,7 +4458,7 @@ packages:
       extend: 3.0.2
       https-proxy-agent: 5.0.0
       is-stream: 2.0.1
-      node-fetch: 2.6.5
+      node-fetch: 2.6.6
     transitivePeerDependencies:
       - supports-color
     dev: false
@@ -4584,8 +4580,8 @@ packages:
       slash: 3.0.0
     dev: true
 
-  /google-auth-library/7.10.1:
-    resolution: {integrity: sha512-nQxgM1ZopUMcpMnu95kOSzI+9tJl4YDOZJomSTBGlRLpxfBopdwto7WvzoI87HuN0nQqVETgOsHi/C/po1rppA==}
+  /google-auth-library/7.10.2:
+    resolution: {integrity: sha512-M37o9Kxa/TLvOLgF71SXvLeVEP5sbSTmKl1zlIgl72SFy5PtsU3pOdu8G8MIHHpQ3/NZabDI8rQkA9DvQVKkPA==}
     engines: {node: '>=10'}
     dependencies:
       arrify: 2.0.1
@@ -4615,7 +4611,7 @@ packages:
     dependencies:
       extend: 3.0.2
       gaxios: 4.3.2
-      google-auth-library: 7.10.1
+      google-auth-library: 7.10.2
       qs: 6.10.1
       url-template: 2.0.8
       uuid: 8.3.2
@@ -4627,7 +4623,7 @@ packages:
     resolution: {integrity: sha512-WLYk8R4dpW/oIxXhj0PQGhu+eOUpQbtWYTCxx/jeENr4arE9UmV5qmz0h1Gs1SPF/O/8PjCQIsPwOuHAlj78GA==}
     engines: {node: '>=10'}
     dependencies:
-      google-auth-library: 7.10.1
+      google-auth-library: 7.10.2
       googleapis-common: 5.0.5
     transitivePeerDependencies:
       - supports-color
@@ -5752,10 +5748,6 @@ packages:
       - utf-8-validate
     dev: true
 
-  /js-base64/3.7.2:
-    resolution: {integrity: sha512-NnRs6dsyqUXejqk/yv2aiXlAvOs56sLkX6nUdeaNezI5LFFLlsZjOThmwnrcwh5ZZRwZlCMnVAY3CvhIhoVEKQ==}
-    dev: false
-
   /js-beautify/1.13.13:
     resolution: {integrity: sha512-oH+nc0U5mOAqX8M5JO1J0Pw/7Q35sAdOsM5W3i87pir9Ntx6P/5Gx1xLNoK+MGyvHk4rqqRCE4Oq58H6xl2W7A==}
     engines: {node: '>=10'}
@@ -5895,22 +5887,6 @@ packages:
       graceful-fs: 4.2.6
     dev: true
 
-  /jsonwebtoken/8.5.1:
-    resolution: {integrity: sha512-XjwVfRS6jTMsqYs0EsuJ4LGxXV14zQybNd4L2r0UvbVnSF9Af8x7p5MzbJ90Ioz/9TI41/hTCvznF/loiSzn8w==}
-    engines: {node: '>=4', npm: '>=1.4.28'}
-    dependencies:
-      jws: 3.2.2
-      lodash.includes: 4.3.0
-      lodash.isboolean: 3.0.3
-      lodash.isinteger: 4.0.4
-      lodash.isnumber: 3.0.3
-      lodash.isplainobject: 4.0.6
-      lodash.isstring: 4.0.1
-      lodash.once: 4.1.1
-      ms: 2.1.3
-      semver: 5.7.1
-    dev: false
-
   /jsx-ast-utils/3.2.0:
     resolution: {integrity: sha512-EIsmt3O3ljsU6sot/J4E1zDRxfBNrhjyf/OKjlydwgEimQuznlM4Wv7U+ueONJMyEn1WRE0K8dhi3dVAXYT24Q==}
     engines: {node: '>=4.0'}
@@ -5919,26 +5895,11 @@ packages:
       object.assign: 4.1.2
     dev: true
 
-  /jwa/1.4.1:
-    resolution: {integrity: sha512-qiLX/xhEEFKUAJ6FiBMbes3w9ATzyk5W7Hvzpa/SLYdxNtng+gcurvrI7TbACjIXlsJyr05/S1oUhZrc63evQA==}
-    dependencies:
-      buffer-equal-constant-time: 1.0.1
-      ecdsa-sig-formatter: 1.0.11
-      safe-buffer: 5.2.1
-    dev: false
-
   /jwa/2.0.0:
     resolution: {integrity: sha512-jrZ2Qx916EA+fq9cEAeCROWPTfCwi1IVHqT2tapuqLEVVDKFDENFw1oL+MwrTvH6msKxsd1YTDVw6uKEcsrLEA==}
     dependencies:
       buffer-equal-constant-time: 1.0.1
       ecdsa-sig-formatter: 1.0.11
-      safe-buffer: 5.2.1
-    dev: false
-
-  /jws/3.2.2:
-    resolution: {integrity: sha512-YHlZCB6lMTllWDtSPHz/ZXTsi8S00usEV6v1tjq8tOUZzw7DpSDWVXjXDre6ed1w/pd495ODpHZYSdkRTsa0HA==}
-    dependencies:
-      jwa: 1.4.1
       safe-buffer: 5.2.1
     dev: false
 
@@ -6093,34 +6054,6 @@ packages:
 
   /lodash.flattendeep/4.4.0:
     resolution: {integrity: sha1-+wMJF/hqMTTlvJvsDWngAT3f7bI=}
-    dev: false
-
-  /lodash.includes/4.3.0:
-    resolution: {integrity: sha1-YLuYqHy5I8aMoeUTJUgzFISfVT8=}
-    dev: false
-
-  /lodash.isboolean/3.0.3:
-    resolution: {integrity: sha1-bC4XHbKiV82WgC/UOwGyDV9YcPY=}
-    dev: false
-
-  /lodash.isinteger/4.0.4:
-    resolution: {integrity: sha1-YZwK89A/iwTDH1iChAt3sRzWg0M=}
-    dev: false
-
-  /lodash.isnumber/3.0.3:
-    resolution: {integrity: sha1-POdoEMWSjQM1IwGsKHMX8RwLH/w=}
-    dev: false
-
-  /lodash.isplainobject/4.0.6:
-    resolution: {integrity: sha1-fFJqUtibRcRcxpC4gWO+BJf1UMs=}
-    dev: false
-
-  /lodash.isstring/4.0.1:
-    resolution: {integrity: sha1-1SfftUVuynzJu5XV2ur4i6VKVFE=}
-    dev: false
-
-  /lodash.once/4.1.1:
-    resolution: {integrity: sha1-DdOXEhPHxW34gJd9UEyI+0cal6w=}
     dev: false
 
   /lodash.toarray/4.4.0:
@@ -6400,6 +6333,7 @@ packages:
 
   /ms/2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
+    dev: true
 
   /multicast-dns-service-types/1.1.0:
     resolution: {integrity: sha1-iZ8R2WhuXgXLkbNdXw5jt3PPyQE=}
@@ -6466,8 +6400,8 @@ packages:
       lodash.toarray: 4.4.0
     dev: true
 
-  /node-fetch/2.6.5:
-    resolution: {integrity: sha512-mmlIVHJEu5rnIxgEgez6b9GgWXbkZj5YZ7fx+2r94a2E+Uirsp6HsPTPlomfdHtpt/B0cdKviwkoaM6pyvUOpQ==}
+  /node-fetch/2.6.6:
+    resolution: {integrity: sha512-Z8/6vRlTUChSdIgMa51jxQ4lrw/Jy5SOW10ObaA47/RElsAN2c5Pn8bTgFGWn/ibwzXTE8qwr1Yzx28vsecXEA==}
     engines: {node: 4.x || >=6.0.0}
     dependencies:
       whatwg-url: 5.0.0
@@ -7766,6 +7700,7 @@ packages:
   /semver/5.7.1:
     resolution: {integrity: sha512-sauaDf/PZdVgrLTNYHRtpXa1iRiKcaebiKQ1BJdpQlWH2lCvexQdX55snPFyK7QzpudqbCI0qXFfOasHdyNDGQ==}
     hasBin: true
+    dev: true
 
   /semver/6.3.0:
     resolution: {integrity: sha512-b39TBaTSfV6yBrapU89p5fKekE2m/NwnDocOVruQFS1/veMgdzuPcnOM34M6CwxW8jH/lxEa5rBoDeUwu5HHTw==}
