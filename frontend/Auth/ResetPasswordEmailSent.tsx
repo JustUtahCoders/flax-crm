@@ -1,5 +1,5 @@
 import React from "react";
-import { useHistory } from "react-router";
+import { Redirect, useHistory } from "react-router";
 import { Button, ButtonKind } from "../Styleguide/Button";
 import { Anchor } from "../Styleguide/Anchor";
 
@@ -9,7 +9,7 @@ export function ResetPasswordEmailSent(props) {
   const history = useHistory();
 
   if (!email) {
-    history.push("/login");
+    return <Redirect to="/login" />;
   }
 
   return (
@@ -19,7 +19,7 @@ export function ResetPasswordEmailSent(props) {
           Email Sent
         </h1>
         <p className="text-left text-s text-gray-600 py-8 mb-60">
-          An email with reset instructions has been sent to {`${email}.`}
+          An email with reset instructions has been sent to {email}
         </p>
         <div className="flex space-x-4 my-8">
           <Button kind={ButtonKind.primary} className="w-full mt-2">
