@@ -44,12 +44,10 @@ export function ResetPassword(props: RouterProps) {
 
   return (
     <div className="flex justify-center h-screen p-24 sm:pt-80">
-      {/* <div className="flex justify-center h-screen sm:p-20"></div> */}
       <form
         onSubmit={unary(submitMutation.mutate)}
         className="relative lg:max-w-sm"
       >
-        {/* <form onSubmit={unary(submitMutation.mutate)} className="pt-40"> */}
         <h1 className="text-gray-500 place-self-start mb-2 text-5xl lg:text-xl">
           Need a new password?
         </h1>
@@ -80,7 +78,7 @@ export function ResetPassword(props: RouterProps) {
           <Button
             kind={ButtonKind.primary}
             type="submit"
-            className="w-full md:h-10 text-3xl lg:text-sm"
+            className="w-full h-24 lg:h-10 text-3xl lg:text-sm"
           >
             Send Reset Email
           </Button>
