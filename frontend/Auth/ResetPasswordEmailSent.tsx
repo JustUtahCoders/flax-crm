@@ -1,12 +1,10 @@
 import React from "react";
-import { Redirect, useHistory } from "react-router";
+import { Redirect } from "react-router";
 import { Button, ButtonKind } from "../Styleguide/Button";
 import { Anchor } from "../Styleguide/Anchor";
 
 export function ResetPasswordEmailSent(props) {
   const { email } = props.location.state;
-
-  const history = useHistory();
 
   if (!email) {
     return <Redirect to="/login" />;
