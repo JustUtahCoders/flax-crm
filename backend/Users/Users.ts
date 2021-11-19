@@ -77,7 +77,7 @@ export async function findUserByEmail(
       email: Sequelize.where(
         Sequelize.fn("LOWER", Sequelize.col("email")),
         Op.eq,
-        email?.toLowerCase()
+        email.toLowerCase()
       ),
     },
   });
