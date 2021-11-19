@@ -1,6 +1,9 @@
 import { sequelize } from "../DB.js";
 import Sequelize, { Sequelize as SequelizeType } from "sequelize";
 import bcrypt from "bcryptjs";
+import { UserModel } from "../DB/models/user.js";
+
+const { Op } = Sequelize;
 
 export async function findOrCreateLocalUser(email) {
   const users = await sequelize.models.User.findAll({
@@ -66,13 +69,15 @@ export async function findUser(email, password) {
   }
 }
 
-export async function findUserByEmail(email) {
+export async function findUserByEmail(
+  email: string
+): Promise<UserModel | null> {
   const users = await sequelize.models.User.findAll({
     where: {
       email: Sequelize.where(
         Sequelize.fn("LOWER", Sequelize.col("email")),
-        "ILIKE",
-        email
+        Op.eq,
+        email?.toLowerCase()
       ),
     },
   });
