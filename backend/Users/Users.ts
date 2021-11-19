@@ -1,5 +1,9 @@
 import { sequelize } from "../DB.js";
+import Sequelize, { Sequelize as SequelizeType } from "sequelize";
 import bcrypt from "bcryptjs";
+import { UserModel } from "../DB/models/user.js";
+
+const { Op } = Sequelize;
 
 export async function findOrCreateLocalUser(email) {
   const users = await sequelize.models.User.findAll({
@@ -53,14 +57,7 @@ export async function findOrCreateGoogleUser(profile) {
 
 export async function findUser(email, password) {
   const hashpass = await bcrypt.hash(password, 5);
-
-  const users = await sequelize.models.User.findAll({
-    where: {
-      email: email,
-    },
-  });
-
-  const user = users.length > 0 ? users[0] : null;
+  const user = await findUserByEmail(email);
 
   if (user) {
     const hash = user.get("password");
@@ -70,4 +67,19 @@ export async function findUser(email, password) {
   } else {
     return null;
   }
+}
+
+export async function findUserByEmail(
+  email: string
+): Promise<UserModel | null> {
+  const users = await sequelize.models.User.findAll({
+    where: {
+      email: Sequelize.where(
+        Sequelize.fn("LOWER", Sequelize.col("email")),
+        Op.eq,
+        email.toLowerCase()
+      ),
+    },
+  });
+  return users.length > 0 ? users[0] : null;
 }
