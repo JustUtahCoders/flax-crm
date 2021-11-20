@@ -59,4 +59,8 @@ modelEvents.once("init", (sequelize) => {
       allowNull: false,
     },
   });
+
+  FieldModel.sync({
+    alter: true,
+  });
 });

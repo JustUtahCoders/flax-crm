@@ -1,4 +1,3 @@
-import Umzug from "umzug";
 import ss from "umzug/lib/storages/SequelizeStorage.js";
 import { router } from "./Router.js";
 import { Sequelize } from "sequelize";
@@ -39,55 +38,34 @@ export const sequelize = new Sequelize(
 
 export const modelEvents = new EventEmitter();
 
-export const dbReady = Promise.resolve().then(() => {
+export const dbReady = new Promise<void>((resolve, reject) => {
+  let timeoutId;
+  const intervalId = setInterval(() => {
+    console.log("Attempting to connect to db");
+    sequelize
+      .authenticate()
+      .then(() => {
+        console.log("Database connection established");
+        clearInterval(intervalId);
+        resolve();
+      })
+      .catch((err) => {
+        console.error("Failed to connect to db. Trying again in 300ms");
+        // console.error(err);
+      });
+  }, 300);
+
+  if (env !== "development") {
+    timeoutId = setTimeout(() => {
+      console.log("Unable to connect to db. Giving up");
+      process.exit(1);
+    }, 10000);
+  }
+}).then(() => {
   // Tell all models to init and associate with other models. This can't be done synchronously
   // in the model files because of order-of-execution edge cases.
   // See https://sequelize.org/master/class/lib/associations/base.js~Association.html
   modelEvents.emit("init", sequelize);
-
-  return new Promise<void>((resolve, reject) => {
-    let timeoutId;
-    const intervalId = setInterval(() => {
-      console.log("Attempting to connect to db");
-      sequelize
-        .authenticate()
-        .then(() => {
-          console.log("Database connection established");
-          clearInterval(intervalId);
-
-          const umzug = new Umzug({
-            migrations: {
-              path: "./backend/DB/migrations",
-              pattern: /\.cjs$/,
-              params: [sequelize.getQueryInterface(), Sequelize],
-            },
-            context: sequelize.getQueryInterface(),
-            storage: new SequelizeStorage({
-              sequelize,
-            }),
-            logger: console,
-          });
-
-          console.log("Running database migrations");
-          return umzug.up().then(() => {
-            console.log("Finished database migrations");
-            clearTimeout(timeoutId);
-            resolve();
-          });
-        })
-        .catch((err) => {
-          console.error("Failed to connect to db. Trying again in 300ms");
-          // console.error(err);
-        });
-    }, 300);
-
-    if (env !== "development") {
-      timeoutId = setTimeout(() => {
-        console.log("Unable to connect to db. Giving up");
-        process.exit(1);
-      }, 10000);
-    }
-  });
 });
 
 router.use(async (req, res, next) => {

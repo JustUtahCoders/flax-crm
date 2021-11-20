@@ -51,4 +51,8 @@ modelEvents.once("init", (sequelize) => {
       modelName: "User",
     }
   );
+
+  UserModel.sync({
+    alter: true,
+  });
 });

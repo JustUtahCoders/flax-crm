@@ -79,7 +79,6 @@ specifiers:
   tree-kill: ^1.2.2
   ts-node: ^9.1.1
   typescript: ^4.2.4
-  umzug: ^2.3.0
   url-loader: ^4.1.1
   webpack: ^5.37.1
   webpack-cli: ^4.7.2
@@ -125,7 +124,6 @@ dependencies:
   react-router-dom: 5.2.0_react@17.0.2
   sequelize: 6.6.2_pg@8.6.0
   tree-kill: 1.2.2
-  umzug: 2.3.0
 
 devDependencies:
   '@babel/core': 7.15.5
@@ -2822,6 +2820,7 @@ packages:
 
   /bluebird/3.7.2:
     resolution: {integrity: sha512-XpNj6GDQzdfW+r2Wnn7xiSAd7TM3jzkxGXBGTtWKuSXv1xUV+azxAm8jdWZN06QTQk+2N2XB9jRDkvbmQmcRtg==}
+    dev: true
 
   /body-parser/1.19.0:
     resolution: {integrity: sha512-dhEPs72UPbDnAQJ9ZKMNTP6ptJaionhP5cBb541nXPlW60Jepo9RV/a4fX4XWW9CuFNK22krhrj1+rgzifNCsw==}
@@ -8512,6 +8511,7 @@ packages:
     engines: {node: '>=6.0.0'}
     dependencies:
       bluebird: 3.7.2
+    dev: true
 
   /unbox-primitive/1.0.1:
     resolution: {integrity: sha512-tZU/3NqK3dA5gpE1KtyiJUrEB0lxnGkMFHptJ7q6ewdZ8s12QrODwNbhIJStmJkd1QDXa1NRA8aF2A1zk/Ypyw==}

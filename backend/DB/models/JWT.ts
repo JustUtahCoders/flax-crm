@@ -48,4 +48,8 @@ modelEvents.once("init", (sequelize) => {
   );
 
   JWTModel.belongsTo(UserModel);
+
+  JWTModel.sync({
+    alter: true,
+  });
 });

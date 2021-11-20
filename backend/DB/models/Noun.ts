@@ -43,6 +43,10 @@ modelEvents.once("init", (sequelize) => {
       allowNull: true,
     },
   });
+
+  NounModel.sync({
+    alter: true,
+  });
 });
 
 export interface NounAttributes {
