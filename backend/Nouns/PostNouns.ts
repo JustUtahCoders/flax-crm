@@ -1,11 +1,13 @@
 import { body, checkSchema, validationResult } from "express-validator";
-import { ModelCtor } from "sequelize/lib/model.js";
 import { NounModel } from "../DB/models/noun.js";
-import { sequelize } from "../DB.js";
 import { router } from "../Router.js";
-import { invalidRequest } from "../Utils/EndpointResponses.js";
+import {
+  created,
+  invalidRequest,
+  serverApiError,
+} from "../Utils/EndpointResponses.js";
 
-router.post(
+router.post<Params, ResponseBody, RequestBody>(
   "/api/nouns",
   body("tableName").isString().notEmpty().trim(),
   body("slug").isString().notEmpty().trim(),
@@ -20,30 +22,41 @@ router.post(
 
     const { tableName, slug, friendlyName, parentId } = req.body;
 
-    const Nouns: ModelCtor<NounModel> = sequelize.models.Noun;
-
-    const { count: numDuplicates } = await Nouns.findAndCountAll({
+    const { count: numDuplicates } = await NounModel.findAndCountAll({
       where: {
         tableName,
       },
     });
 
     if (numDuplicates > 0) {
-      return res.status(400).send({
-        error: `A noun with tableName ${tableName} already exists`,
-      });
+      return invalidRequest(
+        res,
+        `A noun with tableName ${tableName} already exists`
+      );
     }
 
-    const newNoun = await sequelize.models.Noun.create({
+    const newNoun = await NounModel.create({
       tableName,
       slug,
       friendlyName,
       parentId,
     });
+
     if (newNoun) {
-      res.status(201).send(newNoun);
+      return created(res, newNoun);
     } else {
-      res.status(500);
+      return serverApiError(res, "Could not create noun");
     }
   }
 );
+
+interface Params {}
+
+type ResponseBody = NounModel;
+
+interface RequestBody {
+  tableName: string;
+  slug: string;
+  friendlyName: string;
+  parentId: number;
+}

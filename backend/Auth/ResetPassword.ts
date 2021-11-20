@@ -2,6 +2,7 @@ import { router } from "../Router.js";
 import { body, validationResult } from "express-validator";
 import { sendEmail } from "../Utils/EmailUtils.js";
 import { findUserByEmail } from "../Users/Users";
+import { invalidRequest } from "../Utils/EndpointResponses";
 
 // send email to user with link to reset password
 router.post(
@@ -10,7 +11,7 @@ router.post(
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return invalidRequest(res, errors);
     }
 
     let userEmail = req.body.email;

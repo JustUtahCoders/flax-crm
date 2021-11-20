@@ -1,16 +1,16 @@
-import { sequelize } from "../DB.js";
 import { router } from "../Router.js";
 import { param, validationResult } from "express-validator";
 import { invalidRequest, notFound } from "../Utils/EndpointResponses.js";
+import { NounModel } from "../DB/models/noun.js";
 
-router.get("/api/nouns", async (req, res) => {
-  const nouns = await sequelize.models.Noun.findAll();
+router.get<void, GetAllNounsResponseBody>("/api/nouns", async (req, res) => {
+  const nouns = await NounModel.findAll();
   res.send({
     nouns,
   });
 });
 
-router.get<Params>(
+router.get<GetOneNounParams, NounModel>(
   "/api/nouns/:nounId",
   param("nounId").isInt().toInt(),
   async (req, res) => {
@@ -20,7 +20,7 @@ router.get<Params>(
     }
 
     const { nounId } = req.params;
-    const noun = await sequelize.models.Noun.findByPk(nounId);
+    const noun = await NounModel.findByPk(nounId);
     if (noun === null) {
       notFound(res, `No such noun with id '${nounId}'`);
     } else {
@@ -29,6 +29,10 @@ router.get<Params>(
   }
 );
 
-interface Params {
+interface GetOneNounParams {
   nounId: number;
+}
+
+interface GetAllNounsResponseBody {
+  nouns: NounModel[];
 }
