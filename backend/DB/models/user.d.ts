@@ -4,7 +4,6 @@ import { DefaultModelAttrs } from "./defaults";
 export type UserModel = Model<UserAttributes>;
 
 export interface UserAttributes {
-  id: string;
   firstName: string;
   lastName: string;
   email: string;
