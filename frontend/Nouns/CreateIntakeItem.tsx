@@ -1,5 +1,5 @@
 import { SelectHTMLAttributes, useState } from "react";
-import { Field } from "../../backend/DB/models/field";
+import { Field } from "../../backend/DB/models/Field";
 import { FormFieldLabel } from "../Styleguide/FormFieldLabel";
 import { Modal } from "../Styleguide/Modal";
 import { Select } from "../Styleguide/Select";

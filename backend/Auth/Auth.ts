@@ -18,6 +18,7 @@ import {
 } from "../Users/Users";
 import { OAuth2Strategy as GoogleStrategy } from "passport-google-oauth";
 import Keygrip from "keygrip";
+import { serverApiError } from "../Utils/EndpointResponses.js";
 
 const LOCAL_DEV_USER_EMAIL = "localdev@email.com";
 
@@ -34,26 +35,28 @@ let passportStrategy = new Strategy(async function (email, password, done) {
   }
 });
 
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL:
-        process.env.GOOGLE_CALLBACK_URL ||
-        "http://localhost:7600/auth/google/callback",
-    },
-    async function (accessToken, refreshToken, profile, done) {
-      findOrCreateGoogleUser(profile)
-        .then((user) => {
-          return done(null, user);
-        })
-        .catch((error) => {
-          return done(error);
-        });
-    }
-  )
-);
+if (process.env.GOOGLE_CLIENT_ID) {
+  passport.use(
+    new GoogleStrategy(
+      {
+        clientID: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        callbackURL:
+          process.env.GOOGLE_CALLBACK_URL ||
+          "http://localhost:7600/auth/google/callback",
+      },
+      async function (accessToken, refreshToken, profile, done) {
+        findOrCreateGoogleUser(profile)
+          .then((user) => {
+            return done(null, user);
+          })
+          .catch((error) => {
+            return done(error);
+          });
+      }
+    )
+  );
+}
 
 passport.use(passportStrategy);
 
@@ -101,7 +104,7 @@ router.use("/", async (req, res, next) => {
       next();
     } catch (err) {
       console.error(err);
-      res.status(500).send("Server error during login");
+      serverApiError(res, "Server error during login");
     }
   } else if (req.url && req.url.includes("/api")) {
     res.status(401).json({ message: "Unauthorized" });

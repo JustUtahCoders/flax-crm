@@ -1,6 +1,5 @@
-import { FieldAttributes, FieldModel } from "../DB/models/field.js";
-import { NounAttributes, NounModel } from "../DB/models/noun.js";
-import { sequelize } from "../DB.js";
+import { FieldCreationAttributes, FieldModel } from "../DB/models/Field.js";
+import { NounModel } from "../DB/models/Noun.js";
 import { router } from "../Router.js";
 import { invalidRequest, notFound } from "../Utils/EndpointResponses.js";
 import { body, validationResult, param } from "express-validator";
@@ -25,32 +24,33 @@ router.post<Params, ResponseBody, RequestBody>(
 
     let noun: NounModel | null;
     try {
-      noun = await sequelize.models.Noun.findByPk<NounModel>(req.params.nounId);
+      noun = await NounModel.findByPk<NounModel>(req.params.nounId);
     } catch (err) {
       console.error(err);
       notFound(res, `No such noun with id '${req.params.nounId}'`);
       return;
     }
 
-    const fieldsToCreate: FieldAttributes[] = req.body.fields.map((field) => {
-      return {
-        ...field,
-        nounId,
-      };
-    });
+    const fieldsToCreate: FieldCreationAttributes[] = req.body.fields.map(
+      (field) => {
+        return {
+          ...field,
+          nounId,
+        };
+      }
+    );
 
-    const fields: FieldAttributes[] =
-      await sequelize.models.Field.bulkCreate<FieldModel>(fieldsToCreate);
+    const fields: FieldModel[] = await FieldModel.bulkCreate(fieldsToCreate);
 
     res.json(fields);
   }
 );
 
-export type FieldToCreate = Omit<FieldAttributes, "nounId">;
+export type FieldToCreate = Omit<FieldCreationAttributes, "nounId">;
 interface Params {
   nounId: number;
 }
 interface RequestBody {
   fields: Array<FieldToCreate>;
 }
-type ResponseBody = Array<FieldAttributes>;
+type ResponseBody = Array<FieldModel>;

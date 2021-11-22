@@ -1,5 +1,6 @@
 import { router } from "./Router.js";
+import { notFound } from "./Utils/EndpointResponses.js";
 
 router.use("/api", (req, res, next) => {
-  res.status(404).send("No such api");
+  return notFound(res, `No API implemented for ${req.method} ${req.path}`);
 });

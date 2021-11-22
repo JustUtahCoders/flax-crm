@@ -2,6 +2,7 @@ import { Response } from "express";
 import { createElement } from "react";
 import ReactDOMServer from "react-dom/server.js";
 import { App, AppProps, RouterContext } from "../../frontend/App.js";
+import { serverApiError } from "../Utils/EndpointResponses.js";
 
 export const renderWebApp = async (req, res: Response) => {
   const routerContext: RouterContext = {};
@@ -30,9 +31,7 @@ export const renderWebApp = async (req, res: Response) => {
     stream = ReactDOMServer.renderToNodeStream(createElement(App, props));
   } catch (err) {
     console.log("ERROR", err);
-    return res.status(500).json({
-      errors: `Failed to generate HTML`,
-    });
+    return serverApiError(res, "Unable to generate HTML");
   }
 
   if (routerContext.url) {

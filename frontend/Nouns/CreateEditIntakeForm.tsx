@@ -6,7 +6,7 @@ import {
   DropResult,
 } from "react-beautiful-dnd";
 import { RouteComponentProps } from "react-router";
-import { Field } from "../../backend/DB/models/field";
+import { Field } from "../../backend/DB/models/Field";
 import { useQuery } from "react-query";
 import { Card } from "../Styleguide/Card";
 import { Loader } from "../Styleguide/Loader";
