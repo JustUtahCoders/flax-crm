@@ -1,5 +1,5 @@
 import { body, checkSchema, validationResult } from "express-validator";
-import { NounModel } from "../DB/models/noun.js";
+import { NounModel } from "../DB/models/Noun.js";
 import { router } from "../Router.js";
 import {
   created,

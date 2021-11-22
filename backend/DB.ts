@@ -1,4 +1,3 @@
-import ss from "umzug/lib/storages/SequelizeStorage.js";
 import { router } from "./Router.js";
 import { Sequelize } from "sequelize";
 import dbConfigs from "./DB/config/config";
@@ -6,8 +5,6 @@ import EventEmitter from "events";
 
 const env: string = process.env.NODE_ENV || "development";
 const config = dbConfigs[env];
-
-const { default: SequelizeStorage } = ss;
 
 if (!config) {
   throw Error(`No db config found for NODE_ENV '${env}'`);

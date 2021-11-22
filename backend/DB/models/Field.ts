@@ -1,6 +1,6 @@
 import S from "sequelize";
 import { modelEvents } from "../../DB";
-import { NounModel } from "./noun";
+import { NounModel } from "./Noun";
 import { DefaultModelAttrs } from "./DefaultModelAttrs";
 
 const { Model, DataTypes } = S;

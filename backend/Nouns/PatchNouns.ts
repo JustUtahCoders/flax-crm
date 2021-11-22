@@ -5,7 +5,7 @@ import {
   notFound,
   successNoContent,
 } from "../Utils/EndpointResponses.js";
-import { NounAttributes, NounModel } from "../DB/models/noun.js";
+import { NounAttributes, NounModel } from "../DB/models/Noun.js";
 
 router.patch<Params, ResponseBody, RequestBody>(
   "/api/nouns/:nounId",

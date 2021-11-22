@@ -5,7 +5,7 @@ import {
   notFound,
   successNoContent,
 } from "../Utils/EndpointResponses.js";
-import { NounModel } from "../DB/models/noun.js";
+import { NounModel } from "../DB/models/Noun.js";
 
 router.delete<Params, ResponseBody, RequestBody>(
   "/api/nouns/:nounId",

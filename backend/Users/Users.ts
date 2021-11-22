@@ -1,6 +1,6 @@
 import Sequelize from "sequelize";
 import bcrypt from "bcryptjs";
-import { UserModel } from "../DB/models/user.js";
+import { UserModel } from "../DB/models/User.js";
 
 const { Op } = Sequelize;
 

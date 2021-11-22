@@ -1,6 +1,6 @@
 import { router } from "../Router.js";
 import { param, validationResult } from "express-validator";
-import { Field, FieldModel } from "../DB/models/field.js";
+import { Field, FieldModel } from "../DB/models/Field.js";
 import { invalidRequest, notFound } from "../Utils/EndpointResponses.js";
 
 router.get<Params, ResponseBody, RequestBody>(

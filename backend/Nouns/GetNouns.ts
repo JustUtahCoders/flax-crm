@@ -1,7 +1,7 @@
 import { router } from "../Router.js";
 import { param, validationResult } from "express-validator";
 import { invalidRequest, notFound } from "../Utils/EndpointResponses.js";
-import { NounModel } from "../DB/models/noun.js";
+import { NounModel } from "../DB/models/Noun.js";
 
 router.get<void, GetAllNounsResponseBody>("/api/nouns", async (req, res) => {
   const nouns = await NounModel.findAll();

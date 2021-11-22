@@ -1,5 +1,5 @@
-import { FieldCreationAttributes, FieldModel } from "../DB/models/field.js";
-import { NounModel } from "../DB/models/noun.js";
+import { FieldCreationAttributes, FieldModel } from "../DB/models/Field.js";
+import { NounModel } from "../DB/models/Noun.js";
 import { router } from "../Router.js";
 import { invalidRequest, notFound } from "../Utils/EndpointResponses.js";
 import { body, validationResult, param } from "express-validator";
