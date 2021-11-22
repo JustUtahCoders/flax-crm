@@ -1,4 +1,3 @@
-import { sequelize } from "../DB.js";
 import { router } from "../Router.js";
 import { param, validationResult } from "express-validator";
 import {
@@ -6,8 +5,9 @@ import {
   notFound,
   successNoContent,
 } from "../Utils/EndpointResponses.js";
+import { NounModel } from "../DB/models/Noun.js";
 
-router.delete<Params>(
+router.delete<Params, ResponseBody, RequestBody>(
   "/api/nouns/:nounId",
   param("nounId").isInt().toInt(),
   async (req, res) => {
@@ -16,7 +16,7 @@ router.delete<Params>(
       return invalidRequest(res, validationErrors);
     }
 
-    const numDeleted = await sequelize.models.Noun.destroy({
+    const numDeleted = await NounModel.destroy({
       where: {
         id: req.params.nounId,
       },
@@ -35,3 +35,7 @@ router.delete<Params>(
 interface Params {
   nounId: number;
 }
+
+type ResponseBody = void;
+
+type RequestBody = void;

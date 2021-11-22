@@ -1,8 +1,7 @@
 import { router } from "../Router.js";
 import { param, validationResult } from "express-validator";
-import { Field, FieldModel } from "../DB/models/field.js";
+import { Field, FieldModel } from "../DB/models/Field.js";
 import { invalidRequest, notFound } from "../Utils/EndpointResponses.js";
-import { sequelize } from "../DB.js";
 
 router.get<Params, ResponseBody, RequestBody>(
   "/api/nouns/:nounId/fields",
@@ -20,7 +19,7 @@ router.get<Params, ResponseBody, RequestBody>(
     let fields: FieldModel[];
 
     try {
-      fields = await sequelize.models.Field.findAll<FieldModel>({
+      fields = await FieldModel.findAll<FieldModel>({
         where: {
           nounId,
         },
@@ -40,7 +39,7 @@ interface Params {
 }
 
 interface ResponseBody {
-  fields: Field[];
+  fields: FieldModel[];
 }
 
 type RequestBody = void;

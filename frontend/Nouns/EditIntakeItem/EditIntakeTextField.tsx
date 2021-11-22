@@ -7,7 +7,7 @@ import { IntakeFieldItem, IntakeItemType } from "../CreateEditIntakeForm";
 import { EditItemProps } from "../EditIntakeItem";
 import { Toggle } from "../../Styleguide/Toggle";
 import { Button, ButtonKind } from "../../Styleguide/Button";
-import { Field } from "../../../backend/DB/models/field";
+import { Field } from "../../../backend/DB/models/Field";
 import { Select } from "../../Styleguide/Select";
 
 export function EditIntakeTextField(props: EditItemProps) {

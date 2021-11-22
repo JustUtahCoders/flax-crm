@@ -1,12 +1,11 @@
-import { sequelize } from "../DB.js";
-import Sequelize, { Sequelize as SequelizeType } from "sequelize";
+import Sequelize from "sequelize";
 import bcrypt from "bcryptjs";
-import { UserModel } from "../DB/models/user.js";
+import { UserModel } from "../DB/models/User.js";
 
 const { Op } = Sequelize;
 
-export async function findOrCreateLocalUser(email) {
-  const users = await sequelize.models.User.findAll({
+export async function findOrCreateLocalUser(email): Promise<UserModel> {
+  const users = await UserModel.findAll({
     where: {
       email: email,
     },
@@ -17,7 +16,7 @@ export async function findOrCreateLocalUser(email) {
   const hashLocalDevPass = await bcrypt.hash("localDevPassword", 5);
 
   if (!localUser) {
-    localUser = await sequelize.models.User.create({
+    localUser = await UserModel.create({
       firstName: "localDevFirstName",
       lastName: "localDevLastName",
       email: email,
@@ -29,8 +28,8 @@ export async function findOrCreateLocalUser(email) {
   return localUser;
 }
 
-export async function findOrCreateGoogleUser(profile) {
-  const users = await sequelize.models.User.findAll({
+export async function findOrCreateGoogleUser(profile): Promise<UserModel> {
+  const users = await UserModel.findAll({
     where: {
       googleAuthToken: profile.id,
     },
@@ -38,16 +37,19 @@ export async function findOrCreateGoogleUser(profile) {
 
   let googleUser = users.length > 0 ? users[0] : null;
 
-  let userGoogleEmail = undefined;
-  if (profile.emails.length > 0) {
-    userGoogleEmail = profile.emails[0].value;
+  let userGoogleEmail: string =
+    profile.emails.length > 0 ? profile.emails[0].value : null;
+
+  if (!userGoogleEmail) {
+    throw Error(`Could not find email address in Google profile`);
   }
 
   if (!googleUser) {
-    googleUser = await sequelize.models.User.create({
+    googleUser = await UserModel.create({
       firstName: profile.name.givenName,
       lastName: profile.name.familyName,
       email: userGoogleEmail,
+      password: null,
       googleAuthToken: profile.id, // googleAuthToken is not a token, it's a Google id
     });
   }
@@ -55,7 +57,7 @@ export async function findOrCreateGoogleUser(profile) {
   return googleUser;
 }
 
-export async function findUser(email, password) {
+export async function findUser(email, password): Promise<UserModel | null> {
   const hashpass = await bcrypt.hash(password, 5);
   const user = await findUserByEmail(email);
 
@@ -72,7 +74,7 @@ export async function findUser(email, password) {
 export async function findUserByEmail(
   email: string
 ): Promise<UserModel | null> {
-  const users = await sequelize.models.User.findAll({
+  const users = await UserModel.findAll({
     where: {
       email: Sequelize.where(
         Sequelize.fn("LOWER", Sequelize.col("email")),

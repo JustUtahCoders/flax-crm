@@ -1,4 +1,4 @@
-import { Field } from "../../backend/DB/models/field";
+import { Field } from "../../backend/DB/models/Field";
 import { Modal } from "../Styleguide/Modal";
 import {
   IntakeFieldItem,

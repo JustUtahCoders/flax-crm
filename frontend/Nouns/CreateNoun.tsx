@@ -4,7 +4,7 @@ import { RouterProps, useHistory } from "react-router";
 import { useMutation } from "react-query";
 import { flaxFetch } from "../Utils/flaxFetch";
 import { unary, kebabCase } from "lodash-es";
-import { Noun } from "../../backend/DB/models/noun";
+import { Noun } from "../../backend/DB/models/Noun";
 import { FieldToCreate } from "../../backend/Fields/BatchPostFields";
 import { FormField } from "../Styleguide/FormField";
 import { FormFieldLabel } from "../Styleguide/FormFieldLabel";
