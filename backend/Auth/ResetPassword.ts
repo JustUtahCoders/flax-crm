@@ -3,6 +3,7 @@ import { body, validationResult } from "express-validator";
 import { sendEmail } from "../Utils/EmailUtils.js";
 import { findUserByEmail } from "../Users/Users";
 import { invalidRequest } from "../Utils/EndpointResponses";
+import "../DB/models/JWT";
 
 // send email to user with link to reset password
 router.post(
