@@ -9,7 +9,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      models.JWT.belongsTo(models.User);
+      models.JWT.belongsTo(models.User, {
+        foreignKey: "userId",
+      });
     }
   }
   JWT.init(
