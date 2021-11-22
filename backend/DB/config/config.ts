@@ -1,4 +1,6 @@
-module.exports = {
+import { Options } from "sequelize";
+
+const allConfigs: AllDBConfigs = {
   development: {
     username: "root",
     password: "password",
@@ -14,3 +16,9 @@ module.exports = {
     dialect: "postgres",
   },
 };
+
+export default allConfigs;
+
+interface AllDBConfigs {
+  [key: string]: Options;
+}
