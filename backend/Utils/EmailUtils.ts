@@ -1,15 +1,17 @@
 import google from "googleapis";
 import path from "path";
 import { encode } from "js-base64";
-import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
+//import JWT from "../DB/models/jwt";
+import { sequelize } from "../DB.js";
 
-dotenv.config();
 const { sign, verify } = jwt;
 
-const baseUrl = process.env.PASSWORD_RESET_BASE_URL || "https://localhost:7600";
+export const baseUrl = process.env.SERVER_ORIGIN || "https://localhost:7600";
 
 async function makeEmail({ to, from, subject }, token) {
+  // don't need the token as a param, base url
+  // email templates folder, with each email resetPassword.handlebars
   const message = `
   <div style="width: 60vw; margin: 4rem auto auto auto; color: #403F3D;
   ">
@@ -88,5 +90,20 @@ function makeJwt(email: string): string {
   const secret = process.env.JWT_PASSWORD_RESET_SECRET || "secret";
 
   const token = sign(payload, secret, { expiresIn: "1h" });
+  const userId = 1; // Temporary until we have userId
+  saveJWT(token, userId);
   return token;
+}
+
+async function saveJWT(token: string, userId: number) {
+  const newJWT = await sequelize.models.JWT.create({
+    token: token,
+    userId: userId,
+    jwtType: "passwordReset",
+  });
+  if (newJWT) {
+    console.log("JWT created");
+  } else {
+    console.log("Failed to create JWT");
+  }
 }
