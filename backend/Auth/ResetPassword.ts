@@ -36,10 +36,10 @@ router.post(
     let userEmail = req.body.email;
     const user = await findUserByEmail(userEmail);
 
-    const payload = { userId: user?.id, email: userEmail }; // check this user?id
-    const token = makeJWT(payload);
-
     if (user) {
+      const payload = { userId: user.id, email: userEmail };
+      const token = makeJWT(payload);
+
       await sendEmail({
         to: userEmail,
         subject: "Reset Password",
