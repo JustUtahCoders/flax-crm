@@ -10,15 +10,5 @@ export function makeJWT(payload: object): string {
 
   const userId = payload["userId"];
 
-  saveJWT(token, userId);
-
   return token;
-}
-
-async function saveJWT(token: string, userId: number) {
-  const newJWT = await JWTModel.create({
-    token: token,
-    userId: userId,
-    jwtType: "passwordReset",
-  });
 }

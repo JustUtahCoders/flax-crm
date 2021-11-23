@@ -1,10 +1,14 @@
 import { router } from "../Router.js";
 import { body, validationResult } from "express-validator";
 import { findUserByEmail } from "../Users/Users";
-import { invalidRequest } from "../Utils/EndpointResponses";
+import {
+  created,
+  invalidRequest,
+  serverApiError,
+} from "../Utils/EndpointResponses";
 import { sendEmail, baseUrl } from "../Utils/EmailUtils.js";
 import { makeJWT } from "../Utils/JWTUtils.js";
-import "../DB/models/JWT";
+import { JWTModel } from "../DB/models/JWT";
 
 function getResetPasswordBody(baseUrl: string, token: string): string {
   return `<div style="width: 60vw; margin: 4rem auto auto auto; color: #403F3D;">
@@ -40,11 +44,22 @@ router.post(
       const payload = { userId: user.id, email: userEmail };
       const token = makeJWT(payload);
 
-      await sendEmail({
-        to: userEmail,
-        subject: "Reset Password",
-        body: getResetPasswordBody(baseUrl, token),
+      const newJWT = await JWTModel.create({
+        token: token,
+        userId: user.id,
+        jwtType: "passwordReset",
       });
+
+      if (newJWT) {
+        await sendEmail({
+          to: userEmail,
+          subject: "Reset Password",
+          body: getResetPasswordBody(baseUrl, token),
+        });
+        return created(res, newJWT);
+      } else {
+        return serverApiError(res, "Could not create JWT");
+      }
     }
     return res.status(204).end();
   }
