@@ -47,5 +47,12 @@ describe("<ViewIntakeHeader />", () => {
     );
     expect(wrapper.getByText("Test Header").nodeName).toBe("H6");
     expect(wrapper.getByText("Test Header").className).toBe("text-base");
+
+    // There's no such thing as <h7>
+    wrapper.rerender(
+      <ViewIntakeHeader intakeItem={intakeItem} nestingLevel={6} />
+    );
+    expect(wrapper.getByText("Test Header").nodeName).toBe("H6");
+    expect(wrapper.getByText("Test Header").className).toBe("text-base");
   });
 });
