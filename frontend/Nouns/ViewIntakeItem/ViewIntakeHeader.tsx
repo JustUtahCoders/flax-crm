@@ -10,8 +10,8 @@ export function ViewIntakeHeader(props: ViewIntakeItemProps) {
   // since that's not supported by browsers
   const headerLevel = Math.min(props.nestingLevel + 1, 6);
 
-  // use createElement directly since jsx does not providing a dynamic react
-  // element type
+  // use createElement directly since jsx does not support providing
+  // a dynamic react element type
   return createElement(
     `h${headerLevel}`,
     { className: getFontSizeClass() },
