@@ -8,6 +8,7 @@ import {
 } from "./CreateEditIntakeForm";
 import { EditIntakeParagraph } from "./EditIntakeItem/EditIntakeParagraph";
 import { EditIntakeTextField } from "./EditIntakeItem/EditIntakeTextField";
+import { EditIntakeHeader } from "./EditIntakeItem/EditIntakeHeader";
 
 export function EditIntakeItem(props: EditIntakeItemProps) {
   const Edit = getEditComponent(props.intakeItem);
@@ -55,6 +56,8 @@ function getEditComponent(
       return EditIntakeParagraph;
     case IntakeItemType.Section:
       return EditSectionItem;
+    case IntakeItemType.Header:
+      return EditIntakeHeader;
   }
 }
 

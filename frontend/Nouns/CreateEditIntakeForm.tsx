@@ -161,7 +161,7 @@ export function CreateEditIntakeForm(
                           })
                         }
                       >
-                        <ViewIntakeItem intakeItem={item} />
+                        <ViewIntakeItem intakeItem={item} nestingLevel={0} />
                       </div>
                     )}
                   </Draggable>
@@ -342,6 +342,11 @@ export interface IntakeParagraphItem {
   textContent: string;
 }
 
+export interface IntakeHeaderItem {
+  type: IntakeItemType.Header;
+  id: number;
+  textContent: string;
+}
 interface FieldQuestion {
   label: string;
   required: boolean;
@@ -351,7 +356,8 @@ interface FieldQuestion {
 export type IntakeItem =
   | IntakeFieldItem
   | IntakeSectionItem
-  | IntakeParagraphItem;
+  | IntakeParagraphItem
+  | IntakeHeaderItem;
 
 interface IntakeItemsLoadedAction {
   type: ActionTypes.IntakeItemsLoaded;
