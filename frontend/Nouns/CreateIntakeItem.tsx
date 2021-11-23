@@ -1,11 +1,16 @@
-import { SelectHTMLAttributes, useState } from "react";
+import { FormEvent, SelectHTMLAttributes, useState } from "react";
 import { Field } from "../../backend/DB/models/Field";
 import { FormFieldLabel } from "../Styleguide/FormFieldLabel";
-import { Modal } from "../Styleguide/Modal";
+import { Modal, ModalActions } from "../Styleguide/Modal";
 import { Select } from "../Styleguide/Select";
-import { IntakeItem, IntakeItemType } from "./CreateEditIntakeForm";
+import {
+  IntakeItem,
+  IntakeItemType,
+  IntakePageItem,
+} from "./CreateEditIntakeForm";
 import { EditIntakeTextField } from "./EditIntakeItem/EditIntakeTextField";
 import { EditIntakeParagraph } from "./EditIntakeItem/EditIntakeParagraph";
+import { Button, ButtonKind } from "../Styleguide/Button";
 
 export function CreateIntakeItem(props: CreateIntakeItemProps) {
   const [intakeItemType, setIntakeItemType] = useState<IntakeItemType>(
@@ -34,10 +39,40 @@ function getCreateComponent(
       return CreateFieldItem;
     case IntakeItemType.Paragraph:
       return CreateParagraphItem;
+    case IntakeItemType.Page:
+      return CreatePageItem;
     default:
       throw Error(
         `No create component implemented for intake item type ${intakeItemType}`
       );
+  }
+}
+
+function CreatePageItem(props: CreateItemProps) {
+  return (
+    <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+      <IntakeItemTypeSelect
+        value={props.intakeItemType}
+        setIntakeItemType={props.setIntakeItemType}
+      />
+      <ModalActions>
+        <Button type="button" kind={ButtonKind.secondary} onClick={props.close}>
+          Cancel
+        </Button>
+        <Button type="submit" kind={ButtonKind.primary}>
+          Save
+        </Button>
+      </ModalActions>
+    </form>
+  );
+
+  function handleSubmit(evt: FormEvent<HTMLFormElement>): void {
+    evt.preventDefault();
+    const intakeItem: IntakePageItem = {
+      id: -1,
+      type: IntakeItemType.Page,
+    };
+    props.doCreate(intakeItem);
   }
 }
 

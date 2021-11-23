@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Field } from "../../backend/DB/models/Field";
 import { Modal } from "../Styleguide/Modal";
 import {
@@ -13,16 +14,27 @@ export function EditIntakeItem(props: EditIntakeItemProps) {
   const Edit = getEditComponent(props.intakeItem);
   const friendlyName = getFriendlyName(props.intakeItem);
 
-  return (
-    <Modal title={`Edit ${friendlyName}`} close={props.close}>
-      <Edit
-        intakeItem={props.intakeItem}
-        close={props.close}
-        save={save}
-        fields={props.fields}
-      />
-    </Modal>
-  );
+  useEffect(() => {
+    if (!Edit) {
+      props.close();
+    }
+  });
+
+  if (Edit) {
+    return (
+      <Modal title={`Edit ${friendlyName}`} close={props.close}>
+        <Edit
+          intakeItem={props.intakeItem}
+          close={props.close}
+          save={save}
+          fields={props.fields}
+        />
+      </Modal>
+    );
+  } else {
+    // This intake item is not editable
+    return null;
+  }
 
   function save() {}
 }
@@ -38,7 +50,7 @@ function getFriendlyName(intakeItem: IntakeItem): string {
 
 function getEditComponent(
   intakeItem: IntakeItem
-): React.FunctionComponent<EditItemProps> {
+): React.FunctionComponent<EditItemProps> | null {
   switch (intakeItem.type) {
     case IntakeItemType.Field:
       switch ((intakeItem as IntakeFieldItem).field.type) {
@@ -55,6 +67,9 @@ function getEditComponent(
       return EditIntakeParagraph;
     case IntakeItemType.Section:
       return EditSectionItem;
+    case IntakeItemType.Page:
+      // Pages are only deletable, not editable
+      return null;
   }
 }
 

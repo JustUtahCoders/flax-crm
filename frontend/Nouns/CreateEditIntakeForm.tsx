@@ -14,7 +14,10 @@ import { EditIntakeItem } from "./EditIntakeItem";
 import { Button, ButtonKind } from "../Styleguide/Button";
 import { CreateIntakeItem } from "./CreateIntakeItem";
 import { flaxFetch } from "../Utils/flaxFetch";
-import { ViewIntakeItem } from "./ViewIntakeItem/ViewIntakeItem";
+import {
+  IntakeViewMode,
+  ViewIntakeItem,
+} from "./ViewIntakeItem/ViewIntakeItem";
 
 export function CreateEditIntakeForm(
   props: RouteComponentProps<{ nounId: string }>
@@ -161,7 +164,10 @@ export function CreateEditIntakeForm(
                           })
                         }
                       >
-                        <ViewIntakeItem intakeItem={item} />
+                        <ViewIntakeItem
+                          intakeItem={item}
+                          viewMode={IntakeViewMode.createEdit}
+                        />
                       </div>
                     )}
                   </Draggable>
@@ -342,6 +348,11 @@ export interface IntakeParagraphItem {
   textContent: string;
 }
 
+export interface IntakePageItem {
+  type: IntakeItemType.Page;
+  id: number;
+}
+
 interface FieldQuestion {
   label: string;
   required: boolean;
@@ -351,7 +362,8 @@ interface FieldQuestion {
 export type IntakeItem =
   | IntakeFieldItem
   | IntakeSectionItem
-  | IntakeParagraphItem;
+  | IntakeParagraphItem
+  | IntakePageItem;
 
 interface IntakeItemsLoadedAction {
   type: ActionTypes.IntakeItemsLoaded;
