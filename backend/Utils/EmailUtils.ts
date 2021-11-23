@@ -1,11 +1,10 @@
 import google from "googleapis";
 import path from "path";
 import { encode } from "js-base64";
-import dotenv from "dotenv";
 
-async function makeEmail({ to, from, subject }) {
-  const message = `This is a test email for reset password.`;
+export const baseUrl = process.env.SERVER_ORIGIN || "https://localhost:7600";
 
+async function makeEmail({ to, from, subject, body }) {
   // the white space is important, template literals are space sensitive
   const str = `
 Content-Type: text/html; charset="UTF-8"
@@ -13,13 +12,13 @@ to: ${to}
 from: ${from}
 subject: =?utf-8?B? ${encode(subject, true)}?=
 
-${message} 
+${body} 
 `.trim();
 
   return encode(str, true);
 }
 
-export async function sendEmail({ to, subject }) {
+export async function sendEmail({ to, subject, body }) {
   const authClient = new google.Auth.JWT({
     keyFile: path.resolve(
       process.cwd(),
@@ -37,6 +36,7 @@ export async function sendEmail({ to, subject }) {
     to,
     from: "Flax CRM <info@single-spa-workshop.com>",
     subject,
+    body,
   });
 
   const result = await gmail.users.messages.send({
