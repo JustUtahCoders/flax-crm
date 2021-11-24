@@ -6,6 +6,7 @@ import { Select } from "../Styleguide/Select";
 import { IntakeItem, IntakeItemType } from "./CreateEditIntakeForm";
 import { EditIntakeTextField } from "./EditIntakeItem/EditIntakeTextField";
 import { EditIntakeParagraph } from "./EditIntakeItem/EditIntakeParagraph";
+import { EditIntakeHeader } from "./EditIntakeItem/EditIntakeHeader";
 
 export function CreateIntakeItem(props: CreateIntakeItemProps) {
   const [intakeItemType, setIntakeItemType] = useState<IntakeItemType>(
@@ -34,6 +35,8 @@ function getCreateComponent(
       return CreateFieldItem;
     case IntakeItemType.Paragraph:
       return CreateParagraphItem;
+    case IntakeItemType.Header:
+      return CreateHeaderItem;
     default:
       throw Error(
         `No create component implemented for intake item type ${intakeItemType}`
@@ -54,6 +57,22 @@ function CreateFieldItem(props: CreateItemProps) {
         setIntakeItemType={props.setIntakeItemType}
       />
     </EditIntakeTextField>
+  );
+}
+
+function CreateHeaderItem(props: CreateItemProps) {
+  return (
+    <EditIntakeHeader
+      close={props.close}
+      intakeItem={null}
+      save={props.doCreate}
+      fields={props.fields}
+    >
+      <IntakeItemTypeSelect
+        value={props.intakeItemType}
+        setIntakeItemType={props.setIntakeItemType}
+      />
+    </EditIntakeHeader>
   );
 }
 
