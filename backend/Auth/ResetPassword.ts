@@ -1,5 +1,5 @@
 import { router } from "../Router.js";
-import { body, validationResult } from "express-validator";
+import { body, validationResult, param } from "express-validator";
 import { findUserByEmail } from "../Users/Users";
 import {
   created,
@@ -9,6 +9,10 @@ import {
 import { sendEmail, baseUrl } from "../Utils/EmailUtils.js";
 import { makeJWT } from "../Utils/JWTUtils.js";
 import { JWTModel } from "../DB/models/JWT";
+import jwt from "jsonwebtoken";
+
+const { verify } = jwt;
+const secret = process.env.JWT_SECRET || "secret"; // JWT_SECRET="JUC2021s3cr3t"
 
 function getResetPasswordBody(baseUrl: string, token: string): string {
   return `<div style="width: 60vw; margin: 4rem auto auto auto; color: #403F3D;">
@@ -64,3 +68,50 @@ router.post(
     return res.status(204).end();
   }
 );
+
+router.get(
+  "/validate-token/:token",
+  param("token").exists(),
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return invalidRequest(res, errors);
+    }
+    const token = req.params?.token;
+    const tokenType = req.query?.tokenType;
+
+    const rows = await JWTModel.findAll({
+      where: {
+        token: token,
+        jwtType: tokenType,
+      },
+    });
+
+    if (rows.length >= 1) {
+      let token = rows[0].token;
+
+      if (tokenIsValid(token, secret)) {
+        return res
+          .status(200)
+          .json({ tokenIsValid: true, tokenIsExpired: false });
+      } else {
+        return res
+          .status(200)
+          .json({ tokenIsValid: true, tokenIsExpired: true });
+      }
+    } else {
+      return res
+        .status(200)
+        .json({ tokenIsValid: false, tokenIsExpired: false });
+    }
+  }
+);
+
+function tokenIsValid(token: string, secret: string): boolean {
+  try {
+    const decoded = verify(token, secret);
+    return true;
+  } catch (err) {
+    return false;
+  }
+}
