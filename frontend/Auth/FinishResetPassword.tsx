@@ -18,7 +18,7 @@ export function FinishResetPassword(props: RouterProps) {
   let searchParams = new URLSearchParams(paramString);
   const token = searchParams.get("jwt") || "MISSING TOKEN";
 
-  const queryFunctionhelper = (queryKey) => {
+  const queryFunctionHelper = (queryKey) => {
     const token = queryKey["queryKey"][0];
     return flaxFetch<object>(
       `/validate-token/${token}?tokenType=passwordReset`,
@@ -28,7 +28,7 @@ export function FinishResetPassword(props: RouterProps) {
     );
   };
 
-  const info = useQuery(token, queryFunctionhelper);
+  const info = useQuery(token, queryFunctionHelper);
 
   const submitMutation = useMutation<
     void,
