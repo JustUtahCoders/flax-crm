@@ -12,7 +12,7 @@ import { JWTModel } from "../DB/models/JWT";
 import jwt from "jsonwebtoken";
 
 const { verify } = jwt;
-const secret = process.env.JWT_SECRET || "secret"; // JWT_SECRET="JUC2021s3cr3t"
+const jwtSecret = process.env.JWT_SECRET;
 
 function getResetPasswordBody(baseUrl: string, token: string): string {
   return `<div style="width: 60vw; margin: 4rem auto auto auto; color: #403F3D;">
@@ -90,7 +90,7 @@ router.get(
     if (rows.length >= 1) {
       let token = rows[0].token;
 
-      if (tokenIsValid(token, secret)) {
+      if (tokenIsValid(token, jwtSecret)) {
         return res
           .status(200)
           .json({ tokenIsValid: true, tokenIsExpired: false });
@@ -107,9 +107,9 @@ router.get(
   }
 );
 
-function tokenIsValid(token: string, secret: string): boolean {
+function tokenIsValid(token: string, jwtSecret: string): boolean {
   try {
-    const decoded = verify(token, secret);
+    const decoded = verify(token, jwtSecret);
     return true;
   } catch (err) {
     return false;
