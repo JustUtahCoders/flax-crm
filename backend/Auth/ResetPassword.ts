@@ -107,7 +107,11 @@ router.get<Params>(
   }
 );
 
-function tokenIsValid(token: string, jwtSecret: string): boolean {
+function tokenIsValid(token: string, jwtSecret: string | undefined): boolean {
+  if (jwtSecret === undefined) {
+    return false;
+  }
+
   try {
     const decoded = verify(token, jwtSecret);
     return true;
