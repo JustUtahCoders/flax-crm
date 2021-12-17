@@ -27,7 +27,7 @@ export function FinishResetPassword(props: RouterProps) {
         method: "GET",
         signal: ac.signal,
       }
-    );
+    ); // where to call abort?
   };
 
   const info = useQuery(token, queryFunctionHelper);
@@ -47,7 +47,7 @@ export function FinishResetPassword(props: RouterProps) {
         token: token,
       },
     });
-    return requestPromise;
+    return requestPromise; // where to call abort?
   });
 
   return (
@@ -62,7 +62,7 @@ export function FinishResetPassword(props: RouterProps) {
         <p className="text-left text-gray-600 py-8 text-4xl lg:text-sm">
           Enter your new password below.
         </p>
-        <FormField className="mb-40">
+        <FormField className="mb-4">
           <FormFieldLabel className="text-3xl lg:text-xs" htmlFor="password">
             Password
           </FormFieldLabel>
