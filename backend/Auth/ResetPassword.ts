@@ -98,13 +98,11 @@ router.get<Params>(
         const userEmail = user?.email;
 
         if (tokenIsValid(token, jwtSecret)) {
-          return res
-            .status(200)
-            .json({
-              tokenIsValid: true,
-              tokenIsExpired: false,
-              email: userEmail,
-            });
+          return res.status(200).json({
+            tokenIsValid: true,
+            tokenIsExpired: false,
+            email: userEmail,
+          });
         } else {
           return res
             .status(200)
