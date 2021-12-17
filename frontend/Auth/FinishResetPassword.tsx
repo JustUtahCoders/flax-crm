@@ -29,7 +29,10 @@ export function FinishResetPassword(props: RouterProps) {
     );
   };
 
-  const tokenValidationResponse = useQuery(token, queryFunctionHelper).data;
+  const tokenValidationResponse = useQuery<TokenValidationResponse>(
+    token,
+    queryFunctionHelper
+  ).data;
 
   const userEmail = tokenValidationResponse?.email;
 
@@ -100,4 +103,10 @@ export function FinishResetPassword(props: RouterProps) {
 
 interface FinishResetPasswordFormData {
   password: string;
+}
+
+interface TokenValidationResponse {
+  tokenIsValid: boolean;
+  tokenIsExpired: boolean;
+  email: string;
 }
