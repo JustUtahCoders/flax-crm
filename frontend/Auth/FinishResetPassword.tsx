@@ -20,10 +20,12 @@ export function FinishResetPassword(props: RouterProps) {
 
   const queryFunctionHelper = (queryKey) => {
     const token = queryKey["queryKey"][0];
+    const ac = new AbortController();
     return flaxFetch<object>(
       `/validate-token/${token}?tokenType=passwordReset`,
       {
         method: "GET",
+        signal: ac.signal,
       }
     );
   };
@@ -36,8 +38,10 @@ export function FinishResetPassword(props: RouterProps) {
     React.FormEvent<HTMLFormElement>
   >((evt) => {
     evt.preventDefault();
+    const ac = new AbortController();
     let requestPromise = flaxFetch<void>(`/send-reset-password-email`, {
       method: "POST",
+      signal: ac.signal,
       body: {
         password: finishResetPasswordFormData.password,
         token: token,
