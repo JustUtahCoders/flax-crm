@@ -24,12 +24,15 @@ export function FinishResetPassword(props: RouterProps) {
 
   const queryFunctionHelper = (queryKey) => {
     const token = queryKey["queryKey"][0];
+
+    const ac = new AbortController();
     return flaxFetch<TokenValidationResponse>(
       `/validate-token/${token}?tokenType=passwordReset`,
       {
         method: "GET",
+        signal: ac.signal,
       }
-    );
+    ); // where to call abort?
   };
 
   const tokenValidationResponse = useQuery<TokenValidationResponse>(
@@ -48,14 +51,16 @@ export function FinishResetPassword(props: RouterProps) {
     React.FormEvent<HTMLFormElement>
   >((evt) => {
     evt.preventDefault();
+    const ac = new AbortController();
     let requestPromise = flaxFetch<void>(`/send-reset-password-email`, {
       method: "POST",
+      signal: ac.signal,
       body: {
         password: finishResetPasswordFormData.password,
         token: token,
       },
     });
-    return requestPromise;
+    return requestPromise; // where to call abort?
   });
 
   return (
@@ -74,7 +79,7 @@ export function FinishResetPassword(props: RouterProps) {
             Enter your new password below.
           </p>
 
-          <FormField className="mb-40">
+          <FormField className="mb-4">
             <FormFieldLabel className="text-3xl lg:text-xs" htmlFor="password">
               Password
             </FormFieldLabel>
