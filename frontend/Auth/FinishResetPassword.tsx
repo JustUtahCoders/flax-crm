@@ -29,7 +29,11 @@ export function FinishResetPassword(props: RouterProps) {
     );
   };
 
-  const tokenValidationResponse = useQuery(token, queryFunctionHelper);
+  const tokenValidationResponse = useQuery(token, queryFunctionHelper).data;
+
+  const userEmail = tokenValidationResponse?.email;
+
+  console.log("-------------userEmail", userEmail);
 
   const submitMutation = useMutation<
     void,
