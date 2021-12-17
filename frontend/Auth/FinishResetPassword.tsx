@@ -20,7 +20,7 @@ export function FinishResetPassword(props: RouterProps) {
 
   const queryFunctionHelper = (options) => {
     const token = options.queryKey[0];
-    return flaxFetch<object>(
+    return flaxFetch<TokenValidationResponse>(
       `/validate-token/${token}?tokenType=passwordReset`,
       {
         method: "GET",
