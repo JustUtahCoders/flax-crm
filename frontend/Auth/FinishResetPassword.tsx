@@ -68,7 +68,7 @@ export function FinishResetPassword(props: RouterProps) {
       tokenValidationResponse?.tokenIsExpired == false ? (
         <form
           onSubmit={unary(submitMutation.mutate)}
-          className="relative lg:max-w-sm"
+          className="relative lg:max-w-sm w-64"
         >
           <h1 className="text-gray-500 place-self-start mb-2 text-5xl lg:text-xl">
             Set New Password
