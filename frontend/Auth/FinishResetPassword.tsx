@@ -79,6 +79,20 @@ export function FinishResetPassword(props: RouterProps) {
           </p>
 
           <FormField className="mb-4">
+            <FormFieldLabel className="text-3xl lg:text-xs" htmlFor="username">
+              Email
+            </FormFieldLabel>
+            <Input
+              id="username"
+              type="email"
+              placeholder={userEmail}
+              value={userEmail}
+              disabled
+              className="text-gray-500"
+            />
+          </FormField>
+
+          <FormField className="mb-4">
             <FormFieldLabel className="text-3xl lg:text-xs" htmlFor="password">
               Password
             </FormFieldLabel>
