@@ -8,7 +8,9 @@ import {
 } from "../Utils/EndpointResponses";
 import { sendEmail, baseUrl } from "../Utils/EmailUtils.js";
 import { makeJWT } from "../Utils/JWTUtils.js";
+import { findUserById } from "../users/Users";
 import { JWTModel } from "../DB/models/JWT";
+import { UserModel } from "../DB/models/User";
 import jwt from "jsonwebtoken";
 
 const { verify } = jwt;
@@ -90,15 +92,25 @@ router.get<Params>(
     if (rows.length >= 1) {
       let token = rows[0].token;
 
-      if (tokenIsValid(token, jwtSecret)) {
-        return res
-          .status(200)
-          .json({ tokenIsValid: true, tokenIsExpired: false });
-      } else {
-        return res
-          .status(200)
-          .json({ tokenIsValid: true, tokenIsExpired: true });
-      }
+      const userId = rows[0].userId;
+
+      findUserById(userId).then((user) => {
+        const userEmail = user?.email;
+
+        if (tokenIsValid(token, jwtSecret)) {
+          return res
+            .status(200)
+            .json({
+              tokenIsValid: true,
+              tokenIsExpired: false,
+              email: userEmail,
+            });
+        } else {
+          return res
+            .status(200)
+            .json({ tokenIsValid: true, tokenIsExpired: true });
+        }
+      });
     } else {
       return res
         .status(200)
