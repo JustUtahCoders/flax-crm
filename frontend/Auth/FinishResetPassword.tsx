@@ -18,16 +18,15 @@ export function FinishResetPassword(props: RouterProps) {
   let searchParams = new URLSearchParams(paramString);
   const token = searchParams.get("jwt") || "MISSING TOKEN";
 
-  const queryFunctionHelper = (queryKey) => {
-    const token = queryKey["queryKey"][0];
-    const ac = new AbortController();
+  const queryFunctionHelper = (options) => {
+    const token = options.queryKey[0];
     return flaxFetch<object>(
       `/validate-token/${token}?tokenType=passwordReset`,
       {
         method: "GET",
-        signal: ac.signal,
+        signal: options.signal,
       }
-    ); // where to call abort?
+    );
   };
 
   const info = useQuery(token, queryFunctionHelper);
@@ -47,7 +46,7 @@ export function FinishResetPassword(props: RouterProps) {
         token: token,
       },
     });
-    return requestPromise; // where to call abort?
+    return requestPromise;
   });
 
   return (
