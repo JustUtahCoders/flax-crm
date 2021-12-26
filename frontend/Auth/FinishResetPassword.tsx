@@ -38,8 +38,10 @@ export function FinishResetPassword(props: RouterProps) {
     queryFunctionHelper
   ).data;
 
+  // const tokenValidationResponse = {email: "test", tokenIsExpired: false, tokenIsValid: true};
+
   console.log(
-    "---------------------- tokenValidationResponse",
+    "---------------------- tokenValidationResponse in frontend",
     tokenValidationResponse
   );
   const userEmail = tokenValidationResponse?.email;
@@ -133,16 +135,10 @@ export function FinishResetPassword(props: RouterProps) {
               password again.
             </p>
           ) : (
-            <></>
-          )}
-
-          {tokenValidationResponse?.tokenIsExpired == true ? (
             <p className="text-left text-gray-600 py-8 text-4xl lg:text-sm">
               This reset password link is expired. Please try resetting your
               password again.
             </p>
-          ) : (
-            <></>
           )}
 
           <div className="absolute inset-x-0 my-8 bottom-0">
