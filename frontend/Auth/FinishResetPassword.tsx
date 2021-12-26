@@ -38,12 +38,6 @@ export function FinishResetPassword(props: RouterProps) {
     queryFunctionHelper
   ).data;
 
-  // const tokenValidationResponse = {email: "test", tokenIsExpired: false, tokenIsValid: true};
-
-  console.log(
-    "---------------------- tokenValidationResponse in frontend",
-    tokenValidationResponse
-  );
   const userEmail = tokenValidationResponse?.email;
 
   const submitMutation = useMutation<
@@ -124,7 +118,7 @@ export function FinishResetPassword(props: RouterProps) {
           </div>
         </form>
       ) : (
-        <>
+        <div className="relative lg:max-w-sm w-64">
           <h1 className="text-gray-500 place-self-start mb-2 text-5xl lg:text-xl">
             Set New Password
           </h1>
@@ -150,7 +144,7 @@ export function FinishResetPassword(props: RouterProps) {
               Go Back To Login - x button kind
             </Button>
           </div>
-        </>
+        </div>
       )}
     </div>
   );
