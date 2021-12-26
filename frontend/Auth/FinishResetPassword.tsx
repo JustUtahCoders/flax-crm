@@ -159,6 +159,3 @@ interface TokenValidationResponse {
   tokenIsExpired: boolean;
   email: string;
 }
-// need to change button for invalid or expired token
-
-// need to adjust styling
