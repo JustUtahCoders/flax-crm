@@ -1,6 +1,6 @@
 import { router } from "../Router.js";
 import { body, validationResult, param } from "express-validator";
-import { findUserByEmail } from "../Users/Users";
+import { findUserByEmail, findUserById } from "../Users/Users";
 import {
   created,
   invalidRequest,
@@ -8,9 +8,7 @@ import {
 } from "../Utils/EndpointResponses";
 import { sendEmail, baseUrl } from "../Utils/EmailUtils.js";
 import { makeJWT } from "../Utils/JWTUtils.js";
-import { findUserById } from "../users/Users";
 import { JWTModel } from "../DB/models/JWT";
-import { UserModel } from "../DB/models/User";
 import jwt from "jsonwebtoken";
 
 const { verify } = jwt;
