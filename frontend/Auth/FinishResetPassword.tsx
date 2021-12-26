@@ -141,7 +141,7 @@ export function FinishResetPassword(props: RouterProps) {
               type="submit"
               className="w-full h-24 lg:h-10 text-3xl lg:text-sm"
             >
-              Go Back To Login - x button kind
+              Login
             </Button>
           </div>
         </div>
