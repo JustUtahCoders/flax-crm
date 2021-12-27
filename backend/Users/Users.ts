@@ -94,13 +94,3 @@ export async function findUserById(userId: number): Promise<UserModel | null> {
   });
   return users.length > 0 ? users[0] : null;
 }
-
-export async function saveUserPassword(user, password) {
-  const hash = await bcrypt.hash(password, 5);
-
-  user.set({
-    password: hash,
-  });
-
-  await user.save();
-}
