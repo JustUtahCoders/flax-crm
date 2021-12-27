@@ -1,10 +1,15 @@
 import { router } from "../Router.js";
 import { body, validationResult, param } from "express-validator";
-import { findUserByEmail, findUserById } from "../Users/Users";
+import {
+  findUserByEmail,
+  findUserById,
+  saveUserPassword,
+} from "../Users/Users";
 import {
   created,
   invalidRequest,
   serverApiError,
+  successNoContent,
 } from "../Utils/EndpointResponses";
 import { sendEmail, baseUrl } from "../Utils/EmailUtils.js";
 import { makeJWT } from "../Utils/JWTUtils.js";
@@ -111,6 +116,36 @@ router.get<Params>(
       return res
         .status(200)
         .json({ tokenIsValid: false, tokenIsExpired: false });
+    }
+  }
+);
+
+router.patch(
+  "/update-password",
+  body("email").isEmail(),
+  body("password").isStrongPassword(),
+  body("token").exists(),
+  async (req, res) => {
+    const { email, password, token } = req.body;
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return invalidRequest(res, errors);
+    }
+    if (!tokenIsValid(token, jwtSecret)) {
+      return invalidRequest(res, "Invalid token");
+    }
+
+    const user = await findUserByEmail(email);
+
+    if (user) {
+      saveUserPassword(user, password)
+        .then((user) => {
+          return successNoContent(res);
+        })
+        .catch((error) => {
+          return serverApiError(res, error);
+        });
     }
   }
 );
