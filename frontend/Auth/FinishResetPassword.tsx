@@ -47,12 +47,11 @@ export function FinishResetPassword(props: RouterProps) {
   >((evt) => {
     evt.preventDefault();
     const ac = new AbortController();
-    let requestPromise = flaxFetch<void>(`/update-password`, {
-      method: "PATCH",
+    let requestPromise = flaxFetch<void>(`/api/passwords`, {
+      method: "PUT",
       signal: ac.signal,
       body: {
         password: finishResetPasswordFormData.password,
-        email: userEmail,
         token: token,
       },
     });
