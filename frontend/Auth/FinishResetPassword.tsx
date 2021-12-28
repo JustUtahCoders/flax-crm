@@ -4,7 +4,6 @@ import { FormField } from "../Styleguide/FormField";
 import { FormFieldLabel } from "../Styleguide/FormFieldLabel";
 import { Input } from "../Styleguide/Input";
 import { RouterProps } from "react-router";
-import { useHistory } from "react-router-dom";
 import { useMutation, useQuery } from "react-query";
 import { flaxFetch } from "../Utils/flaxFetch";
 import { unary } from "lodash-es";
@@ -46,26 +45,33 @@ export function FinishResetPassword(props: RouterProps) {
     void,
     Error,
     React.FormEvent<HTMLFormElement>
-  >((evt) => {
-    evt.preventDefault();
-    const ac = new AbortController();
-    let requestPromise = flaxFetch<void>(`/api/passwords`, {
-      method: "PUT",
-      signal: ac.signal,
-      body: {
-        password: finishResetPasswordFormData.password,
-        token: token,
+  >(
+    (evt) => {
+      evt.preventDefault();
+      const ac = new AbortController();
+      let requestPromise = flaxFetch<void>(`/api/passwords`, {
+        method: "PUT",
+        signal: ac.signal,
+        body: {
+          password: finishResetPasswordFormData.password,
+          token: token,
+        },
+      });
+      return requestPromise;
+    },
+    {
+      onSuccess: async (data, variables, context) => {
+        setPasswordSaveSucceeded(true);
       },
-    });
-    setPasswordSaveSucceeded(true);
-    return requestPromise;
-  });
-
-  const history = useHistory();
+      onError: (error, variables, context) => {
+        console.log(error);
+      },
+    }
+  );
 
   useEffect(() => {
     if (passwordSaveSucceeded) {
-      history.push("/");
+      props.history.push("/home");
     }
   }, [passwordSaveSucceeded]);
 
