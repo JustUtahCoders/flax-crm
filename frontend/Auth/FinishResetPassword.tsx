@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, ButtonKind } from "../Styleguide/Button";
 import { FormField } from "../Styleguide/FormField";
 import { FormFieldLabel } from "../Styleguide/FormFieldLabel";
 import { Input } from "../Styleguide/Input";
-import { RouterProps } from "react-router";
+import { Redirect, RouterProps } from "react-router";
 import { useMutation, useQuery } from "react-query";
 import { flaxFetch } from "../Utils/flaxFetch";
 import { unary } from "lodash-es";
@@ -17,6 +17,7 @@ export function FinishResetPassword(props: RouterProps) {
     useState<boolean | undefined>(undefined);
   const [tokenIsExpired, setTokenIsExpired] =
     useState<boolean | undefined>(undefined);
+  const [passwordSaveSucceeded, setPasswordSaveSucceeded] = useState(false);
 
   const paramString = props.history.location.search;
   let searchParams = new URLSearchParams(paramString);
@@ -55,8 +56,15 @@ export function FinishResetPassword(props: RouterProps) {
         token: token,
       },
     });
+    // setPasswordSaveSucceeded(true);
     return requestPromise;
   });
+
+  useEffect(() => {
+    if (passwordSaveSucceeded) {
+      props.history.push("/");
+    }
+  }, [passwordSaveSucceeded]);
 
   return (
     <div className="flex justify-center h-screen p-24 sm:pt-80">
