@@ -1,20 +1,19 @@
 import { router } from "../Router.js";
 import { body, validationResult, param } from "express-validator";
-import {
-  findUserByEmail,
-  findUserById,
-  saveUserPassword,
-} from "../Users/Users";
+import { findUserByEmail, findUserById } from "../Users/Users";
 import {
   created,
   invalidRequest,
   serverApiError,
   successNoContent,
+  notFound,
 } from "../Utils/EndpointResponses";
 import { sendEmail, baseUrl } from "../Utils/EmailUtils.js";
 import { makeJWT } from "../Utils/JWTUtils.js";
 import { JWTModel } from "../DB/models/JWT";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
+import { UserModel } from "../DB/models/User.js";
 
 const { verify } = jwt;
 const jwtSecret = process.env.JWT_SECRET;
@@ -120,13 +119,12 @@ router.get<Params>(
   }
 );
 
-router.patch(
-  "/update-password",
-  body("email").isEmail(),
+router.put(
+  "/api/passwords",
   body("password").isStrongPassword(),
   body("token").exists(),
   async (req, res) => {
-    const { email, password, token } = req.body;
+    const { password, token } = req.body;
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -136,16 +134,33 @@ router.patch(
       return invalidRequest(res, "Invalid token");
     }
 
-    const user = await findUserByEmail(email);
+    const rows = await JWTModel.findAll({
+      where: {
+        token: token,
+      },
+    });
 
-    if (user) {
-      saveUserPassword(user, password)
-        .then((user) => {
-          return successNoContent(res);
-        })
-        .catch((error) => {
-          return serverApiError(res, error);
-        });
+    if (rows.length >= 1) {
+      const userId = rows[0].userId;
+      const hash = await bcrypt.hash(password, 5);
+
+      const toUpdate = {
+        password: hash,
+      };
+
+      const [numUpdated] = await UserModel.update(toUpdate, {
+        where: {
+          id: userId,
+        },
+      });
+
+      if (numUpdated === 0) {
+        notFound(res, `Unable to update password`);
+      } else {
+        successNoContent(res);
+      }
+    } else {
+      return invalidRequest(res, "Invalid token");
     }
   }
 );
