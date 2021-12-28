@@ -74,7 +74,7 @@ router.post(
 );
 
 router.get<Params>(
-  "/validate-token/:token",
+  "/api/validate-token/:token",
   param("token").exists(),
   async (req, res) => {
     const errors = validationResult(req);

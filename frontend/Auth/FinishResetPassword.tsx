@@ -25,7 +25,7 @@ export function FinishResetPassword(props: RouterProps) {
   const queryFunctionHelper = (options) => {
     const token = options.queryKey[0];
     return flaxFetch<TokenValidationResponse>(
-      `/validate-token/${token}?tokenType=passwordReset`,
+      `/api/validate-token/${token}?tokenType=passwordReset`,
       {
         method: "GET",
         signal: options.signal,
@@ -64,50 +64,58 @@ export function FinishResetPassword(props: RouterProps) {
       tokenValidationResponse?.tokenIsExpired == false ? (
         <form
           onSubmit={unary(submitMutation.mutate)}
-          className="relative lg:max-w-sm w-64"
+          className="space-y-32 relative lg:max-w-sm w-64"
         >
-          <h1 className="text-gray-500 place-self-start mb-2 text-5xl lg:text-xl">
-            Set New Password
-          </h1>
+          <div>
+            <h1 className="text-gray-500 place-self-start mb-2 text-5xl lg:text-xl">
+              Set New Password
+            </h1>
 
-          <p className="text-left text-gray-600 py-8 text-4xl lg:text-sm">
-            Enter your new password below.
-          </p>
+            <p className="text-left text-gray-600 py-8 text-4xl lg:text-sm">
+              Enter your new password below.
+            </p>
 
-          <FormField className="mb-4">
-            <FormFieldLabel className="text-3xl lg:text-xs" htmlFor="username">
-              Email
-            </FormFieldLabel>
-            <Input
-              id="username"
-              type="email"
-              placeholder={userEmail}
-              value={userEmail}
-              disabled
-              className="text-gray-500"
-            />
-          </FormField>
+            <FormField className="mb-4">
+              <FormFieldLabel
+                className="text-3xl lg:text-xs"
+                htmlFor="username"
+              >
+                Email
+              </FormFieldLabel>
+              <Input
+                id="username"
+                type="email"
+                placeholder={userEmail}
+                value={userEmail}
+                disabled
+                className="text-gray-500"
+              />
+            </FormField>
 
-          <FormField className="mb-4">
-            <FormFieldLabel className="text-3xl lg:text-xs" htmlFor="password">
-              Password
-            </FormFieldLabel>
-            <Input
-              id="password"
-              className="text-5xl lg:text-sm"
-              type="password"
-              value={finishResetPasswordFormData.password}
-              onChange={(evt) =>
-                setFinishResetPasswordFormData({
-                  ...finishResetPasswordFormData,
-                  password: evt.target.value,
-                })
-              }
-              required
-            />
-          </FormField>
+            <FormField className="mb-4">
+              <FormFieldLabel
+                className="text-3xl lg:text-xs"
+                htmlFor="password"
+              >
+                Password
+              </FormFieldLabel>
+              <Input
+                id="password"
+                className="text-5xl lg:text-sm"
+                type="password"
+                value={finishResetPasswordFormData.password}
+                onChange={(evt) =>
+                  setFinishResetPasswordFormData({
+                    ...finishResetPasswordFormData,
+                    password: evt.target.value,
+                  })
+                }
+                required
+              />
+            </FormField>
+          </div>
 
-          <div className="absolute inset-x-0 my-8 bottom-0">
+          <div className="inset-x-0 my-8 bottom-0">
             <Button
               kind={ButtonKind.primary}
               type="submit"
@@ -118,24 +126,26 @@ export function FinishResetPassword(props: RouterProps) {
           </div>
         </form>
       ) : (
-        <div className="relative lg:max-w-sm w-64">
-          <h1 className="text-gray-500 place-self-start mb-2 text-5xl lg:text-xl">
-            Set New Password
-          </h1>
+        <div className="space-y-32 relative lg:max-w-sm w-64">
+          <div>
+            <h1 className="text-gray-500 place-self-start mb-2 text-5xl lg:text-xl">
+              Set New Password
+            </h1>
 
-          {tokenValidationResponse?.tokenIsValid == false ? (
-            <p className="text-left text-gray-600 py-8 text-4xl lg:text-sm">
-              This reset password link is not valid. Please try resetting your
-              password again.
-            </p>
-          ) : (
-            <p className="text-left text-gray-600 py-8 text-4xl lg:text-sm">
-              This reset password link is expired. Please try resetting your
-              password again.
-            </p>
-          )}
+            {tokenValidationResponse?.tokenIsValid == false ? (
+              <p className="text-left text-gray-600 py-8 text-4xl lg:text-sm">
+                This reset password link is not valid. Please try resetting your
+                password again.
+              </p>
+            ) : (
+              <p className="text-left text-gray-600 py-8 text-4xl lg:text-sm">
+                This reset password link is expired. Please try resetting your
+                password again.
+              </p>
+            )}
+          </div>
 
-          <div className="absolute inset-x-0 my-8 bottom-0">
+          <div className="inset-x-0 my-8 bottom-0">
             <Button
               kind={ButtonKind.primary}
               type="submit"
