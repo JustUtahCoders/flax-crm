@@ -57,11 +57,12 @@ export function FinishResetPassword(props: RouterProps) {
         token: token,
       },
     });
-    // setPasswordSaveSucceeded(true);
+    setPasswordSaveSucceeded(true);
     return requestPromise;
   });
 
   const history = useHistory();
+
   useEffect(() => {
     if (passwordSaveSucceeded) {
       history.push("/");
