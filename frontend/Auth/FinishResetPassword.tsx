@@ -115,7 +115,7 @@ export function FinishResetPassword(props: RouterProps) {
             </FormField>
           </div>
 
-          <div className="absolute inset-x-0 my-8 bottom-0">
+          <div className="inset-x-0 my-8 bottom-0">
             <Button
               kind={ButtonKind.primary}
               type="submit"
@@ -145,7 +145,7 @@ export function FinishResetPassword(props: RouterProps) {
             )}
           </div>
 
-          <div className="absolute inset-x-0 my-8 bottom-0">
+          <div className="inset-x-0 my-8 bottom-0">
             <Button
               kind={ButtonKind.primary}
               type="submit"
