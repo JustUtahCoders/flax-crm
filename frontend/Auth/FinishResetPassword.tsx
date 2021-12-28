@@ -3,7 +3,8 @@ import { Button, ButtonKind } from "../Styleguide/Button";
 import { FormField } from "../Styleguide/FormField";
 import { FormFieldLabel } from "../Styleguide/FormFieldLabel";
 import { Input } from "../Styleguide/Input";
-import { Redirect, RouterProps } from "react-router";
+import { RouterProps } from "react-router";
+import { useHistory } from "react-router-dom";
 import { useMutation, useQuery } from "react-query";
 import { flaxFetch } from "../Utils/flaxFetch";
 import { unary } from "lodash-es";
@@ -60,9 +61,10 @@ export function FinishResetPassword(props: RouterProps) {
     return requestPromise;
   });
 
+  const history = useHistory();
   useEffect(() => {
     if (passwordSaveSucceeded) {
-      props.history.push("/");
+      history.push("/");
     }
   }, [passwordSaveSucceeded]);
 
