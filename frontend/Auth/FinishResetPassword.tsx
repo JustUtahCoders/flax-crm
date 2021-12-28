@@ -73,7 +73,7 @@ export function FinishResetPassword(props: RouterProps) {
     if (passwordSaveSucceeded) {
       props.history.push("/home");
     }
-  }, [passwordSaveSucceeded]);
+  }, [props.history, passwordSaveSucceeded]);
 
   return (
     <div className="flex justify-center h-screen p-24 sm:pt-80">
