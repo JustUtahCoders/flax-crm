@@ -14,9 +14,16 @@ export function FinishResetPassword(props: RouterProps) {
     useState<FinishResetPasswordFormData>({
       password: "",
     });
-  const [finishResetPasswordFormErrors, setFinishResetPasswordErrors] =
+  const [
+    finishResetPasswordFormDataCheck,
+    setFinishResetPasswordFormDataCheck,
+  ] = useState<FinishResetPasswordFormData>({
+    password: "",
+  });
+  const [finishResetPasswordErrors, setFinishResetPasswordErrors] =
     useState<FinishResetPasswordErrors>({
       message: "",
+      passwordCheck: "",
     });
   const [passwordSaveSucceeded, setPasswordSaveSucceeded] = useState(false);
 
@@ -49,6 +56,18 @@ export function FinishResetPassword(props: RouterProps) {
   >(
     (evt) => {
       evt.preventDefault();
+
+      if (
+        finishResetPasswordFormData.password !==
+        finishResetPasswordFormDataCheck.password
+      ) {
+        setFinishResetPasswordErrors({
+          message: "",
+          passwordCheck: "Passwords do not match",
+        });
+        return new Promise<void>(() => {});
+      }
+
       const ac = new AbortController();
       let requestPromise = flaxFetch<void>(`/api/passwords`, {
         method: "PUT",
@@ -68,6 +87,7 @@ export function FinishResetPassword(props: RouterProps) {
         setFinishResetPasswordErrors({
           // @ts-ignore
           message: error.body.errors[0],
+          passwordCheck: "",
         });
       },
     }
@@ -118,7 +138,7 @@ export function FinishResetPassword(props: RouterProps) {
                 className="text-3xl lg:text-xs"
                 htmlFor="password"
               >
-                Password
+                New Password
               </FormFieldLabel>
               <Input
                 id="password"
@@ -134,8 +154,32 @@ export function FinishResetPassword(props: RouterProps) {
                 required
               />
             </FormField>
+            <FormField className="mb-4">
+              <FormFieldLabel
+                className="text-3xl lg:text-xs"
+                htmlFor="passwordCheck"
+              >
+                Re-enter Password
+              </FormFieldLabel>
+              <Input
+                id="passwordCheck"
+                className="text-5xl lg:text-sm"
+                type="password"
+                value={finishResetPasswordFormDataCheck.password}
+                onChange={(evt) =>
+                  setFinishResetPasswordFormDataCheck({
+                    ...finishResetPasswordFormDataCheck,
+                    password: evt.target.value,
+                  })
+                }
+                required
+              />
+            </FormField>
             <p className="text-sm text-gray-500">
-              {finishResetPasswordFormErrors.message}
+              {finishResetPasswordErrors.passwordCheck}
+            </p>
+            <p className="text-sm text-gray-500">
+              {finishResetPasswordErrors.message}
             </p>
           </div>
 
@@ -184,8 +228,13 @@ interface FinishResetPasswordFormData {
   password: string | undefined;
 }
 
+interface FinishResetPasswordFormDataCheck {
+  password: string | undefined;
+}
+
 interface FinishResetPasswordErrors {
   message: string | undefined;
+  passwordCheck: string | undefined;
 }
 
 interface TokenValidationResponse {
