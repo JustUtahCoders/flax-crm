@@ -134,7 +134,10 @@ router.put(
           "Password must be at least 8 characters long, contain one number, one uppercase letter, and one special character."
         );
       } else {
-        return invalidRequest(res, "Request must include token.");
+        return invalidRequest(
+          res,
+          "Request must include token. Please reset your password again."
+        );
       }
     }
 
