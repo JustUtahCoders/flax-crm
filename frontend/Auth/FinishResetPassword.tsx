@@ -85,6 +85,7 @@ export function FinishResetPassword(props: RouterProps) {
       },
       onError: (error, variables, context) => {
         setFinishResetPasswordErrors({
+          // @ts-ignore
           message: error.body.errors[0],
           passwordCheck: "",
         });

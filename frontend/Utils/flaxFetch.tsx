@@ -36,6 +36,7 @@ export function flaxFetch<ResponseDataType = object>(
         : "text";
 
       return r[bodyMethod]().then((body) => {
+        // @ts-ignore
         err.body = body;
         throw err;
       });
