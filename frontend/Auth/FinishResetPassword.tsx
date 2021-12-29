@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, ButtonKind } from "../Styleguide/Button";
+import { Anchor } from "../Styleguide/Anchor";
 import { FormField } from "../Styleguide/FormField";
 import { FormFieldLabel } from "../Styleguide/FormFieldLabel";
 import { Input } from "../Styleguide/Input";
@@ -13,10 +14,10 @@ export function FinishResetPassword(props: RouterProps) {
     useState<FinishResetPasswordFormData>({
       password: "",
     });
-  const [tokenIsValid, setTokenIsValid] =
-    useState<boolean | undefined>(undefined);
-  const [tokenIsExpired, setTokenIsExpired] =
-    useState<boolean | undefined>(undefined);
+  const [finishResetPasswordFormErrors, setFinishResetPasswordErrors] =
+    useState<FinishResetPasswordErrors>({
+      message: "",
+    });
   const [passwordSaveSucceeded, setPasswordSaveSucceeded] = useState(false);
 
   const paramString = props.history.location.search;
@@ -64,7 +65,10 @@ export function FinishResetPassword(props: RouterProps) {
         setPasswordSaveSucceeded(true);
       },
       onError: (error, variables, context) => {
-        console.log(error);
+        setFinishResetPasswordErrors({
+          // @ts-ignore
+          message: error.body.errors[0],
+        });
       },
     }
   );
@@ -130,6 +134,9 @@ export function FinishResetPassword(props: RouterProps) {
                 required
               />
             </FormField>
+            <p className="text-sm text-gray-500">
+              {finishResetPasswordFormErrors.message}
+            </p>
           </div>
 
           <div className="inset-x-0 my-8 bottom-0">
@@ -163,13 +170,9 @@ export function FinishResetPassword(props: RouterProps) {
           </div>
 
           <div className="inset-x-0 my-8 bottom-0">
-            <Button
-              kind={ButtonKind.primary}
-              type="submit"
-              className="w-full h-24 lg:h-10 text-3xl lg:text-sm"
-            >
+            <Anchor kind={ButtonKind.primary} to="/login">
               Login
-            </Button>
+            </Anchor>
           </div>
         </div>
       )}
@@ -178,7 +181,11 @@ export function FinishResetPassword(props: RouterProps) {
 }
 
 interface FinishResetPasswordFormData {
-  password: string;
+  password: string | undefined;
+}
+
+interface FinishResetPasswordErrors {
+  message: string | undefined;
 }
 
 interface TokenValidationResponse {
