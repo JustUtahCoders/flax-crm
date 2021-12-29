@@ -128,8 +128,16 @@ router.put(
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return invalidRequest(res, errors);
+      if (token) {
+        return invalidRequest(
+          res,
+          "Password must be at least 8 characters long, contain one number, one uppercase letter, and one special character."
+        );
+      } else {
+        return invalidRequest(res, "Request must include token.");
+      }
     }
+
     if (!tokenIsValid(token, jwtSecret)) {
       return invalidRequest(res, "Invalid token");
     }
