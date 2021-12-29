@@ -22,12 +22,31 @@ export function flaxFetch<ResponseDataType = object>(
       }
     } else if (r.status === 401) {
       window.location.assign("/login");
+      // } else {
+      //   throw Error(
+      //     `Server responded with ${r.status} ${r.statusText} when requesting ${
+      //       options?.method ?? "GET"
+      //     } ${url}`
+      //   );
+      // }
     } else {
-      throw Error(
+      const err = Error(
         `Server responded with ${r.status} ${r.statusText} when requesting ${
           options?.method ?? "GET"
         } ${url}`
       );
+
+      const bodyMethod = r.headers
+        .get("content-type")
+        ?.includes("application/json")
+        ? "json"
+        : "text";
+
+      return r[bodyMethod]().then((body) => {
+        // @ts-ignore
+        err.body = body;
+        throw err;
+      });
     }
   });
 }
