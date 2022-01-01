@@ -100,21 +100,18 @@ export function FinishResetPassword(props: RouterProps) {
   }, [props.history, passwordSaveSucceeded]);
 
   return (
-    <div className="flex justify-center h-screen p-24 sm:pt-80">
+    <div className="flex justify-center h-screen">
+      {/* <div className="flex justify-center h-screen p-24 sm:pt-80"></div> */}
       {tokenValidationResponse?.tokenIsValid == true &&
       tokenValidationResponse?.tokenIsExpired == false ? (
         <form
           onSubmit={unary(submitMutation.mutate)}
-          className="space-y-32 relative lg:max-w-sm w-64"
+          className="space-y-28 relative lg:max-w-sm pt-40 w-64"
         >
           <div>
-            <h1 className="text-gray-500 place-self-start mb-2 text-5xl lg:text-xl">
+            <h1 className="text-gray-500 place-self-start mb-6 text-5xl lg:text-xl">
               Set New Password
             </h1>
-
-            <p className="text-left text-gray-600 py-8 text-4xl lg:text-sm">
-              Enter your new password below.
-            </p>
 
             <FormField className="mb-4">
               <FormFieldLabel
@@ -175,15 +172,18 @@ export function FinishResetPassword(props: RouterProps) {
                 required
               />
             </FormField>
-            <p className="text-sm text-gray-500">
-              {finishResetPasswordErrors.passwordCheck}
-            </p>
-            <p className="text-sm text-gray-500">
-              {finishResetPasswordErrors.message}
-            </p>
+            {/* h-0.5 is height: 0.125rem; */}
+            <div className="h-0.5">
+              <p className="text-sm text-gray-500">
+                {finishResetPasswordErrors.passwordCheck}
+              </p>
+              <p className="text-sm text-gray-500">
+                {finishResetPasswordErrors.message}
+              </p>
+            </div>
           </div>
 
-          <div className="inset-x-0 my-8 bottom-0">
+          <div>
             <Button
               kind={ButtonKind.primary}
               type="submit"
@@ -194,19 +194,20 @@ export function FinishResetPassword(props: RouterProps) {
           </div>
         </form>
       ) : (
-        <div className="space-y-32 relative lg:max-w-sm w-64">
-          <div>
-            <h1 className="text-gray-500 place-self-start mb-2 text-5xl lg:text-xl">
+        <div className="space-y-72 relative lg:w-64">
+          <div className="md:pt-72 lg:pt-40">
+            {/* <h1 className="text-gray-500 place-self-start mb-6 text-2xl lg:text-xl"> */}
+            <h1 className="text-gray-500 place-self-start mb-6 text-6xl md:text-2xl lg:text-xl">
               Set New Password
             </h1>
 
             {tokenValidationResponse?.tokenIsValid == false ? (
-              <p className="text-left text-gray-600 py-8 text-4xl lg:text-sm">
+              <p className="text-left text-gray-600 text-lg lg:text-sm">
                 This reset password link is not valid. Please try resetting your
                 password again.
               </p>
             ) : (
-              <p className="text-left text-gray-600 py-8 text-4xl lg:text-sm">
+              <p className="text-left text-gray-600 text-lg lg:text-sm">
                 This reset password link is expired. Please try resetting your
                 password again.
               </p>
@@ -214,7 +215,11 @@ export function FinishResetPassword(props: RouterProps) {
           </div>
 
           <div className="inset-x-0 my-8 bottom-0">
-            <Anchor kind={ButtonKind.primary} to="/login">
+            <Anchor
+              className="lg:text-sm"
+              kind={ButtonKind.primary}
+              to="/login"
+            >
               Login
             </Anchor>
           </div>

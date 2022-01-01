@@ -12,19 +12,19 @@ export function ResetPasswordEmailSent(props) {
 
   return (
     <div className="flex justify-center h-screen">
-      <div className="pt-40 max-w-sm">
-        <h1 className="text-xl text-gray-500 place-self-start mb-2">
-          Email Sent
-        </h1>
-        <p className="text-left text-s text-gray-600 py-8 mb-60">
-          An email with reset instructions has been sent to {email}
-        </p>
-        <div className="flex space-x-4 my-8">
-          <Button kind={ButtonKind.primary} className="w-full mt-2">
-            <Anchor kind={ButtonKind.primary} to="/login">
-              Return To Sign In
-            </Anchor>
-          </Button>
+      <div className="space-y-72 pt-40 w-64 max-w-sm">
+        <div>
+          <h1 className="text-xl text-gray-500 place-self-start mb-6">
+            Email Sent
+          </h1>
+          <p className="text-left text-gray-600 text-sm">
+            An email with reset instructions has been sent to {email}
+          </p>
+        </div>
+        <div className="my-8 lg:text-sm">
+          <Anchor kind={ButtonKind.primary} to="/login">
+            Return To Sign In
+          </Anchor>
         </div>
       </div>
     </div>
