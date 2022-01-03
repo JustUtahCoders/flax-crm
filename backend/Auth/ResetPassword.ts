@@ -1,14 +1,22 @@
 import { router } from "../Router.js";
-import { body, validationResult } from "express-validator";
-import { findUserByEmail } from "../Users/Users";
+import { body, validationResult, param } from "express-validator";
+import { findUserByEmail, findUserById } from "../Users/Users";
 import {
   created,
   invalidRequest,
   serverApiError,
+  successNoContent,
+  notFound,
 } from "../Utils/EndpointResponses";
 import { sendEmail, baseUrl } from "../Utils/EmailUtils.js";
 import { makeJWT } from "../Utils/JWTUtils.js";
 import { JWTModel } from "../DB/models/JWT";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
+import { UserModel } from "../DB/models/User.js";
+
+const { verify } = jwt;
+const jwtSecret = process.env.JWT_SECRET;
 
 function getResetPasswordBody(baseUrl: string, token: string): string {
   return `<div style="width: 60vw; margin: 4rem auto auto auto; color: #403F3D;">
@@ -64,3 +72,124 @@ router.post(
     return res.status(204).end();
   }
 );
+
+router.get<Params>(
+  "/api/validate-token/:token",
+  param("token").exists(),
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return invalidRequest(res, errors);
+    }
+    const token = req.params.token;
+    const tokenType = req.query?.tokenType;
+
+    const rows = await JWTModel.findAll({
+      where: {
+        token: token,
+        jwtType: tokenType,
+      },
+    });
+
+    if (rows.length >= 1) {
+      let token = rows[0].token;
+
+      const userId = rows[0].userId;
+
+      findUserById(userId).then((user) => {
+        const userEmail = user?.email;
+
+        if (tokenIsValid(token, jwtSecret)) {
+          return res.status(200).json({
+            tokenIsValid: true,
+            tokenIsExpired: false,
+            email: userEmail,
+          });
+        } else {
+          return res
+            .status(200)
+            .json({ tokenIsValid: true, tokenIsExpired: true });
+        }
+      });
+    } else {
+      return res
+        .status(200)
+        .json({ tokenIsValid: false, tokenIsExpired: false });
+    }
+  }
+);
+
+router.put(
+  "/api/passwords",
+  body("password").isStrongPassword(),
+  body("token").exists(),
+  async (req, res) => {
+    const { password, token } = req.body;
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      if (token) {
+        return invalidRequest(
+          res,
+          "Password must be at least 8 characters long, contain one number, one uppercase letter, and one special character."
+        );
+      } else {
+        return invalidRequest(
+          res,
+          "Request must include token. Please reset your password again."
+        );
+      }
+    }
+
+    if (!tokenIsValid(token, jwtSecret)) {
+      return invalidRequest(res, "Invalid token");
+    }
+
+    const rows = await JWTModel.findAll({
+      where: {
+        token: token,
+      },
+    });
+
+    if (rows.length >= 1) {
+      const userId = rows[0].userId;
+      const hash = await bcrypt.hash(password, 5);
+
+      const toUpdate = {
+        password: hash,
+      };
+
+      const [numUpdated] = await UserModel.update(toUpdate, {
+        where: {
+          id: userId,
+        },
+      });
+
+      if (numUpdated === 0) {
+        notFound(res, `Unable to update password`);
+      } else {
+        successNoContent(res);
+      }
+    } else {
+      return invalidRequest(res, "Invalid token");
+    }
+  }
+);
+
+function tokenIsValid(token: string, jwtSecret: string | undefined): boolean {
+  if (jwtSecret === undefined) {
+    return false;
+  }
+
+  try {
+    const decoded = verify(token, jwtSecret);
+    return true;
+  } catch (err) {
+    return false;
+  }
+}
+
+interface Params {
+  token: string;
+  tokenType: string;
+}

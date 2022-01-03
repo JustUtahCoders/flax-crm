@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { Login } from "./Auth/Login";
 import { ResetPassword } from "./Auth/ResetPassword";
 import { ResetPasswordEmailSent } from "./Auth/ResetPasswordEmailSent";
+import { FinishResetPassword } from "./Auth/FinishResetPassword";
 import { CreateEditIntakeForm } from "./Nouns/CreateEditIntakeForm";
 
 const queryClient = new QueryClient();
@@ -49,6 +50,10 @@ export function App(props: AppProps) {
           <Route
             path="/reset-password-email-sent"
             component={ResetPasswordEmailSent}
+          />
+          <Route
+            path="/finish-reset-password"
+            component={FinishResetPassword}
           />
           <Route
             path="/create-intake-form/:nounId"
