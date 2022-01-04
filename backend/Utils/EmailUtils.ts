@@ -2,7 +2,7 @@ import google from "googleapis";
 import path from "path";
 import { encode } from "js-base64";
 
-export const baseUrl = process.env.SERVER_ORIGIN || "https://localhost:7600";
+export const baseUrl = process.env.SERVER_ORIGIN || "http://localhost:7600";
 
 async function makeEmail({ to, from, subject, body }) {
   // the white space is important, template literals are space sensitive

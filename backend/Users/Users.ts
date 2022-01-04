@@ -85,3 +85,12 @@ export async function findUserByEmail(
   });
   return users.length > 0 ? users[0] : null;
 }
+
+export async function findUserById(userId: number): Promise<UserModel | null> {
+  const users = await UserModel.findAll({
+    where: {
+      id: userId,
+    },
+  });
+  return users.length > 0 ? users[0] : null;
+}

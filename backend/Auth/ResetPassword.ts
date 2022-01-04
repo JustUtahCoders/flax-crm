@@ -1,6 +1,6 @@
 import { router } from "../Router.js";
-import { body, validationResult } from "express-validator";
-import { findUserByEmail } from "../Users/Users";
+import { body, validationResult, param } from "express-validator";
+import { findUserByEmail, findUserById } from "../Users/Users";
 import {
   created,
   invalidRequest,
@@ -9,6 +9,10 @@ import {
 import { sendEmail, baseUrl } from "../Utils/EmailUtils.js";
 import { makeJWT } from "../Utils/JWTUtils.js";
 import { JWTModel } from "../DB/models/JWT";
+import jwt from "jsonwebtoken";
+
+const { verify } = jwt;
+const jwtSecret = process.env.JWT_SECRET;
 
 function getResetPasswordBody(baseUrl: string, token: string): string {
   return `<div style="width: 60vw; margin: 4rem auto auto auto; color: #403F3D;">
@@ -64,3 +68,77 @@ router.post(
     return res.status(204).end();
   }
 );
+
+router.get<Params, ResponseBody, QueryParams>(
+  "/validate-token/:token",
+  param("token").exists(),
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return invalidRequest(res, errors);
+    }
+    const token = req.params.token;
+    const tokenType = req.query.tokenType;
+
+    const rows = await JWTModel.findAll({
+      where: {
+        token: token,
+        jwtType: tokenType,
+      },
+    });
+
+    if (rows.length >= 1) {
+      let token = rows[0].token;
+
+      const userId = rows[0].userId;
+
+      findUserById(userId).then((user) => {
+        const userEmail = user?.email;
+
+        if (tokenIsValid(token, jwtSecret)) {
+          return res.status(200).json({
+            tokenIsValid: true,
+            tokenIsExpired: false,
+            email: userEmail,
+          });
+        } else {
+          return res
+            .status(200)
+            .json({ tokenIsValid: true, tokenIsExpired: true });
+        }
+      });
+    } else {
+      return res
+        .status(200)
+        .json({ tokenIsValid: false, tokenIsExpired: false });
+    }
+  }
+);
+
+function tokenIsValid(token: string, jwtSecret: string | undefined): boolean {
+  if (!jwtSecret) {
+    return false;
+  }
+
+  try {
+    const decoded = verify(token, jwtSecret);
+    return true;
+  } catch (err) {
+    return false;
+  }
+}
+
+interface Params {
+  token: string;
+  tokenType: string;
+}
+
+interface QueryParams {
+  tokenType?: string;
+}
+
+interface ResponseBody {
+  tokenIsValid: boolean;
+  tokenIsExpired: boolean;
+  email?: string;
+}
