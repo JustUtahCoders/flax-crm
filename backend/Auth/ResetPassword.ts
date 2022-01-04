@@ -69,7 +69,7 @@ router.post(
   }
 );
 
-router.get<Params, void, ResponseBody, QueryParams>(
+router.get<Params, ResponseBody, QueryParams>(
   "/validate-token/:token",
   param("token").exists(),
   async (req, res) => {
@@ -78,7 +78,7 @@ router.get<Params, void, ResponseBody, QueryParams>(
       return invalidRequest(res, errors);
     }
     const token = req.params.token;
-    const tokenType = req.query?.tokenType;
+    const tokenType = req.query.tokenType;
 
     const rows = await JWTModel.findAll({
       where: {
