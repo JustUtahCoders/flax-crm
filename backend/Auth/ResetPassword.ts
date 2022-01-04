@@ -69,7 +69,7 @@ router.post(
   }
 );
 
-router.get<Params>(
+router.get<Params, void, ResponseBody, QueryParams>(
   "/validate-token/:token",
   param("token").exists(),
   async (req, res) => {
@@ -131,4 +131,14 @@ function tokenIsValid(token: string, jwtSecret: string | undefined): boolean {
 interface Params {
   token: string;
   tokenType: string;
+}
+
+interface QueryParams {
+  tokenType?: string;
+}
+
+interface ResponseBody {
+  tokenIsValid: boolean;
+  tokenIsExpired: boolean;
+  email?: string;
 }
