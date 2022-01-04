@@ -116,7 +116,7 @@ router.get<Params, ResponseBody, QueryParams>(
 );
 
 function tokenIsValid(token: string, jwtSecret: string | undefined): boolean {
-  if (jwtSecret === undefined) {
+  if (!jwtSecret) {
     return false;
   }
 
