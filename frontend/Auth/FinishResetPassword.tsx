@@ -13,10 +13,6 @@ export function FinishResetPassword(props: RouterProps) {
     useState<FinishResetPasswordFormData>({
       password: "",
     });
-  const [tokenIsValid, setTokenIsValid] =
-    useState<boolean | undefined>(undefined);
-  const [tokenIsExpired, setTokenIsExpired] =
-    useState<boolean | undefined>(undefined);
 
   const paramString = props.history.location.search;
   let searchParams = new URLSearchParams(paramString);
@@ -41,21 +37,28 @@ export function FinishResetPassword(props: RouterProps) {
   const userEmail = tokenValidationResponse?.email;
 
   const submitMutation = useMutation<
-    void,
+    TokenValidationResponse,
     Error,
     React.FormEvent<HTMLFormElement>
   >((evt) => {
     evt.preventDefault();
     const ac = new AbortController();
-    let requestPromise = flaxFetch<void>(`/send-reset-password-email`, {
-      method: "POST",
-      signal: ac.signal,
-      body: {
-        password: finishResetPasswordFormData.password,
-        token: token,
-      },
-    });
-    return requestPromise;
+
+    if (token) {
+      return flaxFetch<TokenValidationResponse>(`/send-reset-password-email`, {
+        method: "POST",
+        signal: ac.signal,
+        body: {
+          password: finishResetPasswordFormData.password,
+          token: token,
+        },
+      });
+    } else {
+      return Promise.resolve({
+        tokenIsValid: false,
+        tokenIsExpired: false,
+      });
+    }
   });
 
   return (
@@ -167,5 +170,5 @@ interface FinishResetPasswordFormData {
 interface TokenValidationResponse {
   tokenIsValid: boolean;
   tokenIsExpired: boolean;
-  email: string;
+  email?: string;
 }
