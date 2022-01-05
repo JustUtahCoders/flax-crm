@@ -63,8 +63,8 @@ export function FinishResetPassword(props: RouterProps) {
 
   return (
     <div className="flex justify-center h-screen p-24 sm:pt-80">
-      {tokenValidationResponse?.tokenIsValid == true &&
-      tokenValidationResponse?.tokenIsExpired == false ? (
+      {tokenValidationResponse?.tokenIsValid === true &&
+      tokenValidationResponse?.tokenIsExpired === false ? (
         <form
           onSubmit={unary(submitMutation.mutate)}
           className="space-y-32 relative lg:max-w-sm w-64"
@@ -137,13 +137,19 @@ export function FinishResetPassword(props: RouterProps) {
 
             {tokenValidationResponse?.tokenIsValid == false ? (
               <p className="text-left text-gray-600 py-8 text-4xl lg:text-sm">
-                This reset password link is not valid. Please try resetting your
-                password again.
+                This reset password link is not valid. Please try{" "}
+                <a href="/reset-password" style={{ color: "1c69f9" }}>
+                  resetting your password
+                </a>{" "}
+                again.
               </p>
             ) : (
               <p className="text-left text-gray-600 py-8 text-4xl lg:text-sm">
-                This reset password link is expired. Please try resetting your
-                password again.
+                This reset password link is expired. Please try{" "}
+                <a href="/reset-password" style={{ color: "1c69f9" }}>
+                  resetting your password
+                </a>{" "}
+                again.
               </p>
             )}
           </div>
