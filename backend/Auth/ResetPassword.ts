@@ -73,7 +73,7 @@ router.post(
   }
 );
 
-router.get<Params>(
+router.get<Params, ResponseBody, QueryParams>(
   "/api/validate-token/:token",
   param("token").exists(),
   async (req, res) => {
@@ -82,7 +82,7 @@ router.get<Params>(
       return invalidRequest(res, errors);
     }
     const token = req.params.token;
-    const tokenType = req.query?.tokenType;
+    const tokenType = req.query.tokenType;
 
     const rows = await JWTModel.findAll({
       where: {
@@ -177,7 +177,7 @@ router.put(
 );
 
 function tokenIsValid(token: string, jwtSecret: string | undefined): boolean {
-  if (jwtSecret === undefined) {
+  if (!jwtSecret) {
     return false;
   }
 
@@ -192,4 +192,14 @@ function tokenIsValid(token: string, jwtSecret: string | undefined): boolean {
 interface Params {
   token: string;
   tokenType: string;
+}
+
+interface QueryParams {
+  tokenType?: string;
+}
+
+interface ResponseBody {
+  tokenIsValid: boolean;
+  tokenIsExpired: boolean;
+  email?: string;
 }

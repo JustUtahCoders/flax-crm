@@ -5,6 +5,7 @@ import { FormField } from "../Styleguide/FormField";
 import { FormFieldLabel } from "../Styleguide/FormFieldLabel";
 import { Input } from "../Styleguide/Input";
 import { RouterProps } from "react-router";
+import { Link } from "react-router-dom";
 import { useMutation, useQuery } from "react-query";
 import { flaxFetch } from "../Utils/flaxFetch";
 import { unary } from "lodash-es";
@@ -49,8 +50,14 @@ export function FinishResetPassword(props: RouterProps) {
 
   const userEmail = tokenValidationResponse?.email;
 
+  useEffect(() => {
+    if (passwordSaveSucceeded) {
+      props.history.push("/home");
+    }
+  }, [props.history, passwordSaveSucceeded]);
+
   const submitMutation = useMutation<
-    void,
+    TokenValidationResponse,
     Error,
     React.FormEvent<HTMLFormElement>
   >(
@@ -65,19 +72,29 @@ export function FinishResetPassword(props: RouterProps) {
           message: "",
           passwordCheck: "Passwords do not match",
         });
-        return new Promise<void>(() => {});
+        return Promise.resolve({
+          tokenIsValid: false,
+          tokenIsExpired: false,
+        });
       }
 
       const ac = new AbortController();
-      let requestPromise = flaxFetch<void>(`/api/passwords`, {
-        method: "PUT",
-        signal: ac.signal,
-        body: {
-          password: finishResetPasswordFormData.password,
-          token: token,
-        },
-      });
-      return requestPromise;
+
+      if (token) {
+        return flaxFetch<TokenValidationResponse>(`/api/passwords`, {
+          method: "PUT",
+          signal: ac.signal,
+          body: {
+            password: finishResetPasswordFormData.password,
+            token: token,
+          },
+        });
+      } else {
+        return Promise.resolve({
+          tokenIsValid: false,
+          tokenIsExpired: false,
+        });
+      }
     },
     {
       onSuccess: async (data, variables, context) => {
@@ -93,16 +110,10 @@ export function FinishResetPassword(props: RouterProps) {
     }
   );
 
-  useEffect(() => {
-    if (passwordSaveSucceeded) {
-      props.history.push("/home");
-    }
-  }, [props.history, passwordSaveSucceeded]);
-
   return (
     <div className="flex justify-center h-screen p-24 sm:pt-80">
-      {tokenValidationResponse?.tokenIsValid == true &&
-      tokenValidationResponse?.tokenIsExpired == false ? (
+      {tokenValidationResponse?.tokenIsValid === true &&
+      tokenValidationResponse?.tokenIsExpired === false ? (
         <form
           onSubmit={unary(submitMutation.mutate)}
           className="space-y-32 relative lg:max-w-sm w-64"
@@ -202,13 +213,19 @@ export function FinishResetPassword(props: RouterProps) {
 
             {tokenValidationResponse?.tokenIsValid == false ? (
               <p className="text-left text-gray-600 py-8 text-4xl lg:text-sm">
-                This reset password link is not valid. Please try resetting your
-                password again.
+                This reset password link is not valid. Please try{" "}
+                <Link to="/reset-password" className="text-classic-link">
+                  resetting your password
+                </Link>{" "}
+                again.
               </p>
             ) : (
               <p className="text-left text-gray-600 py-8 text-4xl lg:text-sm">
-                This reset password link is expired. Please try resetting your
-                password again.
+                This reset password link is expired. Please try{" "}
+                <Link to="/reset-password" className="text-classic-link">
+                  resetting your password
+                </Link>{" "}
+                again.
               </p>
             )}
           </div>
@@ -240,5 +257,5 @@ interface FinishResetPasswordErrors {
 interface TokenValidationResponse {
   tokenIsValid: boolean;
   tokenIsExpired: boolean;
-  email: string;
+  email?: string;
 }
