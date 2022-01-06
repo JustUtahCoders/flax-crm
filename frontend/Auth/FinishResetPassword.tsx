@@ -3,7 +3,7 @@ import { Button, ButtonKind } from "../Styleguide/Button";
 import { FormField } from "../Styleguide/FormField";
 import { FormFieldLabel } from "../Styleguide/FormFieldLabel";
 import { Input } from "../Styleguide/Input";
-import { RouterProps } from "react-router";
+import { RouterProps, Link } from "react-router";
 import { useMutation, useQuery } from "react-query";
 import { flaxFetch } from "../Utils/flaxFetch";
 import { unary } from "lodash-es";
@@ -138,17 +138,17 @@ export function FinishResetPassword(props: RouterProps) {
             {tokenValidationResponse?.tokenIsValid == false ? (
               <p className="text-left text-gray-600 py-8 text-4xl lg:text-sm">
                 This reset password link is not valid. Please try{" "}
-                <a href="/reset-password" style={{ color: "1c69f9" }}>
+                <Link to="/reset-password" className="text-classic-link">
                   resetting your password
-                </a>{" "}
+                </Link>{" "}
                 again.
               </p>
             ) : (
               <p className="text-left text-gray-600 py-8 text-4xl lg:text-sm">
                 This reset password link is expired. Please try{" "}
-                <a href="/reset-password" style={{ color: "1c69f9" }}>
+                <Link to="/reset-password" className="text-classic-link">
                   resetting your password
-                </a>{" "}
+                </Link>{" "}
                 again.
               </p>
             )}
