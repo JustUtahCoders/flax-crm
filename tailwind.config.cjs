@@ -9,6 +9,7 @@ module.exports = {
       white: colors.white,
       gray: colors.gray,
       coolGray: colors.coolGray,
+      "classic-link": "blue",
     },
     extend: {
       outline: {
