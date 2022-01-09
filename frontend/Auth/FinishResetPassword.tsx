@@ -18,7 +18,7 @@ export function FinishResetPassword(props: RouterProps) {
   const [
     finishResetPasswordFormDataCheck,
     setFinishResetPasswordFormDataCheck,
-  ] = useState<FinishResetPasswordFormData>({
+  ] = useState<FinishResetPasswordFormDataCheck>({
     password: "",
   });
   const [finishResetPasswordErrors, setFinishResetPasswordErrors] =
@@ -26,6 +26,7 @@ export function FinishResetPassword(props: RouterProps) {
       message: "",
       passwordCheck: "",
     });
+  const [disableSubmit, setDisableSubmit] = useState(true);
   const [passwordSaveSucceeded, setPasswordSaveSucceeded] = useState(false);
 
   const paramString = props.history.location.search;
@@ -51,6 +52,36 @@ export function FinishResetPassword(props: RouterProps) {
   const userEmail = tokenValidationResponse?.email;
 
   useEffect(() => {
+    const doPasswordsMatch =
+      finishResetPasswordFormData.password ===
+      finishResetPasswordFormDataCheck.password;
+
+    if (doPasswordsMatch) {
+      setFinishResetPasswordErrors({
+        message: "",
+        passwordCheck: "",
+      });
+      setDisableSubmit(false);
+    } else {
+      setFinishResetPasswordErrors({
+        message: "",
+        passwordCheck: "Passwords do not match",
+      });
+    }
+
+    if (
+      finishResetPasswordFormData.password === "" ||
+      finishResetPasswordFormDataCheck.password === ""
+    ) {
+      setFinishResetPasswordErrors({
+        message: "",
+        passwordCheck: "",
+      });
+      setDisableSubmit(true);
+    }
+  }, [finishResetPasswordFormData, finishResetPasswordFormDataCheck]);
+
+  useEffect(() => {
     if (passwordSaveSucceeded) {
       props.history.push("/home");
     }
@@ -63,20 +94,6 @@ export function FinishResetPassword(props: RouterProps) {
   >(
     (evt) => {
       evt.preventDefault();
-
-      if (
-        finishResetPasswordFormData.password !==
-        finishResetPasswordFormDataCheck.password
-      ) {
-        setFinishResetPasswordErrors({
-          message: "",
-          passwordCheck: "Passwords do not match",
-        });
-        return Promise.resolve({
-          tokenIsValid: false,
-          tokenIsExpired: false,
-        });
-      }
 
       const ac = new AbortController();
 
@@ -159,7 +176,7 @@ export function FinishResetPassword(props: RouterProps) {
                 onChange={(evt) =>
                   setFinishResetPasswordFormData({
                     ...finishResetPasswordFormData,
-                    password: evt.target.value,
+                    password: evt.target.value.trim(),
                   })
                 }
                 required
@@ -180,7 +197,7 @@ export function FinishResetPassword(props: RouterProps) {
                 onChange={(evt) =>
                   setFinishResetPasswordFormDataCheck({
                     ...finishResetPasswordFormDataCheck,
-                    password: evt.target.value,
+                    password: evt.target.value.trim(),
                   })
                 }
                 required
@@ -197,8 +214,10 @@ export function FinishResetPassword(props: RouterProps) {
           <div className="inset-x-0 my-8 bottom-0">
             <Button
               kind={ButtonKind.primary}
+              style={{ opacity: disableSubmit ? "50%" : "100%" }}
               type="submit"
               className="w-full h-24 lg:h-10 text-3xl lg:text-sm"
+              disabled={disableSubmit}
             >
               Submit New Password
             </Button>
