@@ -7,7 +7,7 @@ import { Input } from "../Styleguide/Input";
 import { RouterProps } from "react-router";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery } from "react-query";
-import { flaxFetch } from "../Utils/flaxFetch";
+import { flaxFetch, FetchError } from "../Utils/flaxFetch";
 import { unary } from "lodash-es";
 
 export function FinishResetPassword(props: RouterProps) {
@@ -89,7 +89,7 @@ export function FinishResetPassword(props: RouterProps) {
 
   const submitMutation = useMutation<
     TokenValidationResponse,
-    Error,
+    FetchError<TokenValidationErrorResponseBody>,
     React.FormEvent<HTMLFormElement>
   >(
     (evt) => {
@@ -119,7 +119,6 @@ export function FinishResetPassword(props: RouterProps) {
       },
       onError: (error, variables, context) => {
         setFinishResetPasswordErrors({
-          // @ts-ignore
           message: error.body.errors[0],
           passwordCheck: "",
         });
@@ -277,4 +276,8 @@ interface TokenValidationResponse {
   tokenIsValid: boolean;
   tokenIsExpired: boolean;
   email?: string;
+}
+
+interface TokenValidationErrorResponseBody {
+  errors: string[];
 }

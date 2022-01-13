@@ -23,7 +23,7 @@ export function flaxFetch<ResponseDataType = object>(
     } else if (r.status === 401) {
       window.location.assign("/login");
     } else {
-      const err = Error(
+      const err = new FetchError(
         `Server responded with ${r.status} ${r.statusText} when requesting ${
           options?.method ?? "GET"
         } ${url}`
@@ -36,7 +36,6 @@ export function flaxFetch<ResponseDataType = object>(
         : "text";
 
       return r[bodyMethod]().then((body) => {
-        // @ts-ignore
         err.body = body;
         throw err;
       });
@@ -47,6 +46,10 @@ export function flaxFetch<ResponseDataType = object>(
 export type FlaxFetchOptions = Omit<RequestInit, "body"> & {
   body?: object | BodyInit;
 };
+
+export class FetchError<ResponseBody = string | object | void> extends Error {
+  body: ResponseBody;
+}
 
 declare global {
   interface Window {
