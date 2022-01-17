@@ -6,7 +6,6 @@ import {
   invalidRequest,
   serverApiError,
   successNoContent,
-  notFound,
 } from "../Utils/EndpointResponses";
 import { sendEmail, baseUrl } from "../Utils/EmailUtils.js";
 import { makeJWT } from "../Utils/JWTUtils.js";
@@ -14,6 +13,7 @@ import { JWTModel } from "../DB/models/JWT";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { UserModel } from "../DB/models/User.js";
+import { request } from ".pnpm/@types+express@4.17.13/node_modules/@types/express";
 
 const { verify } = jwt;
 const jwtSecret = process.env.JWT_SECRET;
@@ -122,24 +122,14 @@ router.get<Params, ResponseBody, QueryParams>(
 router.put(
   "/api/passwords",
   body("password").isStrongPassword(),
-  body("token").exists(),
+  body("token").notEmpty(),
   async (req, res) => {
-    const { password, token } = req.body;
-
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      if (token) {
-        return invalidRequest(
-          res,
-          "Password must be at least 8 characters long, contain one number, one uppercase letter, and one special character."
-        );
-      } else {
-        return invalidRequest(
-          res,
-          "Request must include token. Please reset your password again."
-        );
-      }
+      // return invalidRequest(res, errors.array());
+      return invalidRequest(res, errors.array().join(", "));
     }
+    const { password, token } = req.body;
 
     if (!tokenIsValid(token, jwtSecret)) {
       return invalidRequest(res, "Invalid token");
@@ -147,7 +137,7 @@ router.put(
 
     const rows = await JWTModel.findAll({
       where: {
-        token: token,
+        token,
       },
     });
 
@@ -166,9 +156,9 @@ router.put(
       });
 
       if (numUpdated === 0) {
-        notFound(res, `Unable to update password`);
+        return serverApiError(res, `Unable to update password`);
       } else {
-        successNoContent(res);
+        return successNoContent(res);
       }
     } else {
       return invalidRequest(res, "Invalid token");

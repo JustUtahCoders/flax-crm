@@ -98,14 +98,19 @@ export function FinishResetPassword(props: RouterProps) {
       const ac = new AbortController();
 
       if (token) {
-        return flaxFetch<TokenValidationResponse>(`/api/passwords`, {
-          method: "PUT",
-          signal: ac.signal,
-          body: {
-            password: finishResetPasswordFormData.password,
-            token: token,
-          },
-        });
+        const resetPasswordPromise = flaxFetch<TokenValidationResponse>(
+          `/api/passwords`,
+          {
+            method: "PUT",
+            signal: ac.signal,
+            body: {
+              password: finishResetPasswordFormData.password,
+              token,
+            },
+          }
+        );
+        resetPasswordPromise.cancel = () => ac.abort();
+        return resetPasswordPromise;
       } else {
         return Promise.resolve({
           tokenIsValid: false,
@@ -215,7 +220,9 @@ export function FinishResetPassword(props: RouterProps) {
               kind={ButtonKind.primary}
               style={{ opacity: disableSubmit ? "50%" : "100%" }}
               type="submit"
-              className="w-full h-24 lg:h-10 text-3xl lg:text-sm"
+              className={`w-full h-24 lg:h-10 text-3xl lg:text-sm ${
+                disableSubmit ? "opacity-1" : "opacity-.5"
+              }`}
               disabled={disableSubmit}
             >
               Submit New Password
@@ -260,22 +267,23 @@ export function FinishResetPassword(props: RouterProps) {
 }
 
 interface FinishResetPasswordFormData {
-  password: string | undefined;
+  password?: string;
 }
 
 interface FinishResetPasswordFormDataCheck {
-  password: string | undefined;
+  password?: string;
 }
 
 interface FinishResetPasswordErrors {
-  message: string | undefined;
-  passwordCheck: string | undefined;
+  message?: string;
+  passwordCheck?: string;
 }
 
 interface TokenValidationResponse {
   tokenIsValid: boolean;
   tokenIsExpired: boolean;
   email?: string;
+  cancel: () => void;
 }
 
 interface TokenValidationErrorResponseBody {
