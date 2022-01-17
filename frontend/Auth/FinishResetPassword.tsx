@@ -98,19 +98,17 @@ export function FinishResetPassword(props: RouterProps) {
       const ac = new AbortController();
 
       if (token) {
-        const resetPasswordPromise = flaxFetch<TokenValidationResponse>(
-          `/api/passwords`,
-          {
+        const resetPasswordPromise: Partial<TokenResponsePromise> =
+          flaxFetch<TokenValidationResponse>(`/api/passwords`, {
             method: "PUT",
             signal: ac.signal,
             body: {
               password: finishResetPasswordFormData.password,
               token,
             },
-          }
-        );
+          });
         resetPasswordPromise.cancel = () => ac.abort();
-        return resetPasswordPromise;
+        return resetPasswordPromise as TokenResponsePromise;
       } else {
         return Promise.resolve({
           tokenIsValid: false,
@@ -283,9 +281,16 @@ interface TokenValidationResponse {
   tokenIsValid: boolean;
   tokenIsExpired: boolean;
   email?: string;
+}
+
+interface CancellablePromise<T> extends Promise<T> {
   cancel: () => void;
 }
+
+type TokenResponsePromise = CancellablePromise<TokenValidationResponse>;
 
 interface TokenValidationErrorResponseBody {
   errors: string[];
 }
+
+// NOTE:  How to use partial to pass the cancel to the promise:  https://stackoverflow.com/questions/46461801/possible-to-add-a-cancel-method-to-promise-in-typescript
