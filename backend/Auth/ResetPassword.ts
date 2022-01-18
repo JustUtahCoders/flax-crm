@@ -13,7 +13,6 @@ import { JWTModel } from "../DB/models/JWT";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { UserModel } from "../DB/models/User.js";
-import { request } from ".pnpm/@types+express@4.17.13/node_modules/@types/express";
 
 const { verify } = jwt;
 const jwtSecret = process.env.JWT_SECRET;
@@ -126,8 +125,7 @@ router.put(
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      // return invalidRequest(res, errors.array());
-      return invalidRequest(res, errors.array().join(", "));
+      return invalidRequest(res, errors);
     }
     const { password, token } = req.body;
 

@@ -283,7 +283,7 @@ interface TokenValidationResponse {
   email?: string;
 }
 
-interface CancellablePromise<T> extends Promise<T> {
+interface CancellablePromise<PromiseResult> extends Promise<PromiseResult> {
   cancel: () => void;
 }
 
@@ -292,5 +292,3 @@ type TokenResponsePromise = CancellablePromise<TokenValidationResponse>;
 interface TokenValidationErrorResponseBody {
   errors: string[];
 }
-
-// NOTE:  How to use partial to pass the cancel to the promise:  https://stackoverflow.com/questions/46461801/possible-to-add-a-cancel-method-to-promise-in-typescript
