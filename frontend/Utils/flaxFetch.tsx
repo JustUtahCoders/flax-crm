@@ -4,14 +4,16 @@ import { theGlobal } from "./Global";
 export function flaxFetch<ResponseDataType = object>(
   url: string,
   options: FlaxFetchOptions = {}
-): Promise<ResponseDataType> {
+): CancelablePromise<ResponseDataType> {
   if (isPlainObject(options?.body) && !(options?.body instanceof FormData)) {
     options.body = JSON.stringify(options.body);
     options.headers = options.headers || {};
     options.headers["content-type"] = "application/json";
   }
+  const ac = new AbortController();
+  options.signal = ac.signal;
 
-  return fetch(url, options as RequestInit).then((r) => {
+  const fetchPromise = fetch(url, options as RequestInit).then((r) => {
     if (r.ok) {
       if (r.status === 204) {
         return;
@@ -40,7 +42,15 @@ export function flaxFetch<ResponseDataType = object>(
         throw err;
       });
     }
-  });
+  }) as CancelablePromise<ResponseDataType>;
+  fetchPromise.cancel = () => {
+    ac.abort();
+  };
+  return fetchPromise;
+}
+
+interface CancelablePromise<PromiseResult> extends Promise<PromiseResult> {
+  cancel: () => void;
 }
 
 export type FlaxFetchOptions = Omit<RequestInit, "body"> & {
