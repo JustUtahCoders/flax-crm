@@ -95,20 +95,14 @@ export function FinishResetPassword(props: RouterProps) {
     (evt) => {
       evt.preventDefault();
 
-      const ac = new AbortController();
-
       if (token) {
-        const resetPasswordPromise: Partial<TokenResponsePromise> =
-          flaxFetch<TokenValidationResponse>(`/api/passwords`, {
-            method: "PUT",
-            signal: ac.signal,
-            body: {
-              password: finishResetPasswordFormData.password,
-              token,
-            },
-          });
-        resetPasswordPromise.cancel = () => ac.abort();
-        return resetPasswordPromise as TokenResponsePromise;
+        return flaxFetch<TokenValidationResponse>(`/api/passwords`, {
+          method: "PUT",
+          body: {
+            password: finishResetPasswordFormData.password,
+            token,
+          },
+        });
       } else {
         return Promise.resolve({
           tokenIsValid: false,
@@ -282,12 +276,6 @@ interface TokenValidationResponse {
   tokenIsExpired: boolean;
   email?: string;
 }
-
-interface CancellablePromise<PromiseResult> extends Promise<PromiseResult> {
-  cancel: () => void;
-}
-
-type TokenResponsePromise = CancellablePromise<TokenValidationResponse>;
 
 interface TokenValidationErrorResponseBody {
   errors: string[];
