@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, ButtonKind } from "../Styleguide/Button";
+import { Anchor } from "../Styleguide/Anchor";
 import { FormField } from "../Styleguide/FormField";
 import { FormFieldLabel } from "../Styleguide/FormFieldLabel";
 import { Input } from "../Styleguide/Input";
 import { RouterProps } from "react-router";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery } from "react-query";
-import { flaxFetch } from "../Utils/flaxFetch";
+import { flaxFetch, FetchError } from "../Utils/flaxFetch";
 import { unary } from "lodash-es";
 
 export function FinishResetPassword(props: RouterProps) {
@@ -14,6 +15,19 @@ export function FinishResetPassword(props: RouterProps) {
     useState<FinishResetPasswordFormData>({
       password: "",
     });
+  const [
+    finishResetPasswordFormDataCheck,
+    setFinishResetPasswordFormDataCheck,
+  ] = useState<FinishResetPasswordFormDataCheck>({
+    password: "",
+  });
+  const [finishResetPasswordErrors, setFinishResetPasswordErrors] =
+    useState<FinishResetPasswordErrors>({
+      message: "",
+      passwordCheck: "",
+    });
+  const [disableSubmit, setDisableSubmit] = useState(true);
+  const [passwordSaveSucceeded, setPasswordSaveSucceeded] = useState(false);
 
   const paramString = props.history.location.search;
   let searchParams = new URLSearchParams(paramString);
@@ -37,30 +51,77 @@ export function FinishResetPassword(props: RouterProps) {
 
   const userEmail = tokenValidationResponse?.email;
 
-  const submitMutation = useMutation<
-    TokenValidationResponse,
-    Error,
-    React.FormEvent<HTMLFormElement>
-  >((evt) => {
-    evt.preventDefault();
-    const ac = new AbortController();
+  useEffect(() => {
+    const doPasswordsMatch =
+      finishResetPasswordFormData.password ===
+      finishResetPasswordFormDataCheck.password;
 
-    if (token) {
-      return flaxFetch<TokenValidationResponse>(`/send-reset-password-email`, {
-        method: "POST",
-        signal: ac.signal,
-        body: {
-          password: finishResetPasswordFormData.password,
-          token: token,
-        },
+    if (doPasswordsMatch) {
+      setFinishResetPasswordErrors({
+        message: "",
+        passwordCheck: "",
       });
+      setDisableSubmit(false);
     } else {
-      return Promise.resolve({
-        tokenIsValid: false,
-        tokenIsExpired: false,
+      setFinishResetPasswordErrors({
+        message: "",
+        passwordCheck: "Passwords do not match",
       });
     }
-  });
+
+    if (
+      finishResetPasswordFormData.password === "" ||
+      finishResetPasswordFormDataCheck.password === ""
+    ) {
+      setFinishResetPasswordErrors({
+        message: "",
+        passwordCheck: "",
+      });
+      setDisableSubmit(true);
+    }
+  }, [finishResetPasswordFormData, finishResetPasswordFormDataCheck]);
+
+  useEffect(() => {
+    if (passwordSaveSucceeded) {
+      props.history.push("/home");
+    }
+  }, [props.history, passwordSaveSucceeded]);
+
+  const submitMutation = useMutation<
+    TokenValidationResponse,
+    FetchError<TokenValidationErrorResponseBody>,
+    React.FormEvent<HTMLFormElement>
+  >(
+    (evt) => {
+      evt.preventDefault();
+
+      if (token) {
+        return flaxFetch<TokenValidationResponse>(`/api/passwords`, {
+          method: "PUT",
+          body: {
+            password: finishResetPasswordFormData.password,
+            token,
+          },
+        });
+      } else {
+        return Promise.resolve({
+          tokenIsValid: false,
+          tokenIsExpired: false,
+        });
+      }
+    },
+    {
+      onSuccess: async (data, variables, context) => {
+        setPasswordSaveSucceeded(true);
+      },
+      onError: (error, variables, context) => {
+        setFinishResetPasswordErrors({
+          message: error.body.errors[0],
+          passwordCheck: "",
+        });
+      },
+    }
+  );
 
   return (
     <div className="flex justify-center h-screen p-24 sm:pt-80">
@@ -101,7 +162,7 @@ export function FinishResetPassword(props: RouterProps) {
                 className="text-3xl lg:text-xs"
                 htmlFor="password"
               >
-                Password
+                New Password
               </FormFieldLabel>
               <Input
                 id="password"
@@ -111,19 +172,50 @@ export function FinishResetPassword(props: RouterProps) {
                 onChange={(evt) =>
                   setFinishResetPasswordFormData({
                     ...finishResetPasswordFormData,
-                    password: evt.target.value,
+                    password: evt.target.value.trim(),
                   })
                 }
                 required
               />
             </FormField>
+            <FormField className="mb-4">
+              <FormFieldLabel
+                className="text-3xl lg:text-xs"
+                htmlFor="passwordCheck"
+              >
+                Re-enter Password
+              </FormFieldLabel>
+              <Input
+                id="passwordCheck"
+                className="text-5xl lg:text-sm"
+                type="password"
+                value={finishResetPasswordFormDataCheck.password}
+                onChange={(evt) =>
+                  setFinishResetPasswordFormDataCheck({
+                    ...finishResetPasswordFormDataCheck,
+                    password: evt.target.value.trim(),
+                  })
+                }
+                required
+              />
+            </FormField>
+            <p className="text-sm text-gray-500">
+              {finishResetPasswordErrors.passwordCheck}
+            </p>
+            <p className="text-sm text-gray-500">
+              {finishResetPasswordErrors.message}
+            </p>
           </div>
 
           <div className="inset-x-0 my-8 bottom-0">
             <Button
               kind={ButtonKind.primary}
+              style={{ opacity: disableSubmit ? "50%" : "100%" }}
               type="submit"
-              className="w-full h-24 lg:h-10 text-3xl lg:text-sm"
+              className={`w-full h-24 lg:h-10 text-3xl lg:text-sm ${
+                disableSubmit ? "opacity-1" : "opacity-.5"
+              }`}
+              disabled={disableSubmit}
             >
               Submit New Password
             </Button>
@@ -156,13 +248,9 @@ export function FinishResetPassword(props: RouterProps) {
           </div>
 
           <div className="inset-x-0 my-8 bottom-0">
-            <Button
-              kind={ButtonKind.primary}
-              type="submit"
-              className="w-full h-24 lg:h-10 text-3xl lg:text-sm"
-            >
+            <Anchor kind={ButtonKind.primary} to="/login">
               Login
-            </Button>
+            </Anchor>
           </div>
         </div>
       )}
@@ -171,11 +259,24 @@ export function FinishResetPassword(props: RouterProps) {
 }
 
 interface FinishResetPasswordFormData {
-  password: string;
+  password?: string;
+}
+
+interface FinishResetPasswordFormDataCheck {
+  password?: string;
+}
+
+interface FinishResetPasswordErrors {
+  message?: string;
+  passwordCheck?: string;
 }
 
 interface TokenValidationResponse {
   tokenIsValid: boolean;
   tokenIsExpired: boolean;
   email?: string;
+}
+
+interface TokenValidationErrorResponseBody {
+  errors: string[];
 }
